@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Home",
+    "path": "#",
+    "path2": "/#"
+  },
+  {
+    "name": "Services",
+    "path": "#features",
+    "path2": "/#features"
+  },
+  {
+    "name": "Tutorials",
+    "path": "#tutorial-videos",
+    "path2": "/#tutorial-videos"
+  },
+  {
+    "name": "Features",
+    "path": "#features-on-demand",
+    "path2": "/#features-on-demand"
+  },
+  {
+    "name": "Comparison",
+    "path": "#us-vs-others",
+    "path2": "/#us-vs-others"
+  },
+  {
+    "name": "About",
+    "path": "#mission-statement",
+    "path2": "/#mission-statement"
+  },
+  {
+    "name": "Pricing",
+    "path": "#pricing",
+    "path2": "/#pricing"
+  },
+  {
+    "name": "Testimonials",
+    "path": "#testimonial-section",
+    "path2": "/#testimonial-section"
+  },
+  {
+    "name": "Contact",
+    "path": "/contact",
+    "path2": "/contact"
+  }
+]
