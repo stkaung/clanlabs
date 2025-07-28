@@ -70,8 +70,7 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
       <div
         className="min-h-screen transition-all duration-500 relative overflow-hidden"
         style={{
-          background:
-            "linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 50%, #0F0F0F 100%)",
+          backgroundColor: theme === "dark" ? "#0F0F0F" : "#F8FAFC",
           color: theme === "dark" ? "#FFFFFF" : "#1F2937",
         }}
       >
@@ -120,6 +119,12 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
               className={`flex-1 px-6 ${
                 !(isMobile && !sidebarCollapsed) ? "py-8" : "py-4"
               }`}
+              style={{
+                background:
+                  theme === "dark"
+                    ? "linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 50%, #0F0F0F 100%)"
+                    : "linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #F8FAFC 100%)",
+              }}
             >
               <div className="max-w-7xl mx-auto">{children}</div>
             </div>
@@ -129,10 +134,11 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
               <p
                 className="text-sm"
                 style={{
-                  color: theme === "dark" ? "#A0A0A0" : "#6B7280",
+                  color: theme === "dark" ? "#6B7280" : "#9CA3AF",
+                  fontFamily: "'Poppins', sans-serif",
                 }}
               >
-                2025 © Software Ventures Pty Ltd. All rights reserved.
+                © 2025 Software Ventures Pty Ltd. All rights reserved.
               </p>
             </footer>
           </main>

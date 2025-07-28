@@ -22,18 +22,19 @@ function TopNavBar({
   function handleThemeToggle(): void {
     const html = document.querySelector("html");
     const isDark = html?.classList?.contains("dark");
+    const newTheme = isDark ? "light" : "dark";
 
-    if (isDark) {
-      html?.classList.remove("dark");
-      html?.classList.add("light");
-    } else {
-      html?.classList.remove("light");
-      html?.classList.add("dark");
+    if (html) {
+      html.classList.remove("dark", "light");
+      html.classList.add(newTheme);
     }
+
+    // Save to localStorage
+    localStorage.setItem("theme", newTheme);
 
     // Dispatch custom event for theme change
     const event = new CustomEvent("themeChanged", {
-      detail: { theme: isDark ? "light" : "dark" },
+      detail: { theme: newTheme },
     });
     document.dispatchEvent(event);
   }

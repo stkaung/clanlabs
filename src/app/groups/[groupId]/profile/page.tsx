@@ -87,7 +87,7 @@ export default function GroupProfilePage() {
       permissions: ["read", "write", "moderate"],
     },
     xpLevel: 1250,
-    xpUnit: "bigcoins", // Customizable unit - could be "XP", "points", "coins", etc.
+    xpUnit: "XP", // Customizable unit - could be "XP", "points", "coins", etc.
     joinedDate: "2024-03-15T00:00:00.000Z",
   };
 
@@ -142,36 +142,37 @@ export default function GroupProfilePage() {
   const mockQualifications: Qualification[] = [
     {
       id: "qual-1",
-      title: "AWS Certified Developer",
-      issuer: "Amazon Web Services",
+      title: "Elite Combat Specialist",
+      issuer: "Roblox Military Academy",
       description:
-        "Demonstrates technical expertise in developing and maintaining applications on the AWS platform",
+        "Demonstrates mastery in tactical combat operations and leadership in military simulation games",
       status: "active",
       issuedDate: "2024-01-15T00:00:00.000Z",
       expiryDate: "2027-01-15T00:00:00.000Z",
-      credentialUrl: "https://aws.amazon.com/verification",
-      tags: ["Cloud", "AWS", "Development"],
+      credentialUrl: "https://roblox.com/military-academy/verify",
+      tags: ["Combat", "Leadership", "Tactics"],
     },
     {
       id: "qual-2",
-      title: "Certified Scrum Master",
-      issuer: "Scrum Alliance",
-      description: "Certified to facilitate Scrum teams and remove impediments",
+      title: "Certified Clan Commander",
+      issuer: "Roblox Clan Federation",
+      description:
+        "Certified to lead and manage large-scale clan operations and strategic planning",
       status: "verified",
       issuedDate: "2023-11-20T00:00:00.000Z",
       expiryDate: "2025-11-20T00:00:00.000Z",
-      credentialUrl: "https://scrumalliance.org/verify",
-      tags: ["Agile", "Scrum", "Project Management"],
+      credentialUrl: "https://roblox.com/clan-federation/verify",
+      tags: ["Leadership", "Strategy", "Management"],
     },
     {
       id: "qual-3",
-      title: "Google Cloud Professional",
-      issuer: "Google Cloud",
+      title: "Master Builder Architect",
+      issuer: "Roblox Studio Guild",
       description:
-        "Advanced certification for cloud architecture and development",
+        "Advanced certification for building complex structures and designing immersive game experiences",
       status: "pending",
       issuedDate: "2024-06-01T00:00:00.000Z",
-      tags: ["Cloud", "GCP", "Architecture"],
+      tags: ["Building", "Design", "Creativity"],
     },
   ];
 

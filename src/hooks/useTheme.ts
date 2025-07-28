@@ -10,13 +10,34 @@ interface ThemeChangeEvent extends CustomEvent {
 }
 
 function useTheme(): Theme {
-  const [theme, setTheme] = useState<Theme>("dark"); // default to dark
+  // Initialize theme synchronously to prevent flash
+  const getInitialTheme = (): Theme => {
+    if (typeof window === "undefined") return "dark"; // SSR fallback
 
-  useEffect(() => {
-    // Check HTML class for current theme
+    // First check localStorage
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      return savedTheme as Theme;
+    }
+
+    // Then check HTML class
     const html = document.querySelector("html");
     const isDark = html?.classList?.contains("dark");
-    setTheme(isDark ? "dark" : "light");
+    return isDark ? "dark" : "light";
+  };
+
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+
+  useEffect(() => {
+    // Ensure HTML class matches the theme
+    const html = document.querySelector("html");
+    if (html) {
+      html.classList.remove("dark", "light");
+      html.classList.add(theme);
+    }
+
+    // Save theme to localStorage
+    localStorage.setItem("theme", theme);
 
     // Listen for theme changes from the theme controller
     const handleThemeChange = (event: Event): void => {
@@ -29,7 +50,7 @@ function useTheme(): Theme {
     return (): void => {
       document.removeEventListener("themeChanged", handleThemeChange);
     };
-  }, []);
+  }, [theme]);
 
   return theme;
 }

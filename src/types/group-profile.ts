@@ -5,7 +5,7 @@ export interface UserProfile {
   profilePicture?: string;
   role: UserRole;
   xpLevel: number;
-  xpUnit: string; // Customizable unit name (e.g., "XP", "bigcoins", "points", etc.)
+  xpUnit: string; // Customizable unit name (e.g., "XP", "points", "coins", etc.)
   joinedDate: string;
 }
 
