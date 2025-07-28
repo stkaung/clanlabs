@@ -81,6 +81,7 @@ export default function GroupProfilePage() {
     id: "user-123",
     username: "shin",
     profilePicture: "/img/profiles/shin.png", // Optional, will fallback to icon
+    bio: "Elite Roblox clan strategist with 5+ years experience in competitive gaming. Specializes in tactical operations, team coordination, and base building. Leading multiple successful raids and consistently ranked in top 10% of players.",
     role: {
       name: "Senior Developer",
       color: "#3B82F6",

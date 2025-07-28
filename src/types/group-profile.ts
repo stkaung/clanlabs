@@ -3,6 +3,7 @@ export interface UserProfile {
   id: string;
   username: string;
   profilePicture?: string;
+  bio?: string;
   role: UserRole;
   xpLevel: number;
   xpUnit: string; // Customizable unit name (e.g., "XP", "points", "coins", etc.)
