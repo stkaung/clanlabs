@@ -5,15 +5,23 @@ import useTheme from "@/hooks/useTheme";
 interface SetupGroupModalProps {
   isOpen: boolean;
   onClose: () => void;
+  mode?: "setup" | "renewal";
+  groupName?: string;
 }
 
-function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
+function SetupGroupModal({
+  isOpen,
+  onClose,
+  mode = "setup",
+  groupName,
+}: SetupGroupModalProps) {
   const theme = useTheme();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [serialKey, setSerialKey] = useState<string>("");
   const [selectedServer, setSelectedServer] = useState<string>("");
   const [selectedGroup, setSelectedGroup] = useState<string>("");
-  const [groupName, setGroupName] = useState<string>("Your Group");
+  const [selectedGroupName, setSelectedGroupName] =
+    useState<string>("Your Group");
 
   // Mock data - replace with actual API calls
   const discordServers = [
@@ -39,13 +47,18 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
   }
 
   function handleNextStep(): void {
-    if (currentStep === 1 && serialKey.length === 19) {
-      setCurrentStep(2);
-    } else if (currentStep === 2 && selectedServer && selectedGroup) {
-      // Get group name from selection
-      const group = mainGroups.find((g) => g.id === selectedGroup);
-      if (group) setGroupName(group.name);
+    if (mode === "renewal" && currentStep === 1 && serialKey.length === 19) {
+      // For renewal, go directly to success
       setCurrentStep(3);
+    } else if (mode === "setup") {
+      if (currentStep === 1 && serialKey.length === 19) {
+        setCurrentStep(2);
+      } else if (currentStep === 2 && selectedServer && selectedGroup) {
+        // Get group name from selection
+        const group = mainGroups.find((g) => g.id === selectedGroup);
+        if (group) setSelectedGroupName(group.name);
+        setCurrentStep(3);
+      }
     }
   }
 
@@ -60,7 +73,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
     setSerialKey("");
     setSelectedServer("");
     setSelectedGroup("");
-    setGroupName("Your Group");
+    setSelectedGroupName("Your Group");
     onClose();
   }
 
@@ -74,23 +87,28 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
     handleClose();
   }
 
-  if (!isOpen) return null;
-
   return (
-    <>
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${
+        isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+      }`}
+    >
       {/* Full-screen backdrop overlay */}
       <div
-        className={`fixed inset-0 z-40 transition-all duration-300 ${
-          theme === "dark" ? "bg-black/40" : "bg-black/20"
-        }`}
-        onClick={handleClose}
+        className={`absolute inset-0 transition-all duration-300 ${
+          isOpen ? "backdrop-blur-sm" : "backdrop-blur-none"
+        } ${theme === "dark" ? "bg-black/40" : "bg-black/20"}`}
       />
 
       {/* Modal container */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+      <div className="relative z-10 pointer-events-none">
         {/* Modal */}
         <div
-          className={`relative w-full max-w-2xl mx-4 rounded-2xl border shadow-2xl backdrop-blur-md pointer-events-auto max-h-[90vh] flex flex-col ${
+          className={`relative w-full max-w-2xl mx-4 rounded-2xl border shadow-2xl backdrop-blur-md pointer-events-auto max-h-[90vh] flex flex-col transition-all duration-300 transform ${
+            isOpen
+              ? "scale-100 translate-y-0 opacity-100"
+              : "scale-95 translate-y-4 opacity-0"
+          } ${
             theme === "dark"
               ? "bg-gray-800/95 border-gray-600/50"
               : "bg-white/95 border-gray-200/50"
@@ -99,32 +117,36 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
         >
           {/* Header */}
           <div
-            className={`px-8 py-6 border-b flex-shrink-0 ${
+            className={`px-4 sm:px-8 py-4 sm:py-6 border-b flex-shrink-0 ${
               theme === "dark" ? "border-gray-600/50" : "border-gray-200/50"
             }`}
           >
             <div className="flex items-center justify-between">
               <div>
                 <h2
-                  className={`text-2xl font-bold ${
+                  className={`text-xl sm:text-2xl font-bold ${
                     theme === "dark" ? "text-white" : "text-gray-900"
                   }`}
                   style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
-                  Setup New Group
+                  {mode === "renewal"
+                    ? "Renew Group Access"
+                    : "Setup New Group"}
                 </h2>
                 <p
-                  className={`text-sm mt-1 ${
+                  className={`text-xs sm:text-sm mt-1 ${
                     theme === "dark" ? "text-gray-400" : "text-gray-600"
                   }`}
                   style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
-                  Configure your group integration in 3 simple steps
+                  {mode === "renewal"
+                    ? `Reactivate "${groupName}" with your renewal key`
+                    : "Configure your group integration in 3 simple steps"}
                 </p>
               </div>
               <button
                 onClick={handleClose}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 ${
+                className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 ${
                   theme === "dark"
                     ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
                     : "bg-gray-100 hover:bg-gray-200 text-gray-600"
@@ -134,88 +156,94 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
               </button>
             </div>
 
-            {/* Progress Steps */}
-            <div className="flex items-center justify-center mt-6 space-x-8">
-              {[1, 2, 3].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className="relative">
-                    {/* Spinning border */}
-                    {step <= currentStep && (
-                      <div
-                        className="absolute inset-0 rounded-full animate-spin"
-                        style={{
-                          background:
-                            step <= currentStep
-                              ? "conic-gradient(from 0deg, #3B82F6, #8B5CF6, #06B6D4, #3B82F6)"
-                              : "transparent",
-                          padding: "2px",
-                        }}
-                      >
+            {/* Progress Steps - Only show for setup mode */}
+            {mode === "setup" && (
+              <div className="flex items-center justify-center mt-4 sm:mt-6 space-x-4 sm:space-x-8">
+                {[1, 2, 3].map((step) => (
+                  <div key={step} className="flex items-center">
+                    <div className="relative">
+                      {/* Spinning border */}
+                      {step <= currentStep && (
                         <div
-                          className={`w-full h-full rounded-full ${
-                            theme === "dark" ? "bg-gray-800" : "bg-white"
-                          }`}
-                        />
+                          className="absolute inset-0 rounded-full animate-spin"
+                          style={{
+                            background:
+                              step <= currentStep
+                                ? "conic-gradient(from 0deg, #3B82F6, #8B5CF6, #06B6D4, #3B82F6)"
+                                : "transparent",
+                            padding: "2px",
+                          }}
+                        >
+                          <div
+                            className={`w-full h-full rounded-full ${
+                              theme === "dark" ? "bg-gray-800" : "bg-white"
+                            }`}
+                          />
+                        </div>
+                      )}
+
+                      {/* Step circle */}
+                      <div
+                        className={`relative w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all duration-300 ${
+                          step <= currentStep
+                            ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
+                            : theme === "dark"
+                            ? "bg-gray-700 text-gray-400"
+                            : "bg-gray-200 text-gray-500"
+                        }`}
+                      >
+                        {step}
                       </div>
-                    )}
-
-                    {/* Step circle */}
-                    <div
-                      className={`relative w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                        step <= currentStep
-                          ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg"
-                          : theme === "dark"
-                          ? "bg-gray-700 text-gray-400"
-                          : "bg-gray-200 text-gray-500"
-                      }`}
-                    >
-                      {step}
                     </div>
-                  </div>
 
-                  {step < 3 && (
-                    <div
-                      className={`w-16 h-1 mx-4 transition-all duration-300 ${
-                        step < currentStep
-                          ? "bg-gradient-to-r from-blue-500 to-indigo-600"
-                          : theme === "dark"
-                          ? "bg-gray-700"
-                          : "bg-gray-200"
-                      }`}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
+                    {step < 3 && (
+                      <div
+                        className={`w-8 sm:w-16 h-1 mx-2 sm:mx-4 transition-all duration-300 ${
+                          step < currentStep
+                            ? "bg-gradient-to-r from-blue-500 to-indigo-600"
+                            : theme === "dark"
+                            ? "bg-gray-700"
+                            : "bg-gray-200"
+                        }`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Content - Scrollable */}
-          <div className="px-8 py-8 flex-1 overflow-y-auto">
+          <div className="px-4 sm:px-8 py-6 sm:py-8 flex-1 overflow-y-auto">
             {/* Step 1: Serial Key */}
             {currentStep === 1 && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
                   <h3
-                    className={`text-lg font-semibold mb-2 ${
+                    className={`text-base sm:text-lg font-semibold mb-1 sm:mb-2 ${
                       theme === "dark" ? "text-white" : "text-gray-900"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                   >
-                    Enter Serial Key
+                    {mode === "renewal"
+                      ? "Enter Renewal Key"
+                      : "Enter Serial Key"}
                   </h3>
                   <p
-                    className={`text-sm ${
+                    className={`text-xs sm:text-sm ${
                       theme === "dark" ? "text-gray-400" : "text-gray-600"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                   >
-                    Please enter your valid Clan Labs serial key to continue
+                    {mode === "renewal"
+                      ? "Enter the 16-character renewal key provided in your subscription email"
+                      : "Please enter your valid Clan Labs serial key to continue"}
                   </p>
                 </div>
 
                 <div>
                   <label
-                    className={`block text-sm font-medium mb-2 ${
+                    className={`block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2 ${
                       theme === "dark" ? "text-gray-300" : "text-gray-700"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -229,7 +257,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                       handleSerialKeyChange(e.target.value.toUpperCase())
                     }
                     placeholder="XXXX-XXXX-XXXX-XXXX"
-                    className={`w-full px-4 py-3 rounded-lg border text-lg font-mono tracking-wider transition-all duration-200 focus:outline-none focus:ring-2 ${
+                    className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border text-base sm:text-lg font-mono tracking-wider transition-all duration-200 focus:outline-none focus:ring-2 ${
                       theme === "dark"
                         ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500"
                         : "bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500 focus:border-blue-500"
@@ -252,7 +280,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                     href="https://store.clanlabs.co"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-sm font-medium transition-colors duration-200 hover:underline ${
+                    className={`text-xs sm:text-sm font-medium transition-colors duration-200 hover:underline ${
                       theme === "dark"
                         ? "text-blue-400 hover:text-blue-300"
                         : "text-blue-600 hover:text-blue-700"
@@ -267,10 +295,10 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
 
             {/* Step 2: Server and Group Selection */}
             {currentStep === 2 && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
                   <h3
-                    className={`text-lg font-semibold mb-2 ${
+                    className={`text-base sm:text-lg font-semibold mb-1 sm:mb-2 ${
                       theme === "dark" ? "text-white" : "text-gray-900"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -278,7 +306,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                     Configure Integration
                   </h3>
                   <p
-                    className={`text-sm ${
+                    className={`text-xs sm:text-sm ${
                       theme === "dark" ? "text-gray-400" : "text-gray-600"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -287,10 +315,10 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-4 sm:gap-6">
                   <div>
                     <label
-                      className={`block text-sm font-medium mb-2 ${
+                      className={`block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2 ${
                         theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
                       style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -300,7 +328,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                     <select
                       value={selectedServer}
                       onChange={(e) => setSelectedServer(e.target.value)}
-                      className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 ${
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 [&>option]:py-1 [&>option]:text-sm ${
                         theme === "dark"
                           ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
                           : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
@@ -318,7 +346,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
 
                   <div>
                     <label
-                      className={`block text-sm font-medium mb-2 ${
+                      className={`block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2 ${
                         theme === "dark" ? "text-gray-300" : "text-gray-700"
                       }`}
                       style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -328,7 +356,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                     <select
                       value={selectedGroup}
                       onChange={(e) => setSelectedGroup(e.target.value)}
-                      className={`w-full px-4 py-3 rounded-lg border transition-all duration-200 focus:outline-none focus:ring-2 ${
+                      className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 [&>option]:py-1 [&>option]:text-sm ${
                         theme === "dark"
                           ? "bg-gray-700 border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500"
                           : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500"
@@ -349,19 +377,19 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
 
             {/* Step 3: Success Message */}
             {currentStep === 3 && (
-              <div className="space-y-6 text-center">
-                <div className="mb-6">
+              <div className="space-y-4 sm:space-y-6 text-center">
+                <div className="mb-4 sm:mb-6">
                   <div
-                    className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 ${
+                    className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 ${
                       theme === "dark"
                         ? "bg-green-500/20 text-green-400"
                         : "bg-green-100 text-green-600"
                     }`}
                   >
-                    <i className="fas fa-check text-3xl" />
+                    <i className="fas fa-check text-2xl sm:text-3xl" />
                   </div>
                   <h3
-                    className={`text-xl font-bold mb-2 ${
+                    className={`text-lg sm:text-xl font-bold mb-2 ${
                       theme === "dark" ? "text-white" : "text-gray-900"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -371,39 +399,56 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                 </div>
 
                 <div
-                  className={`text-left p-6 rounded-lg ${
+                  className={`text-left p-4 sm:p-6 rounded-lg ${
                     theme === "dark"
                       ? "bg-gray-700/50 border border-gray-600/50"
                       : "bg-gray-50 border border-gray-200"
                   }`}
                 >
                   <p
-                    className={`text-sm leading-relaxed ${
+                    className={`text-xs sm:text-sm leading-relaxed ${
                       theme === "dark" ? "text-gray-300" : "text-gray-700"
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                   >
-                    <strong>
-                      Deployment of {groupName} has been successful.
-                    </strong>
-                    <br />
-                    <br />
-                    It may take up to 10 minutes for Clan Labs to register that
-                    you have setup a group in your Discord server (Discord API).
-                    <br />
-                    <br />
-                    Please wait up to 48 hours for an official Clan Labs Roblox
-                    bot account (ClanLabs38) to join your group. Bot accounts
-                    are added manually, and the team has been made aware of your
-                    request.
-                    <br />
-                    <br />
-                    If you haven&apos;t already, invite the Clan Labs Discord
-                    bot to your Discord server.
-                    <br />
-                    <br />
-                    Feel free to join our Discord server to ask any questions or
-                    provide feedback.
+                    {mode === "renewal" ? (
+                      <>
+                        <strong>
+                          &quot;{groupName || selectedGroupName}&quot; has been
+                          successfully renewed and is now active.
+                        </strong>
+                        <br />
+                        <br />
+                        Your group access has been reactivated and all features
+                        are now available. You can continue using Clan Labs with
+                        your renewed subscription.
+                      </>
+                    ) : (
+                      <>
+                        <strong>
+                          Deployment of {selectedGroupName} has been successful.
+                        </strong>
+                        <br />
+                        <br />
+                        It may take up to 10 minutes for Clan Labs to register
+                        that you have setup a group in your Discord server
+                        (Discord API).
+                        <br />
+                        <br />
+                        Please wait up to 48 hours for an official Clan Labs
+                        Roblox bot account (ClanLabs38) to join your group. Bot
+                        accounts are added manually, and the team has been made
+                        aware of your request.
+                        <br />
+                        <br />
+                        If you haven&apos;t already, invite the Clan Labs
+                        Discord bot to your Discord server.
+                        <br />
+                        <br />
+                        Feel free to join our Discord server to ask any
+                        questions or provide feedback.
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
@@ -412,17 +457,17 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
 
           {/* Footer */}
           <div
-            className={`px-8 py-6 border-t flex-shrink-0 ${
+            className={`px-4 sm:px-8 py-4 sm:py-6 border-t flex-shrink-0 ${
               theme === "dark" ? "border-gray-600/50" : "border-gray-200/50"
             }`}
           >
             <div className="flex justify-between">
               {/* Left side buttons */}
-              <div className="flex space-x-3">
+              <div className="flex space-x-2 sm:space-x-3">
                 {currentStep > 1 && currentStep < 3 && (
                   <button
                     onClick={handlePreviousStep}
-                    className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
+                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base font-medium transition-all duration-200 hover:scale-105 ${
                       theme === "dark"
                         ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
                         : "bg-gray-200 hover:bg-gray-300 text-gray-700"
@@ -435,11 +480,11 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
               </div>
 
               {/* Right side buttons */}
-              <div className="flex space-x-3">
-                {currentStep < 3 && (
+              <div className="flex space-x-2 sm:space-x-3">
+                {currentStep < 3 && mode === "setup" && (
                   <button
                     onClick={handleClose}
-                    className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 hover:scale-105 ${
+                    className={`px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg text-sm sm:text-base font-medium transition-all duration-200 hover:scale-105 ${
                       theme === "dark"
                         ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
                         : "bg-gray-200 hover:bg-gray-300 text-gray-700"
@@ -463,7 +508,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
                     }`}
                     style={{ fontFamily: "'Poppins', sans-serif" }}
                   >
-                    Next
+                    {mode === "renewal" ? "Reactivate" : "Next"}
                   </button>
                 )}
 
@@ -498,7 +543,7 @@ function SetupGroupModal({ isOpen, onClose }: SetupGroupModalProps) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

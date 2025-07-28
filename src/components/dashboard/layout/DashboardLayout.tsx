@@ -14,6 +14,7 @@ import SetupGroupModal from "@/components/dashboard/groups/SetupGroupModal";
 // Create context for setup modal
 interface DashboardContextType {
   openSetupModal: () => void;
+  openRenewalModal: (groupName: string) => void;
 }
 
 const DashboardContext = createContext<DashboardContextType | undefined>(
@@ -37,6 +38,8 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isSetupModalOpen, setIsSetupModalOpen] = useState<boolean>(false);
+  const [isRenewalModalOpen, setIsRenewalModalOpen] = useState<boolean>(false);
+  const [renewalGroupName, setRenewalGroupName] = useState<string>("");
 
   // Handle responsive behavior
   useEffect(() => {
@@ -61,14 +64,22 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
     setIsSetupModalOpen(true);
   }
 
+  function openRenewalModal(groupName: string): void {
+    setRenewalGroupName(groupName);
+    setIsRenewalModalOpen(true);
+  }
+
   const contextValue: DashboardContextType = {
     openSetupModal,
+    openRenewalModal,
   };
 
   return (
     <DashboardContext.Provider value={contextValue}>
       <div
-        className="min-h-screen transition-all duration-500 relative overflow-hidden"
+        className={`min-h-screen transition-all duration-500 relative overflow-hidden ${
+          isSetupModalOpen ? "blur-sm" : ""
+        }`}
         style={{
           backgroundColor: theme === "dark" ? "#0F0F0F" : "#F8FAFC",
           color: theme === "dark" ? "#FFFFFF" : "#1F2937",
@@ -76,10 +87,10 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
       >
         {/* Main content container */}
         <div className="flex min-h-screen">
-          {/* Mobile Overlay */}
+          {/* Mobile Overlay - positioned above navbar but below sidebar */}
           {isMobile && !sidebarCollapsed && (
             <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+              className="fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300"
               onClick={() => setSidebarCollapsed(true)}
               onTouchEnd={() => setSidebarCollapsed(true)}
             />
@@ -106,50 +117,105 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
 
           {/* Main content area */}
           <main className="flex-1 flex flex-col min-h-screen w-full overflow-hidden">
-            {/* Top Navigation Bar - Hidden when sidebar is open on mobile */}
-            {!(isMobile && !sidebarCollapsed) && (
+            {/* Top Navigation Bar - Always visible */}
+            <div className="relative z-20">
               <TopNavBar
                 onDrawerToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
                 breadcrumb={["Dashboard", "Groups"]}
+                sidebarCollapsed={!isMobile && sidebarCollapsed}
               />
-            )}
+            </div>
 
             {/* Page content with max-width container */}
             <div
-              className={`flex-1 px-6 ${
-                !(isMobile && !sidebarCollapsed) ? "py-8" : "py-4"
-              }`}
+              className={`flex-1 relative overflow-hidden pt-12`}
               style={{
                 background:
                   theme === "dark"
-                    ? "linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 50%, #0F0F0F 100%)"
-                    : "linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #F8FAFC 100%)",
+                    ? "linear-gradient(135deg, #0F0F23 0%, #1A1A3A 50%, #0F0F23 100%)"
+                    : "linear-gradient(135deg, #EBF4FF 0%, #DBEAFE 50%, #EBF4FF 100%)",
               }}
             >
-              <div className="max-w-7xl mx-auto">{children}</div>
-            </div>
+              {/* Flowing background waves - same as hero section */}
+              <div className="absolute inset-0 overflow-hidden opacity-40">
+                <svg
+                  className="absolute inset-0 w-full h-full"
+                  viewBox="0 0 1200 800"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient
+                      id="dashboardGradient1"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
+                    >
+                      <stop
+                        offset="0%"
+                        stopColor={theme === "dark" ? "#1e40af" : "#3b82f6"}
+                        stopOpacity="0.6"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor={theme === "dark" ? "#7c3aed" : "#a855f7"}
+                        stopOpacity="0.5"
+                      />
+                    </linearGradient>
+                    <linearGradient
+                      id="dashboardGradient2"
+                      x1="100%"
+                      y1="0%"
+                      x2="0%"
+                      y2="100%"
+                    >
+                      <stop
+                        offset="0%"
+                        stopColor={theme === "dark" ? "#06b6d4" : "#06b6d4"}
+                        stopOpacity="0.4"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor={theme === "dark" ? "#3b82f6" : "#3b82f6"}
+                        stopOpacity="0.4"
+                      />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M0,400 Q400,200 800,400 T1200,400 L1200,800 L0,800 Z"
+                    fill="url(#dashboardGradient1)"
+                  />
+                  <path
+                    d="M0,600 Q600,500 1200,600 L1200,800 L0,800 Z"
+                    fill="url(#dashboardGradient2)"
+                    className="animate-pulse"
+                    style={{ animationDelay: "2s" }}
+                  />
+                </svg>
+              </div>
 
-            {/* Footer */}
-            <footer className="py-6 text-center">
-              <p
-                className="text-sm"
-                style={{
-                  color: theme === "dark" ? "#6B7280" : "#9CA3AF",
-                  fontFamily: "'Poppins', sans-serif",
-                }}
-              >
-                © 2025 Software Ventures Pty Ltd. All rights reserved.
-              </p>
-            </footer>
+              {/* Content Container - positioned above background layers */}
+              <div className="relative z-10 max-w-7xl mx-auto px-6">
+                {children}
+              </div>
+            </div>
           </main>
         </div>
-
-        {/* Setup Group Modal */}
-        <SetupGroupModal
-          isOpen={isSetupModalOpen}
-          onClose={() => setIsSetupModalOpen(false)}
-        />
       </div>
+
+      {/* Setup Group Modal - Outside main container to avoid blur */}
+      <SetupGroupModal
+        isOpen={isSetupModalOpen}
+        onClose={() => setIsSetupModalOpen(false)}
+      />
+
+      {/* Renewal Modal - Same level as setup modal */}
+      <SetupGroupModal
+        isOpen={isRenewalModalOpen}
+        onClose={() => setIsRenewalModalOpen(false)}
+        mode="renewal"
+        groupName={renewalGroupName}
+      />
     </DashboardContext.Provider>
   );
 }

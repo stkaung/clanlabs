@@ -1,5 +1,6 @@
 "use client";
 import useTheme from "@/hooks/useTheme";
+import { useDashboard } from "@/components/dashboard/layout/DashboardLayout";
 
 interface GroupData {
   id: string;
@@ -18,6 +19,7 @@ interface GroupCardProps {
 
 function GroupCard({ group, onViewProfile, onSettings }: GroupCardProps) {
   const theme = useTheme();
+  const { openRenewalModal } = useDashboard();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -149,56 +151,84 @@ function GroupCard({ group, onViewProfile, onSettings }: GroupCardProps) {
 
       {/* Actions */}
       <div className="flex items-center space-x-3">
-        <button
-          onClick={() => onViewProfile(group.id)}
-          className="flex-1 flex items-center justify-center space-x-3 py-3 px-6 rounded-full font-bold text-white text-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl backdrop-blur-sm"
-          style={{
-            background: "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)",
-            fontFamily: "'Poppins', sans-serif",
-            textShadow: "0 1px 2px rgba(0,0,0,0.2)",
-            backdropFilter: "blur(8px)",
-            border:
-              theme === "dark"
-                ? "1px solid rgba(255,255,255,0.1)"
-                : "1px solid rgba(255,255,255,0.2)",
-          }}
-          onMouseEnter={(e) => {
-            (e.target as HTMLButtonElement).style.background =
-              "linear-gradient(135deg, #0A2D5A 0%, #1E6FD9 100%)";
-          }}
-          onMouseLeave={(e) => {
-            (e.target as HTMLButtonElement).style.background =
-              "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)";
-          }}
-        >
-          <i className="fas fa-user text-xs" />
-          <span>View Profile</span>
-        </button>
-
-        <button
-          onClick={() => onSettings(group.id)}
-          className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 backdrop-blur-sm border shadow-lg ${
-            theme === "dark"
-              ? "bg-gradient-to-br from-gray-700/80 to-gray-800/80 border-white/10"
-              : "bg-gradient-to-br from-white/80 to-gray-50/80 border-blue-200/30"
-          }`}
-          style={{
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          <i
-            className="fas fa-cog text-sm"
+        {group.subscriptionStatus === "EXPIRED" ? (
+          /* Reactivate Button for Expired Groups */
+          <button
+            onClick={() => openRenewalModal(group.name)}
+            className="w-full flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg"
             style={{
-              backgroundImage:
+              background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+              fontFamily: "'Poppins', sans-serif",
+              boxShadow:
                 theme === "dark"
-                  ? "linear-gradient(135deg, #6B7280, #9CA3AF)"
-                  : "linear-gradient(135deg, #4B5563, #6B7280)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
+                  ? "0 8px 25px rgba(245, 158, 11, 0.3), 0 0 0 1px rgba(255,255,255,0.1)"
+                  : "0 8px 25px rgba(245, 158, 11, 0.2)",
             }}
-          />
-        </button>
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background =
+                "linear-gradient(135deg, #D97706 0%, #F59E0B 100%)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLButtonElement).style.background =
+                "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)";
+            }}
+          >
+            <i className="fas fa-refresh text-sm" />
+            <span>Reactivate</span>
+          </button>
+        ) : (
+          /* Normal Buttons for Active/Pending Groups */
+          <>
+            <button
+              onClick={() => onViewProfile(group.id)}
+              className="flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg"
+              style={{
+                background: "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)",
+                fontFamily: "'Poppins', sans-serif",
+                boxShadow:
+                  theme === "dark"
+                    ? "0 8px 25px rgba(30, 111, 217, 0.3), 0 0 0 1px rgba(255,255,255,0.1)"
+                    : "0 8px 25px rgba(30, 111, 217, 0.2)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "linear-gradient(135deg, #0A2D5A 0%, #1E6FD9 100%)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)";
+              }}
+            >
+              <i className="fas fa-user text-sm" />
+              <span>View Profile</span>
+            </button>
+
+            <button
+              onClick={() => onSettings(group.id)}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 backdrop-blur-sm border shadow-lg ${
+                theme === "dark"
+                  ? "bg-gradient-to-br from-gray-700/80 to-gray-800/80 border-white/10"
+                  : "bg-gradient-to-br from-white/80 to-gray-50/80 border-blue-200/30"
+              }`}
+              style={{
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <i
+                className="fas fa-cog text-sm"
+                style={{
+                  backgroundImage:
+                    theme === "dark"
+                      ? "linear-gradient(135deg, #6B7280, #9CA3AF)"
+                      : "linear-gradient(135deg, #4B5563, #6B7280)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              />
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

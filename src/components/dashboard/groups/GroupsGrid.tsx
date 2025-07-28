@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useTheme from "@/hooks/useTheme";
 import GroupCard from "./GroupCard";
-import StatWidgets from "@/components/dashboard/widgets/StatWidgets";
 import { useDashboard } from "@/components/dashboard/layout/DashboardLayout";
 
 interface GroupData {
@@ -78,19 +77,25 @@ function GroupsGrid({ searchQuery = "", onCreateGroup }: GroupsGridProps) {
   return (
     <div>
       {/* Section Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8">
         <div>
-          <div className="flex items-center space-x-3 mb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-2 sm:space-y-0 mb-3">
             <h2
-              className="text-3xl font-bold text-blue-500"
+              className={`text-xl sm:text-3xl font-bold ${
+                theme === "dark" ? "text-white" : "text-blue-500"
+              }`}
               style={{
                 fontFamily: "'Poppins', sans-serif",
+                textShadow:
+                  theme === "dark"
+                    ? "0 2px 4px rgba(0, 0, 0, 0.3)"
+                    : "0 1px 2px rgba(0, 0, 0, 0.1)",
               }}
             >
               Your Groups
             </h2>
             <div
-              className={`px-3 py-1 rounded-full text-xs font-bold ${
+              className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-bold inline-flex items-center ${
                 theme === "dark"
                   ? "bg-blue-500/20 text-blue-300"
                   : "bg-blue-100 text-blue-700"
@@ -124,32 +129,29 @@ function GroupsGrid({ searchQuery = "", onCreateGroup }: GroupsGridProps) {
 
         <button
           onClick={handleCreateGroup}
-          className="flex items-center space-x-3 py-4 px-8 rounded-full font-bold text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+          className="flex items-center space-x-2 sm:space-x-3 py-2 sm:py-4 px-4 sm:px-8 rounded-lg font-bold text-white text-xs sm:text-sm transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl whitespace-nowrap"
           style={{
-            background: "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)",
+            background: "linear-gradient(135deg, #15803D 0%, #166534 100%)",
             fontFamily: "'Poppins', sans-serif",
             textShadow: "0 1px 2px rgba(0,0,0,0.2)",
             boxShadow:
               theme === "dark"
-                ? "0 8px 25px rgba(30, 111, 217, 0.3), 0 0 0 1px rgba(255,255,255,0.1)"
-                : "0 8px 25px rgba(30, 111, 217, 0.2)",
+                ? "0 8px 25px rgba(21, 128, 61, 0.3), 0 0 0 1px rgba(255,255,255,0.1)"
+                : "0 8px 25px rgba(21, 128, 61, 0.2)",
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLButtonElement).style.background =
-              "linear-gradient(135deg, #0A2D5A 0%, #1E6FD9 100%)";
+              "linear-gradient(135deg, #166534 0%, #15803D 100%)";
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLButtonElement).style.background =
-              "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)";
+              "linear-gradient(135deg, #15803D 0%, #166534 100%)";
           }}
         >
-          <i className="fas fa-plus text-sm" />
-          <span className="text-sm">Setup Group</span>
+          <i className="fas fa-plus text-xs sm:text-sm" />
+          <span>Setup Group</span>
         </button>
       </div>
-
-      {/* Statistics Widgets */}
-      <StatWidgets className="mb-8" />
 
       {/* Groups Grid */}
       {filteredGroups.length > 0 ? (

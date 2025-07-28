@@ -38,7 +38,7 @@ export const metadata = {
 // This layout applies to all routes
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/img/logo/mainlogo.png" />
         <script

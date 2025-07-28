@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import useTheme from "@/hooks/useTheme";
 import GroupsSidebar from "@/components/dashboard/sidebar/GroupsSidebar";
-import GroupProfileTopNav from "@/components/dashboard/layout/GroupProfileTopNav";
+import TopNavBar from "@/components/dashboard/layout/TopNavBar";
 import ProfileCard from "@/components/dashboard/profile/ProfileCard";
 import GroupInfoCard from "@/components/dashboard/profile/GroupInfoCard";
 import type {
@@ -23,7 +23,7 @@ import AuditLogsSection from "@/components/dashboard/profile/AuditLogsSection";
 export default function GroupProfilePage() {
   const params = useParams();
   const theme = useTheme();
-  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(true); // Default to collapsed
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
   const groupId = params.groupId as string;
@@ -234,6 +234,8 @@ export default function GroupProfilePage() {
     },
   ];
 
+  const breadcrumb = ["Groups", mockGroupInfo.name, "Profile"];
+
   return (
     <div
       className="min-h-screen transition-all duration-500"
@@ -241,6 +243,15 @@ export default function GroupProfilePage() {
         backgroundColor: theme === "dark" ? "#0F0F0F" : "#F8FAFC",
       }}
     >
+      {/* Mobile Overlay - positioned above content but below sidebar */}
+      {isMobile && !sidebarCollapsed && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity duration-300"
+          onClick={toggleSidebar}
+          onTouchEnd={toggleSidebar}
+        />
+      )}
+
       {/* Groups Sidebar */}
       <GroupsSidebar
         groups={mockGroups}
@@ -250,22 +261,24 @@ export default function GroupProfilePage() {
         isMobile={isMobile}
       />
 
-      {/* Mobile Overlay */}
-      {isMobile && !sidebarCollapsed && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
-          onClick={toggleSidebar}
-        />
-      )}
-
       {/* Top Navigation */}
-      <GroupProfileTopNav
-        onSidebarToggle={toggleSidebar}
-        groupName={mockGroupInfo.name}
-        breadcrumb={["Groups", mockGroupInfo.name, "Profile"]}
-        sidebarCollapsed={sidebarCollapsed}
-        isMobile={isMobile}
-      />
+      <div
+        className="fixed top-0 right-0 z-20 transition-all duration-300"
+        style={{
+          width: `calc(100% - ${
+            isMobile ? "0px" : sidebarCollapsed ? "80px" : "256px"
+          })`,
+          left: isMobile ? "0px" : sidebarCollapsed ? "80px" : "256px",
+        }}
+      >
+        <TopNavBar
+          onDrawerToggle={toggleSidebar}
+          breadcrumb={breadcrumb}
+          showBackButton={true}
+          showSearch={false}
+          sidebarCollapsed={sidebarCollapsed}
+        />
+      </div>
 
       {/* Main Content */}
       <div
@@ -275,52 +288,95 @@ export default function GroupProfilePage() {
       >
         {/* Content Container */}
         <div
-          className="flex-1 p-6 overflow-auto"
+          className="flex-1 relative overflow-hidden"
           style={{
             background:
               theme === "dark"
-                ? "linear-gradient(135deg, #0F0F0F 0%, #1A1A1A 50%, #0F0F0F 100%)"
-                : "linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 50%, #F8FAFC 100%)",
+                ? "linear-gradient(135deg, #0F0F23 0%, #1A1A3A 50%, #0F0F23 100%)"
+                : "linear-gradient(135deg, #EBF4FF 0%, #DBEAFE 50%, #EBF4FF 100%)",
           }}
         >
-          {/* Main Cards Grid */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-7xl mx-auto">
-            {/* Profile Card */}
-            <ProfileCard userProfile={mockUserProfile} />
-
-            {/* Group Info Card */}
-            <GroupInfoCard groupInfo={mockGroupInfo} />
-          </div>
-
-          {/* Profile Activity Sections */}
-          <div className="mt-8 max-w-7xl mx-auto space-y-6">
-            {/* Medals Section */}
-            <MedalsSection medals={mockMedals} />
-
-            {/* Qualifications Section */}
-            <QualificationsSection qualifications={mockQualifications} />
-
-            {/* Audit Logs Section */}
-            <AuditLogsSection auditLogs={mockAuditLogs} />
-          </div>
-
-          {/* Footer */}
-          <footer
-            className="py-6 text-center border-t mt-8 max-w-7xl mx-auto"
-            style={{
-              borderColor: theme === "dark" ? "#2A2A2A" : "#E5E7EB",
-            }}
-          >
-            <p
-              className="text-sm"
-              style={{
-                color: theme === "dark" ? "#6B7280" : "#9CA3AF",
-                fontFamily: "'Poppins', sans-serif",
-              }}
+          {/* Flowing background waves - same as hero section */}
+          <div className="absolute inset-0 overflow-hidden opacity-40">
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox="0 0 1200 800"
+              preserveAspectRatio="none"
             >
-              © 2025 Software Ventures Pty Ltd. All rights reserved.
-            </p>
-          </footer>
+              <defs>
+                <linearGradient
+                  id="profileGradient1"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor={theme === "dark" ? "#1e40af" : "#3b82f6"}
+                    stopOpacity="0.6"
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={theme === "dark" ? "#7c3aed" : "#a855f7"}
+                    stopOpacity="0.5"
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="profileGradient2"
+                  x1="100%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor={theme === "dark" ? "#06b6d4" : "#06b6d4"}
+                    stopOpacity="0.4"
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={theme === "dark" ? "#3b82f6" : "#3b82f6"}
+                    stopOpacity="0.4"
+                  />
+                </linearGradient>
+              </defs>
+              <path
+                d="M0,400 Q400,200 800,400 T1200,400 L1200,800 L0,800 Z"
+                fill="url(#profileGradient1)"
+              />
+              <path
+                d="M0,600 Q600,500 1200,600 L1200,800 L0,800 Z"
+                fill="url(#profileGradient2)"
+                className="animate-pulse"
+                style={{ animationDelay: "2s" }}
+              />
+            </svg>
+          </div>
+
+          {/* Content with padding */}
+          <div className="relative z-10 p-6">
+            {/* Main Cards Grid */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-7xl mx-auto">
+              {/* Profile Card */}
+              <ProfileCard userProfile={mockUserProfile} />
+
+              {/* Group Info Card */}
+              <GroupInfoCard groupInfo={mockGroupInfo} />
+            </div>
+
+            {/* Profile Activity Sections */}
+            <div className="mt-8 max-w-7xl mx-auto space-y-6">
+              {/* Medals Section */}
+              <MedalsSection medals={mockMedals} />
+
+              {/* Qualifications Section */}
+              <QualificationsSection qualifications={mockQualifications} />
+
+              {/* Audit Logs Section */}
+              <AuditLogsSection auditLogs={mockAuditLogs} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
