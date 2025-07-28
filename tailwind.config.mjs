@@ -339,5 +339,14 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
+  daisyui: {
+    styled: true,
+    themes: false, // don't use built-in themes
+    base: true,
+    utils: true,
+    logs: false,
+    rtl: false,
+    prefix: "", // or add "d-" if you want to scope everything
+  },
 };

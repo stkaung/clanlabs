@@ -95,10 +95,8 @@ const MobileMenu = ({ isActiveMobileMenu, setIsActiveMobileMenu }) => {
               ))
             : ""}
           <li>
-            <a
-              href="https://dashboard.clanlabs.co/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/login"
               className={`inline-flex items-center gap-2 px-4 py-2 border rounded-lg text-sm font-medium transition-all duration-200 ${
                 theme === "dark"
                   ? "bg-blue-500/80 border-blue-400/30 text-white hover:bg-blue-600/90"
@@ -109,7 +107,7 @@ const MobileMenu = ({ isActiveMobileMenu, setIsActiveMobileMenu }) => {
             >
               <i className="fab fa-discord text-lg"></i>
               Login
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

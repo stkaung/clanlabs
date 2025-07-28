@@ -2,11 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import useTheme from "@/hooks/useTheme";
 
 export default function LoginPage() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const theme = useTheme();
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
@@ -14,7 +16,7 @@ export default function LoginPage() {
   }, []);
 
   function handleDiscordLogin(): void {
-    console.log("Discord login clicked");
+    router.push("/groups");
   }
 
   return (
@@ -25,7 +27,7 @@ export default function LoginPage() {
         <div
           className={`absolute inset-0 ${
             theme === "dark"
-              ? "bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"
+              ? "bg-gradient-to-br from-slate-950 via-gray-900 to-black"
               : "bg-gradient-to-br from-slate-300 via-gray-200 to-slate-400"
           }`}
         />
@@ -34,7 +36,7 @@ export default function LoginPage() {
         <div
           className={`absolute inset-0 ${
             theme === "dark"
-              ? "bg-gradient-to-br from-blue-900/30 via-indigo-900/15 to-slate-900/40"
+              ? "bg-gradient-to-br from-blue-950/15 via-indigo-950/8 to-slate-950/20"
               : "bg-gradient-to-br from-blue-100/50 via-purple-50/30 to-slate-200/40"
           }`}
         />

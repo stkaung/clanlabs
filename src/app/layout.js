@@ -3,7 +3,6 @@ import SmoothScrollWrapper from "@/components/SmoothScrollWrapper";
 import VideoModalContextProvider from "@/context_api/VideoModalContext";
 import HeaderContextProvider from "@/context_api/HeaderContext";
 import FooterContextProvider from "@/context_api/FooterContext";
-import ThemeModeSwitcher from "@/components/shared/others/ThemeModeSwitcher";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -49,7 +48,6 @@ export default function RootLayout({ children }) {
             <FooterContextProvider value={{ footerType: 1 }}>
               <SmoothScrollWrapper>
                 <Suspense fallback={<></>}>{children}</Suspense>
-                <ThemeModeSwitcher />
               </SmoothScrollWrapper>
             </FooterContextProvider>
           </HeaderContextProvider>

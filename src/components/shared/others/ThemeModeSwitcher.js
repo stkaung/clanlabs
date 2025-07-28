@@ -14,6 +14,7 @@ const ThemeModeSwitcher = () => {
   return (
     <div className="fixed top-[200px] lg:top-[300px] transition-all duration-300 right-[-50px] hover:right-0 z-4xl">
       <button
+        onClick={(e) => e.stopPropagation()}
         className={`theme-controller w-90px h-10 rounded-l-full px-10px flex items-center transition-all duration-300 font-sora ${
           theme === "dark"
             ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"

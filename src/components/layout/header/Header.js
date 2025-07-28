@@ -11,8 +11,6 @@ import Navbar from "./Navbar";
 
 const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
   const [isActiveMobileMenu, setIsActiveMobileMenu] = useState(false);
-  const [previousScrollPosition, setPreviousScrollPosition] = useState(0);
-  const [previousSection, setPreviousSection] = useState("");
   const { isInnerPage, headerType } = useHeaderContext();
   const { isAnyVideoModalOpen } = useVideoModal();
   const theme = useTheme();
@@ -165,10 +163,8 @@ const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
                     ""
                   ) : (
                     <div>
-                      <a
-                        href="https://dashboard.clanlabs.co/"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        href="/login"
                         className={`px-4 py-2 backdrop-blur-sm border rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
                           theme === "dark"
                             ? "bg-blue-500/80 border-blue-400/30 text-white hover:bg-blue-600/90"
@@ -177,7 +173,7 @@ const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
                       >
                         <i className="fab fa-discord text-lg"></i>
                         Login
-                      </a>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -269,10 +265,8 @@ const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
                     ""
                   ) : (
                     <div>
-                      <a
-                        href="https://dashboard.clanlabs.co/"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        href="/login"
                         className={`px-4 py-2 backdrop-blur-sm border rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
                           theme === "dark"
                             ? "bg-blue-500/80 border-blue-400/30 text-white hover:bg-blue-600/90"
@@ -281,7 +275,7 @@ const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
                       >
                         <i className="fab fa-discord text-lg"></i>
                         Login
-                      </a>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -373,10 +367,8 @@ const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
                     ""
                   ) : (
                     <div>
-                      <a
-                        href="https://dashboard.clanlabs.co/"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        href="/login"
                         className={`px-4 py-2 backdrop-blur-sm border rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
                           theme === "dark"
                             ? "bg-blue-500/80 border-blue-400/30 text-white hover:bg-blue-600/90"
@@ -385,7 +377,7 @@ const Header = ({ isSticky, useAlternativeStickyStyle = false }) => {
                       >
                         <i className="fab fa-discord text-lg"></i>
                         Login
-                      </a>
+                      </Link>
                     </div>
                   )}
                 </div>
