@@ -17,7 +17,8 @@ function GroupInfoCard({ groupInfo, className = "" }: GroupInfoCardProps) {
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString("en-US", {
-      month: "long",
+      month: "short",
+      day: "numeric",
       year: "numeric",
     });
   }
@@ -37,12 +38,7 @@ function GroupInfoCard({ groupInfo, className = "" }: GroupInfoCardProps) {
     },
   ];
 
-  const subtitle = (
-    <>
-      <i className="fas fa-user-crown text-sm" style={{ color: "#F59E0B" }} />{" "}
-      By: {groupInfo.creator.name}
-    </>
-  );
+  const subtitle = `By: ${groupInfo.creator.name}`;
 
   const tags = [
     {
@@ -67,7 +63,6 @@ function GroupInfoCard({ groupInfo, className = "" }: GroupInfoCardProps) {
         position: "top-right",
       }}
       tags={tags}
-      description={groupInfo.description}
       stats={stats}
       className={className}
     />

@@ -42,9 +42,9 @@ function ProfileCard({ userProfile, className = "" }: ProfileCardProps) {
       icon: "fas fa-calendar-alt",
       iconColor: "#3B82F6",
       value: new Date(userProfile.joinedDate).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       }),
       label: "Joined",
     },
@@ -76,11 +76,6 @@ function ProfileCard({ userProfile, className = "" }: ProfileCardProps) {
       imageSize="md"
       imageBorderColor={userProfile.role.color}
       imageShape="circle"
-      badge={{
-        text: xpInfo.level.toString(),
-        color: xpInfo.color,
-        position: "bottom-right",
-      }}
       tags={tags}
       stats={stats}
       className={className}

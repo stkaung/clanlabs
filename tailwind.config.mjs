@@ -19,7 +19,8 @@ const darkColor = "#0f0715";
 const bgColor = "#10171c";
 const bgColor2 = "#FFFFFF1A";
 const bgColor3 = "#d9d9d980";
-module.exports = {
+
+export default {
   content: [
     "./demo/index.html",
     "./demo/**/*.{html,js}",

@@ -7,28 +7,18 @@ function MedalsSection({ medals, className = "" }: MedalsProps) {
   const theme = useTheme();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  function getRarityColor(rarity: Medal["rarity"]): string {
-    switch (rarity) {
-      case "common":
-        return "#6B7280";
-      case "rare":
-        return "#3B82F6";
-      case "epic":
-        return "#A855F7";
-      case "legendary":
-        return "#F59E0B";
-      default:
-        return "#6B7280";
+  // Group medals by type and count them
+  const groupedMedals = medals.reduce((acc, medal) => {
+    const key = medal.name;
+    if (acc[key]) {
+      acc[key].count += 1;
+    } else {
+      acc[key] = { ...medal, count: 1 };
     }
-  }
+    return acc;
+  }, {} as Record<string, Medal & { count: number }>);
 
-  function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  }
+  const uniqueMedals = Object.values(groupedMedals);
 
   return (
     <div
@@ -74,7 +64,7 @@ function MedalsSection({ medals, className = "" }: MedalsProps) {
                   color: theme === "dark" ? "#A0A0A0" : "#6B7280",
                 }}
               >
-                {medals.length} earned
+                {uniqueMedals.length} unique medals
               </p>
             </div>
           </div>
@@ -95,7 +85,7 @@ function MedalsSection({ medals, className = "" }: MedalsProps) {
         }`}
       >
         <div className="p-6">
-          {medals.length === 0 ? (
+          {uniqueMedals.length === 0 ? (
             <div className="text-center py-8">
               <i
                 className="fas fa-medal text-4xl mb-3"
@@ -113,105 +103,55 @@ function MedalsSection({ medals, className = "" }: MedalsProps) {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {medals.map((medal, index) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {uniqueMedals.map((medal, index) => (
                 <div
                   key={medal.id}
-                  className={`p-4 rounded-xl border transition-all duration-300 hover:scale-105 transform ${
+                  className={`relative p-4 rounded-xl border transition-all duration-300 hover:scale-105 transform ${
                     isExpanded
                       ? "translate-y-0 opacity-100"
                       : "translate-y-4 opacity-0"
                   }`}
                   style={{
                     backgroundColor: theme === "dark" ? "#2A2A2A" : "#F3F4F6",
-                    borderColor: getRarityColor(medal.rarity),
+                    borderColor: theme === "dark" ? "#4B5563" : "#E5E7EB",
                     transitionDelay: isExpanded
-                      ? `${index * 100}ms`
-                      : `${(medals.length - index - 1) * 50}ms`,
+                      ? `${index * 50}ms`
+                      : `${(uniqueMedals.length - index - 1) * 25}ms`,
                   }}
                 >
-                  <div className="flex items-start space-x-3">
+                  {/* Count Badge */}
+                  {medal.count > 1 && (
                     <div
-                      className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                      className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
                       style={{
-                        backgroundColor: getRarityColor(medal.rarity),
+                        backgroundColor: "#3B82F6",
                       }}
                     >
-                      <i className={`${medal.icon} text-white text-lg`} />
+                      {medal.count}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-1">
-                        <h4
-                          className="font-semibold text-sm truncate"
-                          style={{
-                            color: theme === "dark" ? "#FFFFFF" : "#1F2937",
-                          }}
-                        >
-                          {medal.name}
-                        </h4>
-                        <span
-                          className="text-xs px-2 py-1 rounded-full font-medium uppercase tracking-wide flex-shrink-0 ml-2"
-                          style={{
-                            backgroundColor: `${getRarityColor(
-                              medal.rarity
-                            )}20`,
-                            color: getRarityColor(medal.rarity),
-                          }}
-                        >
-                          {medal.rarity}
-                        </span>
-                      </div>
-                      <p
-                        className="text-xs mb-2 line-clamp-2"
-                        style={{
-                          color: theme === "dark" ? "#A0A0A0" : "#6B7280",
-                        }}
-                      >
-                        {medal.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span
-                          className="text-xs"
-                          style={{
-                            color: theme === "dark" ? "#6B7280" : "#9CA3AF",
-                          }}
-                        >
-                          {formatDate(medal.earnedDate)}
-                        </span>
-                        {medal.progress && (
-                          <div className="flex items-center space-x-1">
-                            <div
-                              className="w-16 h-2 rounded-full overflow-hidden"
-                              style={{
-                                backgroundColor:
-                                  theme === "dark" ? "#4B5563" : "#E5E7EB",
-                              }}
-                            >
-                              <div
-                                className="h-full transition-all duration-300"
-                                style={{
-                                  backgroundColor: getRarityColor(medal.rarity),
-                                  width: `${
-                                    (medal.progress.current /
-                                      medal.progress.total) *
-                                    100
-                                  }%`,
-                                }}
-                              />
-                            </div>
-                            <span
-                              className="text-xs"
-                              style={{
-                                color: theme === "dark" ? "#6B7280" : "#9CA3AF",
-                              }}
-                            >
-                              {medal.progress.current}/{medal.progress.total}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                  )}
+
+                  {/* Medal Icon */}
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3"
+                    style={{
+                      backgroundColor: "#3B82F6",
+                    }}
+                  >
+                    <i className={`${medal.icon} text-white text-lg`} />
                   </div>
+
+                  {/* Medal Name */}
+                  <h4
+                    className="font-semibold text-xs text-center line-clamp-2"
+                    style={{
+                      color: theme === "dark" ? "#FFFFFF" : "#1F2937",
+                    }}
+                    title={medal.name}
+                  >
+                    {medal.name}
+                  </h4>
                 </div>
               ))}
             </div>

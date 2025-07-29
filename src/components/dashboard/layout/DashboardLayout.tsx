@@ -7,7 +7,10 @@ import {
   useContext,
 } from "react";
 import useTheme from "@/hooks/useTheme";
+import type { GroupListItem } from "@/types/group-profile";
 import DashboardSidebar from "@/components/dashboard/sidebar/DashboardSidebar";
+import DeveloperSidebar from "@/components/dashboard/sidebar/DeveloperSidebar";
+import GroupsSidebar from "@/components/dashboard/sidebar/GroupsSidebar";
 import TopNavBar from "@/components/dashboard/layout/TopNavBar";
 import SetupGroupModal from "@/components/dashboard/groups/SetupGroupModal";
 
@@ -31,9 +34,29 @@ export function useDashboard() {
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  breadcrumb?: string[];
+  showSearch?: boolean;
+  onSearch?: (query: string) => void;
+  searchPlaceholder?: string;
+  showBackButton?: boolean;
+  isDeveloperPanel?: boolean;
+  isGroupsPage?: boolean;
+  groups?: GroupListItem[];
+  currentGroupId?: string;
 }
 
-function DashboardLayout({ children }: DashboardLayoutProps) {
+function DashboardLayout({
+  children,
+  breadcrumb = ["Dashboard", "Groups"],
+  showSearch = true,
+  onSearch,
+  searchPlaceholder = "Search...",
+  showBackButton = false,
+  isDeveloperPanel = false,
+  isGroupsPage = false,
+  groups = [],
+  currentGroupId = "",
+}: DashboardLayoutProps) {
   const theme = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -52,6 +75,10 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
       // Auto-collapse sidebar when switching to mobile
       if (mobile && !wasMobile) {
         setSidebarCollapsed(true);
+      }
+      // Auto-expand sidebar when switching to desktop (if it was collapsed in mobile)
+      if (!mobile && wasMobile && sidebarCollapsed) {
+        setSidebarCollapsed(false);
       }
     };
 
@@ -96,39 +123,69 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
             />
           )}
 
-          {/* Sidebar Container */}
-          <div className="relative">
-            <div
-              className={`${
-                isMobile
-                  ? `fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 ease-in-out ${
-                      sidebarCollapsed ? "-translate-x-full" : "translate-x-0"
-                    }`
-                  : "relative"
-              }`}
-            >
+          {/* Sidebar - Fixed positioning for both mobile and desktop */}
+          <div
+            className={`${
+              isMobile
+                ? `fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 ease-in-out ${
+                    sidebarCollapsed ? "-translate-x-full" : "translate-x-0"
+                  }`
+                : `fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 ease-in-out ${
+                    sidebarCollapsed ? "-translate-x-full" : "translate-x-0"
+                  }`
+            }`}
+          >
+            {isDeveloperPanel ? (
+              <DeveloperSidebar
+                collapsed={!isMobile && sidebarCollapsed}
+                onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                isMobile={isMobile}
+              />
+            ) : isGroupsPage ? (
+              <GroupsSidebar
+                groups={groups}
+                currentGroupId={currentGroupId}
+                collapsed={!isMobile && sidebarCollapsed}
+                onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                isMobile={isMobile}
+              />
+            ) : (
               <DashboardSidebar
                 collapsed={!isMobile && sidebarCollapsed}
                 onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
                 isMobile={isMobile}
               />
-            </div>
+            )}
           </div>
 
           {/* Main content area */}
-          <main className="flex-1 flex flex-col min-h-screen w-full overflow-hidden">
-            {/* Top Navigation Bar - Always visible */}
-            <div className="relative z-20">
+          <main
+            className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300 pt-12 ${
+              isMobile ? "ml-0" : sidebarCollapsed ? "ml-20" : "ml-64"
+            }`}
+          >
+            {/* Top Navigation Bar - Fixed */}
+            <div
+              className="fixed top-0 right-0 z-30 bg-opacity-95 backdrop-blur-xl"
+              style={{
+                left: isMobile ? "0" : sidebarCollapsed ? "80px" : "256px",
+                transition: "left 0.3s ease",
+              }}
+            >
               <TopNavBar
                 onDrawerToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                breadcrumb={["Dashboard", "Groups"]}
+                breadcrumb={breadcrumb}
                 sidebarCollapsed={!isMobile && sidebarCollapsed}
+                showSearch={showSearch}
+                onSearch={onSearch}
+                searchPlaceholder={searchPlaceholder}
+                showBackButton={showBackButton}
               />
             </div>
 
             {/* Page content with max-width container */}
             <div
-              className={`flex-1 relative overflow-hidden pt-12`}
+              className={`flex-1 relative pt-12 pb-12`}
               style={{
                 background:
                   theme === "dark"

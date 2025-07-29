@@ -13,53 +13,18 @@ function QualificationsSection({
   const theme = useTheme();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
-  function getStatusColor(status: Qualification["status"]): string {
-    switch (status) {
-      case "active":
-        return "#22C55E";
-      case "verified":
-        return "#3B82F6";
-      case "pending":
-        return "#F59E0B";
-      case "expired":
-        return "#EF4444";
-      default:
-        return "#6B7280";
+  // Group qualifications by title and count them
+  const groupedQualifications = qualifications.reduce((acc, qualification) => {
+    const key = qualification.title;
+    if (acc[key]) {
+      acc[key].count += 1;
+    } else {
+      acc[key] = { ...qualification, count: 1 };
     }
-  }
+    return acc;
+  }, {} as Record<string, Qualification & { count: number }>);
 
-  function getStatusIcon(status: Qualification["status"]): string {
-    switch (status) {
-      case "active":
-        return "fas fa-check-circle";
-      case "verified":
-        return "fas fa-shield-check";
-      case "pending":
-        return "fas fa-clock";
-      case "expired":
-        return "fas fa-exclamation-triangle";
-      default:
-        return "fas fa-question-circle";
-    }
-  }
-
-  function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  }
-
-  function isExpiring(expiryDate?: string): boolean {
-    if (!expiryDate) return false;
-    const expiry = new Date(expiryDate);
-    const now = new Date();
-    const daysUntilExpiry = Math.ceil(
-      (expiry.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-    );
-    return daysUntilExpiry <= 30 && daysUntilExpiry > 0;
-  }
+  const uniqueQualifications = Object.values(groupedQualifications);
 
   return (
     <div
@@ -105,7 +70,7 @@ function QualificationsSection({
                   color: theme === "dark" ? "#A0A0A0" : "#6B7280",
                 }}
               >
-                {qualifications.length} credentials
+                {uniqueQualifications.length} unique credentials
               </p>
             </div>
           </div>
@@ -126,7 +91,7 @@ function QualificationsSection({
         }`}
       >
         <div className="p-6">
-          {qualifications.length === 0 ? (
+          {uniqueQualifications.length === 0 ? (
             <div className="text-center py-8">
               <i
                 className="fas fa-certificate text-4xl mb-3"
@@ -144,149 +109,60 @@ function QualificationsSection({
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {qualifications.map((qualification, index) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {uniqueQualifications.map((qualification, index) => (
                 <div
                   key={qualification.id}
-                  className={`p-4 rounded-xl border transition-all duration-300 hover:scale-[1.02] transform ${
+                  className={`relative p-4 rounded-xl border transition-all duration-300 hover:scale-105 transform ${
                     isExpanded
                       ? "translate-y-0 opacity-100"
                       : "translate-y-4 opacity-0"
                   }`}
                   style={{
                     backgroundColor: theme === "dark" ? "#2A2A2A" : "#F3F4F6",
-                    borderColor: getStatusColor(qualification.status),
+                    borderColor: theme === "dark" ? "#4B5563" : "#E5E7EB",
                     transitionDelay: isExpanded
-                      ? `${index * 100}ms`
-                      : `${(qualifications.length - index - 1) * 50}ms`,
+                      ? `${index * 50}ms`
+                      : `${(uniqueQualifications.length - index - 1) * 25}ms`,
                   }}
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-start space-x-3 flex-1">
-                      <div
-                        className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0"
-                        style={{
-                          backgroundColor: `${getStatusColor(
-                            qualification.status
-                          )}20`,
-                        }}
-                      >
-                        <i
-                          className={`${getStatusIcon(
-                            qualification.status
-                          )} text-lg`}
-                          style={{
-                            color: getStatusColor(qualification.status),
-                          }}
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4
-                          className="font-semibold text-sm mb-1"
-                          style={{
-                            color: theme === "dark" ? "#FFFFFF" : "#1F2937",
-                          }}
-                        >
-                          {qualification.title}
-                        </h4>
-                        <p
-                          className="text-xs mb-2"
-                          style={{
-                            color: theme === "dark" ? "#A0A0A0" : "#6B7280",
-                          }}
-                        >
-                          Issued by {qualification.issuer}
-                        </p>
-                        <p
-                          className="text-xs mb-3 line-clamp-2"
-                          style={{
-                            color: theme === "dark" ? "#9CA3AF" : "#6B7280",
-                          }}
-                        >
-                          {qualification.description}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2 flex-shrink-0">
-                      <span
-                        className="text-xs px-3 py-1 rounded-full font-medium uppercase tracking-wide"
-                        style={{
-                          backgroundColor: `${getStatusColor(
-                            qualification.status
-                          )}20`,
-                          color: getStatusColor(qualification.status),
-                        }}
-                      >
-                        {qualification.status}
-                      </span>
-                      {isExpiring(qualification.expiryDate) && (
-                        <span
-                          className="text-xs px-2 py-1 rounded-full font-medium"
-                          style={{
-                            backgroundColor: "#F59E0B20",
-                            color: "#F59E0B",
-                          }}
-                        >
-                          Expiring Soon
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Tags */}
-                  {qualification.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {qualification.tags.map((tag, index) => (
-                        <span
-                          key={index}
-                          className="text-xs px-2 py-1 rounded-md"
-                          style={{
-                            backgroundColor:
-                              theme === "dark" ? "#4B5563" : "#E5E7EB",
-                            color: theme === "dark" ? "#D1D5DB" : "#374151",
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                  {/* Count Badge */}
+                  {qualification.count > 1 && (
+                    <div
+                      className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                      style={{
+                        backgroundColor: "#3B82F6",
+                      }}
+                    >
+                      {qualification.count}
                     </div>
                   )}
 
-                  {/* Dates and Actions */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4 text-xs">
-                      <span
-                        style={{
-                          color: theme === "dark" ? "#6B7280" : "#9CA3AF",
-                        }}
-                      >
-                        Issued: {formatDate(qualification.issuedDate)}
-                      </span>
-                      {qualification.expiryDate && (
-                        <span
-                          style={{
-                            color: theme === "dark" ? "#6B7280" : "#9CA3AF",
-                          }}
-                        >
-                          Expires: {formatDate(qualification.expiryDate)}
-                        </span>
-                      )}
-                    </div>
-                    {qualification.credentialUrl && (
-                      <button
-                        className="text-xs px-3 py-1 rounded-md transition-all duration-200 hover:scale-105"
-                        style={{
-                          backgroundColor: "#3B82F6",
-                          color: "#FFFFFF",
-                        }}
-                        onClick={() =>
-                          window.open(qualification.credentialUrl, "_blank")
-                        }
-                      >
-                        View Credential
-                      </button>
-                    )}
+                  {/* Qualification Icon */}
+                  <div
+                    className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3"
+                    style={{
+                      backgroundColor: "#3B82F6",
+                    }}
+                  >
+                    <i
+                      className="fas fa-certificate text-lg"
+                      style={{
+                        color: "#FFFFFF",
+                      }}
+                    />
                   </div>
+
+                  {/* Qualification Title */}
+                  <h4
+                    className="font-semibold text-xs text-center line-clamp-2"
+                    style={{
+                      color: theme === "dark" ? "#FFFFFF" : "#1F2937",
+                    }}
+                    title={qualification.title}
+                  >
+                    {qualification.title}
+                  </h4>
                 </div>
               ))}
             </div>

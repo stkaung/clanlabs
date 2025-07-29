@@ -32,6 +32,9 @@ export const metadata = {
       },
     ],
   },
+};
+
+export const viewport = {
   themeColor: "#1e6fd9", // Blue color for theme
 };
 

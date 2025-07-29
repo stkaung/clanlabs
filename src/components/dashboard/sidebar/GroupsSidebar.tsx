@@ -23,7 +23,7 @@ function GroupsSidebar({
       onToggle={onToggle}
       isMobile={isMobile}
       mode="groups"
-      title="Your Groups"
+      title="Clan Labs"
       groups={groups}
       currentGroupId={currentGroupId}
     />

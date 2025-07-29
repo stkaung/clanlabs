@@ -14,7 +14,12 @@ function DashboardSidebar({
 }: DashboardSidebarProps) {
   const navigationItems = [
     { name: "Groups", icon: "fas fa-users", active: true, href: "/groups" },
-    { name: "Developer Panel", icon: "fas fa-code", active: false, href: "#" },
+    {
+      name: "Developer Panel",
+      icon: "fas fa-code",
+      active: false,
+      href: "/dev-panel/bot-accounts",
+    },
     { name: "Settings", icon: "fas fa-cog", active: false, href: "#" },
   ];
 

@@ -9,6 +9,7 @@ interface NavigationItem {
   icon: string;
   active: boolean;
   href?: string;
+  disabled?: boolean;
 }
 
 interface BaseSidebarProps {
@@ -74,13 +75,7 @@ function BaseSidebar({
       )}
 
       <aside
-        className={`${
-          mode === "groups"
-            ? `fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 ${
-                isMobile && collapsed ? "-translate-x-full" : "translate-x-0"
-              }`
-            : "h-full"
-        } ${
+        className={`h-full ${
           isMobile ? "w-64" : collapsed ? "w-20" : "w-64"
         } backdrop-blur-xl border-r flex flex-col transition-all duration-300`}
         style={{
@@ -97,8 +92,6 @@ function BaseSidebar({
               ? "4px 0 24px rgba(0, 0, 0, 0.15), inset -1px 0 0 rgba(59, 130, 246, 0.1)"
               : "2px 0 16px rgba(0, 0, 0, 0.06), inset -1px 0 0 rgba(255, 255, 255, 0.2)",
           height: "100vh",
-          position: mode === "groups" ? "fixed" : "sticky",
-          top: 0,
         }}
       >
         {/* Subtle gradient overlay */}
@@ -288,78 +281,80 @@ function BaseSidebar({
               ) : (
                 // Standard Navigation Items
                 <div className="space-y-2">
-                  {navigationItems.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href || "#"}
-                      className={`flex items-center ${
-                        collapsed && !isMobile ? "justify-center" : "space-x-3"
-                      } ${
-                        collapsed && !isMobile ? "p-4" : "p-3"
-                      } rounded-xl cursor-pointer transition-all duration-200 hover:scale-105 backdrop-blur-sm border ${
-                        item.active ? "shadow-lg" : ""
-                      }`}
-                      style={{
-                        backgroundColor: item.active
-                          ? theme === "dark"
-                            ? "rgba(59, 130, 246, 0.15)"
-                            : "rgba(59, 130, 246, 0.1)"
-                          : "transparent",
-                        borderColor: item.active
-                          ? theme === "dark"
-                            ? "rgba(59, 130, 246, 0.3)"
-                            : "rgba(59, 130, 246, 0.2)"
-                          : "transparent",
-                        color: item.active
-                          ? theme === "dark"
-                            ? "#DBEAFE"
-                            : "#1E40AF"
-                          : theme === "dark"
-                          ? "#CBD5E1"
-                          : "#64748B",
-                        boxShadow: item.active
-                          ? theme === "dark"
-                            ? "0 4px 12px rgba(59, 130, 246, 0.15), inset 0 1px 0 rgba(59, 130, 246, 0.2)"
-                            : "0 4px 12px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(59, 130, 246, 0.15)"
-                          : "none",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!item.active) {
-                          e.currentTarget.style.backgroundColor =
-                            theme === "dark"
-                              ? "rgba(30, 41, 59, 0.4)"
-                              : "rgba(241, 245, 249, 0.6)";
-                          e.currentTarget.style.borderColor =
-                            theme === "dark"
-                              ? "rgba(59, 130, 246, 0.15)"
-                              : "rgba(30, 64, 175, 0.1)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!item.active) {
-                          e.currentTarget.style.backgroundColor = "transparent";
-                          e.currentTarget.style.borderColor = "transparent";
-                        }
-                      }}
-                    >
-                      <i
-                        className={`${item.icon} ${
-                          collapsed && !isMobile ? "text-lg" : "text-sm"
-                        }`}
-                      />
-                      {(!collapsed || isMobile) && (
-                        <span
-                          className={`font-medium whitespace-nowrap transition-all duration-300 ${
-                            collapsed && !isMobile
-                              ? "opacity-0 transform translate-x-2 scale-95"
-                              : "opacity-100 transform translate-x-0 scale-100"
-                          }`}
-                        >
-                          {item.name}
-                        </span>
-                      )}
-                    </Link>
-                  ))}
+                  {navigationItems.map((item) => {
+                    const className = `flex items-center ${
+                      collapsed && !isMobile ? "justify-center" : "space-x-3"
+                    } ${
+                      collapsed && !isMobile ? "p-4" : "p-3"
+                    } rounded-xl transition-all duration-200 backdrop-blur-sm border ${
+                      item.active ? "shadow-lg" : ""
+                    } ${
+                      item.disabled
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:scale-105"
+                    }`;
+
+                    const style = {
+                      backgroundColor: item.active
+                        ? theme === "dark"
+                          ? "rgba(59, 130, 246, 0.15)"
+                          : "rgba(59, 130, 246, 0.1)"
+                        : "transparent",
+                      borderColor: item.active
+                        ? theme === "dark"
+                          ? "rgba(59, 130, 246, 0.3)"
+                          : "rgba(59, 130, 246, 0.2)"
+                        : "transparent",
+                      color: item.active
+                        ? theme === "dark"
+                          ? "#DBEAFE"
+                          : "#1E40AF"
+                        : theme === "dark"
+                        ? "#FFFFFF"
+                        : "#374151",
+                    };
+
+                    const content = (
+                      <>
+                        <i
+                          className={item.icon}
+                          style={{
+                            fontSize:
+                              collapsed && !isMobile ? "1.25rem" : "1rem",
+                          }}
+                        />
+                        {(!collapsed || isMobile) && (
+                          <span
+                            className="font-medium whitespace-nowrap transition-all duration-300"
+                            style={{
+                              transform:
+                                collapsed && !isMobile
+                                  ? "translateX(8px) scale(0.95)"
+                                  : "translateX(0) scale(1)",
+                              opacity: collapsed && !isMobile ? 0 : 1,
+                            }}
+                          >
+                            {item.name}
+                          </span>
+                        )}
+                      </>
+                    );
+
+                    return item.disabled ? (
+                      <div key={item.name} className={className} style={style}>
+                        {content}
+                      </div>
+                    ) : (
+                      <Link
+                        key={item.name}
+                        href={item.href || "#"}
+                        className={className}
+                        style={style}
+                      >
+                        {content}
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </nav>

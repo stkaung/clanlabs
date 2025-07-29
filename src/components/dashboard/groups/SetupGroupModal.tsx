@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useTheme from "@/hooks/useTheme";
 
 interface SetupGroupModalProps {
@@ -22,6 +22,15 @@ function SetupGroupModal({
   const [selectedGroup, setSelectedGroup] = useState<string>("");
   const [selectedGroupName, setSelectedGroupName] =
     useState<string>("Your Group");
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
+  // Prevent hydration mismatch by only rendering on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Don't render anything until mounted and opened
+  if (!isMounted || !isOpen) return null;
 
   // Mock data - replace with actual API calls
   const discordServers = [
@@ -89,7 +98,7 @@ function SetupGroupModal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
         isOpen ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
     >
@@ -101,10 +110,10 @@ function SetupGroupModal({
       />
 
       {/* Modal container */}
-      <div className="relative z-10 pointer-events-none">
+      <div className="relative z-10 w-full max-w-2xl">
         {/* Modal */}
         <div
-          className={`relative w-full max-w-2xl mx-4 rounded-2xl border shadow-2xl backdrop-blur-md pointer-events-auto max-h-[90vh] flex flex-col transition-all duration-300 transform ${
+          className={`relative w-full rounded-2xl border shadow-2xl backdrop-blur-md max-h-[90vh] flex flex-col transition-all duration-300 transform ${
             isOpen
               ? "scale-100 translate-y-0 opacity-100"
               : "scale-95 translate-y-4 opacity-0"
