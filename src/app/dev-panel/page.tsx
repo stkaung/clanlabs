@@ -6,8 +6,8 @@ export default function DevPanelPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirect to bot-accounts as the default dev panel page
-    router.replace("/dev-panel/bot-accounts");
+    // Redirect to bans as the default dev panel page
+    router.replace("/dev-panel/bans");
   }, [router]);
 
   return (

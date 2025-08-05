@@ -58,6 +58,7 @@ function TopNavBar({
   }
 
   function handleBack(): void {
+    // Always go back to /groups
     router.push("/groups");
   }
 

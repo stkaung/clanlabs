@@ -25,16 +25,10 @@ function DeveloperSidebar({
       disabled: true, // As requested by user
     },
     {
-      name: "Bot Accounts",
-      icon: "fas fa-robot",
-      active: pathname.startsWith("/dev-panel/bot-accounts"),
-      href: "/dev-panel/bot-accounts",
-    },
-    {
       name: "Ban List",
       icon: "fas fa-ban",
-      active: pathname.startsWith("/dev-panel/ban-list"),
-      href: "/dev-panel/ban-list",
+      active: pathname.startsWith("/dev-panel/bans"),
+      href: "/dev-panel/bans",
     },
     {
       name: "Clans",
