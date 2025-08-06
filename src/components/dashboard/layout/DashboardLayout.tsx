@@ -43,6 +43,7 @@ interface DashboardLayoutProps {
   isGroupsPage?: boolean;
   groups?: GroupListItem[];
   currentGroupId?: string;
+  customSidebar?: ReactNode;
 }
 
 function DashboardLayout({
@@ -56,6 +57,7 @@ function DashboardLayout({
   isGroupsPage = false,
   groups = [],
   currentGroupId = "",
+  customSidebar,
 }: DashboardLayoutProps) {
   const theme = useTheme();
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
@@ -135,26 +137,28 @@ function DashboardLayout({
                   }`
             }`}
           >
-            {isDeveloperPanel ? (
-              <DeveloperSidebar
-                collapsed={!isMobile && sidebarCollapsed}
-                onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                isMobile={isMobile}
-              />
-            ) : isGroupsPage ? (
-              <GroupsSidebar
-                groups={groups}
-                currentGroupId={currentGroupId}
-                collapsed={!isMobile && sidebarCollapsed}
-                onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                isMobile={isMobile}
-              />
-            ) : (
-              <DashboardSidebar
-                collapsed={!isMobile && sidebarCollapsed}
-                onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                isMobile={isMobile}
-              />
+            {customSidebar || (
+              isDeveloperPanel ? (
+                <DeveloperSidebar
+                  collapsed={!isMobile && sidebarCollapsed}
+                  onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  isMobile={isMobile}
+                />
+              ) : isGroupsPage ? (
+                <GroupsSidebar
+                  groups={groups}
+                  currentGroupId={currentGroupId}
+                  collapsed={!isMobile && sidebarCollapsed}
+                  onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  isMobile={isMobile}
+                />
+              ) : (
+                <DashboardSidebar
+                  collapsed={!isMobile && sidebarCollapsed}
+                  onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                  isMobile={isMobile}
+                />
+              )
             )}
           </div>
 

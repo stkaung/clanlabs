@@ -95,7 +95,7 @@ function GroupsGrid({ searchQuery = "", onCreateGroup }: GroupsGridProps) {
   }
 
   function handleSettings(groupId: string): void {
-    console.log("Opening settings for group:", groupId);
+    router.push(`/groups/${groupId}/manage/home`);
   }
 
   function handleCreateGroup(): void {

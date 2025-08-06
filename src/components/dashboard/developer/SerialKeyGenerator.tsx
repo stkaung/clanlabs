@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import useTheme from "@/hooks/useTheme";
+import SerialKeyDelete from "./SerialKeyDelete";
+import SerialKeySearch from "./SerialKeySearch";
 
 type KeyType = "Subscription" | "Division";
 type TimeUnit = "Month(s)" | "Year(s)";
@@ -10,6 +12,8 @@ type OutputFormat = "New Line" | "Comma Separated" | "Space Separated";
 interface GeneratedKey {
   value: string;
 }
+
+const poppinsClass = "font-['Poppins']";
 
 export default function SerialKeyGenerator() {
   const theme = useTheme();
@@ -72,7 +76,7 @@ export default function SerialKeyGenerator() {
         <div>
           <h1 className={`text-2xl font-bold ${
             theme === "dark" ? "text-gray-100" : "text-gray-900"
-          }`} style={{ fontFamily: "'Poppins', sans-serif" }}>
+          } ${poppinsClass}`}>
             Serial Keys
           </h1>
           <p className={`mt-1 text-sm ${
@@ -146,7 +150,7 @@ export default function SerialKeyGenerator() {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   min="1"
-                  className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 ${
+                  className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 placeholder:${poppinsClass} ${
                     theme === "dark"
                       ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/20"
                       : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500/30"
@@ -165,7 +169,7 @@ export default function SerialKeyGenerator() {
                       value={duration}
                       onChange={(e) => setDuration(e.target.value)}
                       min="1"
-                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 ${
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 placeholder:${poppinsClass} ${
                         theme === "dark"
                           ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/20"
                           : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500/30"
@@ -177,7 +181,7 @@ export default function SerialKeyGenerator() {
                     <select
                       value={timeUnit}
                       onChange={(e) => setTimeUnit(e.target.value as TimeUnit)}
-                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 ${
+                      className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 placeholder:${poppinsClass} ${
                         theme === "dark"
                           ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/20"
                           : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500/30"
@@ -195,7 +199,7 @@ export default function SerialKeyGenerator() {
                 <select
                   value={outputFormat}
                   onChange={(e) => setOutputFormat(e.target.value as OutputFormat)}
-                  className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 ${
+                  className={`w-full px-4 py-2 rounded-lg border focus:ring-2 focus:outline-none transition-colors duration-200 placeholder:${poppinsClass} ${
                     theme === "dark"
                       ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500/20"
                       : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500/30"
@@ -275,6 +279,12 @@ export default function SerialKeyGenerator() {
           </div>
         </div>
       </div>
+      
+      {/* Delete Section */}
+      <SerialKeyDelete />
+
+      {/* Search Section */}
+      <SerialKeySearch />
     </div>
   );
 }

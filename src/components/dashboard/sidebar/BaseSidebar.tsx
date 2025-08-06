@@ -10,6 +10,8 @@ interface NavigationItem {
   active: boolean;
   href?: string;
   disabled?: boolean;
+  isDropdown?: boolean;
+  dropdownItems?: NavigationItem[];
 }
 
 interface BaseSidebarProps {
@@ -170,7 +172,7 @@ function BaseSidebar({
                       className={`flex items-center ${
                         collapsed && !isMobile ? "justify-center" : "space-x-3"
                       } ${
-                        collapsed && !isMobile ? "p-4" : "p-3"
+                        collapsed && !isMobile ? "p-4" : "py-2 px-3"
                       } rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 ${
                         group.id === currentGroupId ? "shadow-lg" : ""
                       }`}
@@ -285,7 +287,7 @@ function BaseSidebar({
                     const className = `flex items-center ${
                       collapsed && !isMobile ? "justify-center" : "space-x-3"
                     } ${
-                      collapsed && !isMobile ? "p-4" : "p-3"
+                      collapsed && !isMobile ? "p-4" : "py-2 px-3"
                     } rounded-xl transition-all duration-200 backdrop-blur-sm border ${
                       item.active ? "shadow-lg" : ""
                     } ${
@@ -325,7 +327,7 @@ function BaseSidebar({
                         />
                         {(!collapsed || isMobile) && (
                           <span
-                            className="font-medium whitespace-nowrap transition-all duration-300"
+                            className="font-medium whitespace-nowrap transition-all duration-300 text-xs"
                             style={{
                               transform:
                                 collapsed && !isMobile
@@ -340,6 +342,77 @@ function BaseSidebar({
                       </>
                     );
 
+                    if (item.isDropdown) {
+                      return (
+                        <div key={item.name} className="space-y-1">
+                          <button
+                            className={className}
+                            style={style}
+                            onClick={() => {
+                              // Toggle dropdown
+                              const btn = document.getElementById(`dropdown-${item.name}`);
+                              const icon = document.getElementById(`dropdown-icon-${item.name}`);
+                              if (btn && icon) {
+                                btn.classList.toggle("hidden");
+                                icon.classList.toggle("rotate-180");
+                              }
+                            }}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <div className="flex items-center space-x-3">
+                                <i className={`${item.icon} w-4 h-4`} />
+                                {(!collapsed || isMobile) && (
+                                  <span className="font-medium whitespace-nowrap text-xs">{item.name}</span>
+                                )}
+                              </div>
+                              <i id={`dropdown-icon-${item.name}`} className="fas fa-chevron-down text-[10px] ml-3 transition-transform duration-200" />
+                            </div>
+                          </button>
+                          <div id={`dropdown-${item.name}`} className="hidden pl-4 ml-2 border-l border-gray-800 space-y-1">
+                            {item.dropdownItems?.map((subItem) => (
+                              <Link
+                                key={subItem.name}
+                                href={subItem.href || "#"}
+                                className={`flex items-center ${
+                                  collapsed && !isMobile ? "justify-center" : "space-x-3"
+                                } ${
+                                  collapsed && !isMobile ? "p-4" : "p-3"
+                                } rounded-xl transition-all duration-200 backdrop-blur-sm border ${
+                                  subItem.active ? "shadow-lg" : ""
+                                } cursor-pointer hover:scale-105`}
+                                style={{
+                                  backgroundColor: subItem.active
+                                    ? theme === "dark"
+                                      ? "rgba(59, 130, 246, 0.15)"
+                                      : "rgba(59, 130, 246, 0.1)"
+                                    : "transparent",
+                                  borderColor: subItem.active
+                                    ? theme === "dark"
+                                      ? "rgba(59, 130, 246, 0.3)"
+                                      : "rgba(59, 130, 246, 0.2)"
+                                    : "transparent",
+                                  color: subItem.active
+                                    ? theme === "dark"
+                                      ? "#DBEAFE"
+                                      : "#1E40AF"
+                                    : theme === "dark"
+                                    ? "#FFFFFF"
+                                    : "#374151",
+                                }}
+                              >
+                                <i className={`${subItem.icon} w-4 h-4`} />
+                                {(!collapsed || isMobile) && (
+                                  <span className="font-medium whitespace-nowrap text-xs">
+                                    {subItem.name}
+                                  </span>
+                                )}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    
                     return item.disabled ? (
                       <div key={item.name} className={className} style={style}>
                         {content}
@@ -379,7 +452,7 @@ function BaseSidebar({
                 <div className="flex flex-col items-center space-y-3">
                   {/* User Avatar - collapsed */}
                   <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border"
+                                          className="w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border"
                     style={{
                       backgroundColor:
                         theme === "dark"
@@ -406,7 +479,7 @@ function BaseSidebar({
                   {/* Action Buttons - collapsed */}
                   <button
                     onClick={handleVerification}
-                    className="w-12 h-10 flex items-center justify-center rounded-xl font-medium transition-all duration-150 hover:scale-105 backdrop-blur-sm border hover:!bg-green-500 hover:!text-white"
+                                          className="w-12 h-10 flex items-center justify-center rounded-xl font-medium transition-all duration-150 hover:scale-105 backdrop-blur-sm border hover:!bg-green-500 hover:!text-white"
                     style={{
                       background:
                         theme === "dark"
@@ -423,7 +496,7 @@ function BaseSidebar({
 
                   <button
                     onClick={handleLogout}
-                    className="w-12 h-10 flex items-center justify-center rounded-xl font-medium transition-all duration-150 hover:scale-105 backdrop-blur-sm border hover:!bg-red-500 hover:!text-white"
+                                          className="w-12 h-10 flex items-center justify-center rounded-xl font-medium transition-all duration-150 hover:scale-105 backdrop-blur-sm border hover:!bg-red-500 hover:!text-white"
                     style={{
                       background:
                         theme === "dark"
@@ -441,7 +514,7 @@ function BaseSidebar({
                   {/* Collapse Toggle */}
                   <button
                     onClick={onToggle}
-                    className="w-12 h-10 flex items-center justify-center rounded-xl transition-all duration-200 hover:scale-105 backdrop-blur-sm border"
+                                          className="w-12 h-10 flex items-center justify-center rounded-xl transition-all duration-200 hover:scale-105 backdrop-blur-sm border"
                     style={{
                       backgroundColor:
                         theme === "dark"
