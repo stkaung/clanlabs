@@ -31,4 +31,5 @@ export interface DataTableProps<T = any> {
   searchQuery?: string;
   onSearch?: (query: string) => void;
   className?: string;
+  actionButtonClassName?: string;
 }

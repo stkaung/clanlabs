@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "id": "1",
+      "name": "Software Ventures",
+      "abbreviation": "SV",
+      "permissionLevel": "Member",
+      "expiryDate": "8/11/2025",
+      "subscriptionStatus": "ACTIVE"
+    },
+    {
+      "id": "2",
+      "name": "Development Team",
+      "abbreviation": "DT",
+      "permissionLevel": "Admin",
+      "expiryDate": "12/25/2025",
+      "subscriptionStatus": "ACTIVE"
+    },
+    {
+      "id": "3",
+      "name": "Beta Testers",
+      "abbreviation": "BT",
+      "permissionLevel": "Member",
+      "expiryDate": "3/15/2024",
+      "subscriptionStatus": "EXPIRED"
+    }
+  ]
+} 

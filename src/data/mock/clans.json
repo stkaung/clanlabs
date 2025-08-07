@@ -1,0 +1,124 @@
+{
+  "clans": [
+    {
+      "id": "1",
+      "name": "Elite Warriors",
+      "subscriptionStatus": "Active",
+      "expiryDate": "15/04/24",
+      "botAccount": "EliteBot#1234",
+      "divisions": 5
+    },
+    {
+      "id": "2",
+      "name": "Shadow Hunters",
+      "subscriptionStatus": "Partnered",
+      "expiryDate": "20/03/24",
+      "botAccount": "ShadowBot#5678",
+      "divisions": 3
+    },
+    {
+      "id": "3",
+      "name": "Dragon Legion",
+      "subscriptionStatus": "Inactive",
+      "expiryDate": "01/03/24",
+      "botAccount": "DragonBot#9012",
+      "divisions": 2
+    },
+    {
+      "id": "4",
+      "name": "Phoenix Rising",
+      "subscriptionStatus": "Active",
+      "expiryDate": "18/04/24",
+      "botAccount": "PhoenixBot#4321",
+      "divisions": 4
+    },
+    {
+      "id": "5",
+      "name": "Storm Raiders",
+      "subscriptionStatus": "Partnered",
+      "expiryDate": "12/04/24",
+      "botAccount": "StormBot#8765",
+      "divisions": 6
+    },
+    {
+      "id": "6",
+      "name": "Mystic Order",
+      "subscriptionStatus": "Inactive",
+      "expiryDate": "28/02/24",
+      "botAccount": "MysticBot#2468",
+      "divisions": 1
+    },
+    {
+      "id": "7",
+      "name": "Crimson Knights",
+      "subscriptionStatus": "Active",
+      "expiryDate": "25/04/24",
+      "botAccount": "CrimsonBot#1357",
+      "divisions": 7
+    },
+    {
+      "id": "8",
+      "name": "Frost Wolves",
+      "subscriptionStatus": "Partnered",
+      "expiryDate": "08/04/24",
+      "botAccount": "FrostBot#9876",
+      "divisions": 4
+    },
+    {
+      "id": "9",
+      "name": "Thunder Squad",
+      "subscriptionStatus": "Inactive",
+      "expiryDate": "15/02/24",
+      "botAccount": "ThunderBot#3579",
+      "divisions": 2
+    },
+    {
+      "id": "10",
+      "name": "Solar Empire",
+      "subscriptionStatus": "Active",
+      "expiryDate": "30/04/24",
+      "botAccount": "SolarBot#2580",
+      "divisions": 8
+    },
+    {
+      "id": "11",
+      "name": "Lunar Dynasty",
+      "subscriptionStatus": "Partnered",
+      "expiryDate": "05/04/24",
+      "botAccount": "LunarBot#1470",
+      "divisions": 5
+    },
+    {
+      "id": "12",
+      "name": "Ocean Guardians",
+      "subscriptionStatus": "Inactive",
+      "expiryDate": "10/02/24",
+      "botAccount": "OceanBot#3690",
+      "divisions": 3
+    },
+    {
+      "id": "13",
+      "name": "Void Seekers",
+      "subscriptionStatus": "Active",
+      "expiryDate": "22/04/24",
+      "botAccount": "VoidBot#7531",
+      "divisions": 4
+    },
+    {
+      "id": "14",
+      "name": "Celestial Force",
+      "subscriptionStatus": "Partnered",
+      "expiryDate": "14/04/24",
+      "botAccount": "CelestialBot#9513",
+      "divisions": 6
+    },
+    {
+      "id": "15",
+      "name": "Neon Warriors",
+      "subscriptionStatus": "Inactive",
+      "expiryDate": "05/02/24",
+      "botAccount": "NeonBot#8642",
+      "divisions": 2
+    }
+  ]
+} 

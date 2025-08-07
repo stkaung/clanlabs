@@ -1,58 +1,11 @@
 import { useState } from "react";
 import useTheme from "@/hooks/useTheme";
+import { serialKeys } from "@/data/mock";
 
 const poppinsClass = "font-['Poppins']";
 
-// Mock database of serial keys
-const mockSerialKeys = [
-  {
-    key: "CL-DIV-2024-XYZ789GH1012",
-    type: "Division",
-    status: "Redeemed",
-    length: "5 months",
-    created: "2024-01-14T12:00:00Z",
-    redemption: {
-      discordUsername: "ShadowHunter#1234",
-      discordUserId: "123456789012345678",
-      groupId: "GRP-001",
-      redeemedAt: "2024-01-21T05:09:57Z"
-    }
-  },
-  {
-    key: "CL-SUB-2024-ABC123XY4567",
-    type: "Subscription",
-    status: "Available",
-    length: "12 months",
-    created: "2024-01-15T14:30:00Z"
-  },
-  {
-    key: "CL-DIV-2024-DEF456UV8901",
-    type: "Division",
-    status: "Available",
-    length: "3 months",
-    created: "2024-01-16T09:15:00Z"
-  },
-  {
-    key: "CL-SUB-2024-GHI789WX2345",
-    type: "Subscription",
-    status: "Redeemed",
-    length: "6 months",
-    created: "2024-01-17T16:45:00Z",
-    redemption: {
-      discordUsername: "NightRider#5678",
-      discordUserId: "987654321098765432",
-      groupId: "GRP-002",
-      redeemedAt: "2024-01-20T18:22:33Z"
-    }
-  },
-  {
-    key: "CL-DIV-2024-JKL012PQ6789",
-    type: "Division",
-    status: "Available",
-    length: "1 month",
-    created: "2024-01-18T11:20:00Z"
-  }
-];
+// Use mock data from centralized database
+const mockSerialKeys = serialKeys;
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);

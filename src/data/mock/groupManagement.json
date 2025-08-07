@@ -1,0 +1,46 @@
+{
+  "groupManagement": {
+    "1": {
+      "id": "1",
+      "name": "Software Ventures",
+      "logo": "/img/logo/software-ventures.png",
+      "owner": "CartarBandit",
+      "members": 1247,
+      "role": "Owner",
+      "subscriptionStatus": "ACTIVE",
+      "expiryDays": 142,
+      "expiryHours": 19,
+      "expiryMinutes": 58,
+      "memberGrowth": "+12% this month",
+      "permissions": "Full control"
+    },
+    "2": {
+      "id": "2",
+      "name": "Development Team",
+      "logo": "/img/logo/develop-team.png",
+      "owner": "Software Ventures",
+      "members": 856,
+      "role": "Admin",
+      "subscriptionStatus": "ACTIVE",
+      "expiryDays": 89,
+      "expiryHours": 12,
+      "expiryMinutes": 30,
+      "memberGrowth": "+8% this month",
+      "permissions": "Active permissions"
+    },
+    "3": {
+      "id": "3",
+      "name": "Beta Testers",
+      "logo": "/img/logo/beta-testers.png",
+      "owner": "Software Ventures",
+      "members": 432,
+      "role": "Member",
+      "subscriptionStatus": "EXPIRED",
+      "expiryDays": 0,
+      "expiryHours": 0,
+      "expiryMinutes": 0,
+      "memberGrowth": "-5% this month",
+      "permissions": "Read only"
+    }
+  }
+} 

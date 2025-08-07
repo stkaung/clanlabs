@@ -1,0 +1,383 @@
+{
+  "userProfiles": {
+    "CartarBandit": {
+      "id": "1",
+      "username": "CartarBandit",
+      "profilePicture": "/img/profiles/cartar-bandit.png",
+      "rank": "Owner",
+      "experience": 15420,
+      "quotaPoints": 1250,
+      "medals": [
+        {
+          "id": "medal-1",
+          "name": "First Contribution",
+          "description": "Made your first contribution to the group project",
+          "icon": "fas fa-code",
+          "color": "#3B82F6",
+          "rarity": "common",
+          "earnedDate": "2024-03-20T00:00:00.000Z"
+        },
+        {
+          "id": "medal-2",
+          "name": "Team Player",
+          "description": "Collaborated effectively with 10+ team members",
+          "icon": "fas fa-users",
+          "color": "#A855F7",
+          "rarity": "epic",
+          "earnedDate": "2024-04-15T00:00:00.000Z"
+        },
+        {
+          "id": "medal-3",
+          "name": "Bug Hunter",
+          "description": "Found and reported 50+ critical bugs",
+          "icon": "fas fa-bug",
+          "color": "#F59E0B",
+          "rarity": "legendary",
+          "earnedDate": "2024-05-10T00:00:00.000Z"
+        }
+      ],
+      "qualifications": [
+        {
+          "id": "qual-1",
+          "title": "Elite Combat Specialist",
+          "issuer": "Roblox Military Academy",
+          "description": "Demonstrates mastery in tactical combat operations and leadership in military simulation games",
+          "status": "active",
+          "issuedDate": "2024-01-15T00:00:00.000Z",
+          "expiryDate": "2027-01-15T00:00:00.000Z",
+          "credentialUrl": "https://roblox.com/military-academy/verify"
+        },
+        {
+          "id": "qual-2",
+          "title": "Advanced Builder Certification",
+          "issuer": "Roblox Builders Guild",
+          "description": "Expert level building skills with advanced scripting and design principles",
+          "status": "active",
+          "issuedDate": "2023-11-20T00:00:00.000Z",
+          "expiryDate": "2026-11-20T00:00:00.000Z",
+          "credentialUrl": "https://roblox.com/builders-guild/verify"
+        }
+      ],
+      "auditLogs": [
+        {
+          "id": "log-1",
+          "action": "Group Created",
+          "description": "Created Software Ventures group",
+          "timestamp": "2023-08-15T10:30:00.000Z",
+          "performedBy": "System",
+          "category": "group_creation"
+        },
+        {
+          "id": "log-2",
+          "action": "Member Promoted",
+          "description": "Promoted DevMaster to Admin role",
+          "timestamp": "2024-01-20T14:15:00.000Z",
+          "performedBy": "CartarBandit",
+          "category": "role_change"
+        },
+        {
+          "id": "log-3",
+          "action": "Settings Updated",
+          "description": "Updated group privacy settings",
+          "timestamp": "2024-02-10T09:45:00.000Z",
+          "performedBy": "CartarBandit",
+          "category": "settings"
+        },
+        {
+          "id": "log-4",
+          "action": "Meeting Hosted",
+          "description": "Hosted monthly leadership meeting",
+          "timestamp": "2024-03-05T16:00:00.000Z",
+          "performedBy": "CartarBandit",
+          "category": "meeting"
+        },
+        {
+          "id": "log-5",
+          "action": "Member Removed",
+          "description": "Removed inactive member from group",
+          "timestamp": "2024-03-15T11:20:00.000Z",
+          "performedBy": "CartarBandit",
+          "category": "member_management"
+        }
+      ]
+    },
+    "DevMaster": {
+      "id": "2",
+      "username": "DevMaster",
+      "profilePicture": "/img/profiles/dev-master.png",
+      "rank": "Admin",
+      "experience": 8920,
+      "quotaPoints": 890,
+      "medals": [
+        {
+          "id": "medal-1",
+          "name": "First Contribution",
+          "description": "Made your first contribution to the group project",
+          "icon": "fas fa-code",
+          "color": "#3B82F6",
+          "rarity": "common",
+          "earnedDate": "2024-03-20T00:00:00.000Z"
+        },
+        {
+          "id": "medal-2",
+          "name": "Code Review Master",
+          "description": "Completed 100+ code reviews",
+          "icon": "fas fa-eye",
+          "color": "#10B981",
+          "rarity": "rare",
+          "earnedDate": "2024-04-10T00:00:00.000Z"
+        }
+      ],
+      "qualifications": [
+        {
+          "id": "qual-1",
+          "title": "Advanced Builder Certification",
+          "issuer": "Roblox Builders Guild",
+          "description": "Expert level building skills with advanced scripting and design principles",
+          "status": "active",
+          "issuedDate": "2023-11-20T00:00:00.000Z",
+          "expiryDate": "2026-11-20T00:00:00.000Z",
+          "credentialUrl": "https://roblox.com/builders-guild/verify"
+        }
+      ],
+      "auditLogs": [
+        {
+          "id": "log-1",
+          "action": "Role Promoted",
+          "description": "Promoted from Member to Admin",
+          "timestamp": "2024-01-20T14:15:00.000Z",
+          "performedBy": "CartarBandit",
+          "category": "role_change"
+        },
+        {
+          "id": "log-2",
+          "action": "Project Created",
+          "description": "Created new development project",
+          "timestamp": "2024-02-15T13:30:00.000Z",
+          "performedBy": "DevMaster",
+          "category": "project"
+        },
+        {
+          "id": "log-3",
+          "action": "Code Review",
+          "description": "Reviewed pull request #45",
+          "timestamp": "2024-03-01T10:20:00.000Z",
+          "performedBy": "DevMaster",
+          "category": "development"
+        },
+        {
+          "id": "log-4",
+          "action": "Meeting Attended",
+          "description": "Attended weekly development sync",
+          "timestamp": "2024-03-08T15:00:00.000Z",
+          "performedBy": "System",
+          "category": "meeting"
+        },
+        {
+          "id": "log-5",
+          "action": "Bug Fixed",
+          "description": "Fixed critical authentication bug",
+          "timestamp": "2024-03-12T16:45:00.000Z",
+          "performedBy": "DevMaster",
+          "category": "development"
+        }
+      ]
+    },
+    "CodeNinja": {
+      "id": "3",
+      "username": "CodeNinja",
+      "profilePicture": "/img/profiles/code-ninja.png",
+      "rank": "Moderator",
+      "experience": 5670,
+      "quotaPoints": 650,
+      "medals": [
+        {
+          "id": "medal-1",
+          "name": "First Contribution",
+          "description": "Made your first contribution to the group project",
+          "icon": "fas fa-code",
+          "color": "#3B82F6",
+          "rarity": "common",
+          "earnedDate": "2024-03-20T00:00:00.000Z"
+        }
+      ],
+      "qualifications": [],
+      "auditLogs": [
+        {
+          "id": "log-1",
+          "action": "Role Assigned",
+          "description": "Assigned Moderator role",
+          "timestamp": "2024-01-25T12:00:00.000Z",
+          "performedBy": "CartarBandit",
+          "category": "role_change"
+        },
+        {
+          "id": "log-2",
+          "action": "UI Update",
+          "description": "Updated dashboard interface",
+          "timestamp": "2024-02-20T14:30:00.000Z",
+          "performedBy": "CodeNinja",
+          "category": "development"
+        },
+        {
+          "id": "log-3",
+          "action": "Content Moderated",
+          "description": "Reviewed and approved new content",
+          "timestamp": "2024-03-03T09:15:00.000Z",
+          "performedBy": "CodeNinja",
+          "category": "moderation"
+        },
+        {
+          "id": "log-4",
+          "action": "Meeting Attended",
+          "description": "Attended design review meeting",
+          "timestamp": "2024-03-10T11:00:00.000Z",
+          "performedBy": "System",
+          "category": "meeting"
+        },
+        {
+          "id": "log-5",
+          "action": "Feature Implemented",
+          "description": "Implemented new search functionality",
+          "timestamp": "2024-03-14T15:20:00.000Z",
+          "performedBy": "CodeNinja",
+          "category": "development"
+        }
+      ]
+    },
+    "PixelArtist": {
+      "id": "4",
+      "username": "PixelArtist",
+      "profilePicture": "/img/profiles/pixel-artist.png",
+      "rank": "Senior Member",
+      "experience": 4230,
+      "quotaPoints": 480,
+      "medals": [
+        {
+          "id": "medal-1",
+          "name": "First Contribution",
+          "description": "Made your first contribution to the group project",
+          "icon": "fas fa-code",
+          "color": "#3B82F6",
+          "rarity": "common",
+          "earnedDate": "2024-03-20T00:00:00.000Z"
+        },
+        {
+          "id": "medal-2",
+          "name": "Design Master",
+          "description": "Created 50+ design assets",
+          "icon": "fas fa-palette",
+          "color": "#EC4899",
+          "rarity": "rare",
+          "earnedDate": "2024-04-05T00:00:00.000Z"
+        }
+      ],
+      "qualifications": [
+        {
+          "id": "qual-1",
+          "title": "UI/UX Design Certification",
+          "issuer": "Design Institute",
+          "description": "Professional UI/UX design certification",
+          "status": "active",
+          "issuedDate": "2023-12-01T00:00:00.000Z",
+          "expiryDate": "2026-12-01T00:00:00.000Z",
+          "credentialUrl": "https://design-institute.com/verify"
+        }
+      ],
+      "auditLogs": [
+        {
+          "id": "log-1",
+          "action": "Design Created",
+          "description": "Created new logo design",
+          "timestamp": "2024-02-01T16:45:00.000Z",
+          "performedBy": "PixelArtist",
+          "category": "design"
+        },
+        {
+          "id": "log-2",
+          "action": "Assets Uploaded",
+          "description": "Uploaded new icon set",
+          "timestamp": "2024-02-18T13:20:00.000Z",
+          "performedBy": "PixelArtist",
+          "category": "assets"
+        },
+        {
+          "id": "log-3",
+          "action": "Meeting Attended",
+          "description": "Attended design team meeting",
+          "timestamp": "2024-03-05T10:00:00.000Z",
+          "performedBy": "System",
+          "category": "meeting"
+        },
+        {
+          "id": "log-4",
+          "action": "Feedback Provided",
+          "description": "Provided design feedback on new feature",
+          "timestamp": "2024-03-12T14:30:00.000Z",
+          "performedBy": "PixelArtist",
+          "category": "feedback"
+        },
+        {
+          "id": "log-5",
+          "action": "Prototype Created",
+          "description": "Created interactive prototype",
+          "timestamp": "2024-03-16T11:15:00.000Z",
+          "performedBy": "PixelArtist",
+          "category": "design"
+        }
+      ]
+    },
+    "DataWizard": {
+      "id": "5",
+      "username": "DataWizard",
+      "profilePicture": "/img/profiles/data-wizard.png",
+      "rank": "Member",
+      "experience": 2890,
+      "quotaPoints": 320,
+      "medals": [],
+      "qualifications": [],
+      "auditLogs": [
+        {
+          "id": "log-1",
+          "action": "Database Optimized",
+          "description": "Optimized query performance",
+          "timestamp": "2024-02-15T15:30:00.000Z",
+          "performedBy": "DataWizard",
+          "category": "development"
+        },
+        {
+          "id": "log-2",
+          "action": "Report Generated",
+          "description": "Generated monthly analytics report",
+          "timestamp": "2024-03-01T12:00:00.000Z",
+          "performedBy": "DataWizard",
+          "category": "analytics"
+        },
+        {
+          "id": "log-3",
+          "action": "Meeting Attended",
+          "description": "Attended data team meeting",
+          "timestamp": "2024-03-08T09:00:00.000Z",
+          "performedBy": "System",
+          "category": "meeting"
+        },
+        {
+          "id": "log-4",
+          "action": "Bug Fixed",
+          "description": "Fixed data export issue",
+          "timestamp": "2024-03-10T16:20:00.000Z",
+          "performedBy": "DataWizard",
+          "category": "development"
+        },
+        {
+          "id": "log-5",
+          "action": "Documentation Updated",
+          "description": "Updated API documentation",
+          "timestamp": "2024-03-15T13:45:00.000Z",
+          "performedBy": "DataWizard",
+          "category": "documentation"
+        }
+      ]
+    }
+  }
+} 

@@ -68,6 +68,10 @@ export default function GroupManageSidebar({
         .group-manage-sidebar .profile-section .action-buttons i {
           font-size: 0.75rem !important;
         }
+        /* Override font size for group management navigation items to keep them small */
+        .group-manage-sidebar nav span {
+          font-size: 0.75rem !important;
+        }
       `}</style>
       <BaseSidebar
         collapsed={collapsed}

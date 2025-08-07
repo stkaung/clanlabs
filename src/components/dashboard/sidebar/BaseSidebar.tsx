@@ -346,7 +346,7 @@ function BaseSidebar({
                       return (
                         <div key={item.name} className="space-y-1">
                           <button
-                            className={className}
+                            className={`${className} w-full`}
                             style={style}
                             onClick={() => {
                               // Toggle dropdown
@@ -358,14 +358,12 @@ function BaseSidebar({
                               }
                             }}
                           >
-                            <div className="flex items-center justify-between w-full">
-                              <div className="flex items-center space-x-3">
-                                <i className={`${item.icon} w-4 h-4`} />
-                                {(!collapsed || isMobile) && (
-                                  <span className="font-medium whitespace-nowrap text-xs">{item.name}</span>
-                                )}
-                              </div>
-                              <i id={`dropdown-icon-${item.name}`} className="fas fa-chevron-down text-[10px] ml-3 transition-transform duration-200" />
+                            <div className="flex items-center space-x-2">
+                              <i className={`${item.icon} w-4 h-4`} />
+                              {(!collapsed || isMobile) && (
+                                <span className="font-medium whitespace-nowrap text-xs">{item.name}</span>
+                              )}
+                              <i id={`dropdown-icon-${item.name}`} className="fas fa-chevron-down text-[10px] transition-transform duration-200" />
                             </div>
                           </button>
                           <div id={`dropdown-${item.name}`} className="hidden pl-4 ml-2 border-l border-gray-800 space-y-1">
@@ -447,9 +445,9 @@ function BaseSidebar({
                   : "rgba(241, 245, 249, 0.5)",
             }}
           >
-            <div className="p-4">
+            <div className="p-3">
               {collapsed && !isMobile ? (
-                <div className="flex flex-col items-center space-y-3">
+                <div className="flex flex-col items-center space-y-2">
                   {/* User Avatar - collapsed */}
                   <div
                                           className="w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-sm border"
@@ -531,8 +529,8 @@ function BaseSidebar({
                   </button>
                 </div>
               ) : (
-                <div className="mb-4">
-                  <div className="flex items-center space-x-3 mb-4">
+                <div className="mb-3">
+                  <div className="flex items-center space-x-3 mb-3">
                     <div
                       className="w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-sm border"
                       style={{
@@ -584,10 +582,10 @@ function BaseSidebar({
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <button
                       onClick={handleVerification}
-                      className="w-full flex items-center justify-center space-x-2 py-2 px-4 rounded-xl font-medium text-sm transition-all duration-150 hover:scale-105 backdrop-blur-sm border hover:!bg-green-500 hover:!text-white"
+                      className="w-full flex items-center justify-center space-x-2 py-1.5 px-4 rounded-xl font-medium text-sm transition-all duration-150 hover:scale-105 backdrop-blur-sm border hover:!bg-green-500 hover:!text-white"
                       style={{
                         background:
                           theme === "dark"

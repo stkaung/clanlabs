@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import useTheme from "@/hooks/useTheme";
 import GroupCard from "./GroupCard";
 import { useDashboard } from "@/components/dashboard/layout/DashboardLayout";
+import { groups } from "@/data/mock";
 
-interface GroupData {
+interface GroupData { 
   id: string;
   name: string;
   abbreviation: string;
@@ -26,35 +27,10 @@ function GroupsGrid({ searchQuery = "", onCreateGroup }: GroupsGridProps) {
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [displayedCount, setDisplayedCount] = useState<number>(0);
 
-  // Mock data - replace with actual data from API
-  const [groups] = useState<GroupData[]>([
-    {
-      id: "1",
-      name: "Software Ventures",
-      abbreviation: "SV",
-      permissionLevel: "Member",
-      expiryDate: "8/11/2025",
-      subscriptionStatus: "ACTIVE",
-    },
-    {
-      id: "2",
-      name: "Development Team",
-      abbreviation: "DT",
-      permissionLevel: "Admin",
-      expiryDate: "12/25/2025",
-      subscriptionStatus: "ACTIVE",
-    },
-    {
-      id: "3",
-      name: "Beta Testers",
-      abbreviation: "BT",
-      permissionLevel: "Member",
-      expiryDate: "3/15/2024",
-      subscriptionStatus: "EXPIRED",
-    },
-  ]);
+  // Use mock data from centralized database
+  const [groupsData] = useState<GroupData[]>(groups as GroupData[]);
 
-  const filteredGroups = groups.filter(
+  const filteredGroups = groupsData.filter(
     (group) =>
       group.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       group.abbreviation.toLowerCase().includes(searchQuery.toLowerCase())

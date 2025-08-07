@@ -21,6 +21,7 @@ function DataTable<T>({
   searchQuery = "",
   onSearch,
   className = "",
+  actionButtonClassName = "",
 }: DataTableProps<T>) {
   const theme = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
@@ -183,6 +184,7 @@ function DataTable<T>({
               columns={columns}
               actions={actions}
               isEven={index % 2 === 0}
+              actionButtonClassName={actionButtonClassName}
             />
           ))}
         </div>

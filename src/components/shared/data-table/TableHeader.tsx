@@ -13,7 +13,7 @@ function TableHeader<T>({ columns, hasActions }: TableHeaderProps<T>) {
 
   return (
     <div
-      className={`relative z-[9999] mb-4 px-6 py-3 rounded-lg border transition-all duration-300 ${
+      className={`relative z-10 mb-4 px-6 py-3 rounded-lg border transition-all duration-300 ${
         theme === "dark"
           ? "bg-gray-800/50 border-gray-700/50"
           : "bg-gray-50/80 border-gray-200/50"

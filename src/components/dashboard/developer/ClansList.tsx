@@ -4,7 +4,8 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { Column } from "@/components/shared/data-table/types";
 import { DataTable } from "@/components/shared/data-table";
 import useTheme from "@/hooks/useTheme";
-import UpdateClanModal from "./UpdateClanModal";  
+import UpdateClanModal from "./UpdateClanModal";
+import { clans } from "@/data/mock";  
 
 interface ClanRecord {
   id: string;
@@ -26,7 +27,7 @@ function ClansList() {
   const [statusFilter, setStatusFilter] = useState<"all" | "Inactive" | "Partnered" | "Active">("all");
   
   // Debounce search state updates
-  const searchTimeout = useRef<NodeJS.Timeout>();
+  const searchTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const debouncedSetSearching = (value: boolean) => {
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
@@ -40,169 +41,8 @@ function ClansList() {
     direction: "asc" | "desc" | null;
   }>({ key: null, direction: null });
 
-  // Example data - in real app this would come from an API
-  const data: ClanRecord[] = [
-    {
-      id: "1",
-      name: "Elite Warriors",
-      subscriptionStatus: "Active",
-      expiryDate: "15/04/24",
-      botAccount: "EliteBot#1234",
-      divisions: 5,
-    },
-    {
-      id: "2",
-      name: "Shadow Hunters",
-      subscriptionStatus: "Partnered",
-      expiryDate: "20/03/24",
-      botAccount: "ShadowBot#5678",
-      divisions: 3,
-    },
-    {
-      id: "3",
-      name: "Dragon Legion",
-      subscriptionStatus: "Inactive",
-      expiryDate: "01/03/24",
-      botAccount: "DragonBot#9012",
-      divisions: 2,
-    },
-    {
-      id: "4",
-      name: "Phoenix Rising",
-      subscriptionStatus: "Active",
-      expiryDate: "18/04/24",
-      botAccount: "PhoenixBot#4321",
-      divisions: 4,
-    },
-    {
-      id: "5",
-      name: "Storm Raiders",
-      subscriptionStatus: "Partnered",
-      expiryDate: "12/04/24",
-      botAccount: "StormBot#8765",
-      divisions: 6,
-    },
-    {
-      id: "6",
-      name: "Mystic Order",
-      subscriptionStatus: "Inactive",
-      expiryDate: "28/02/24",
-      botAccount: "MysticBot#2468",
-      divisions: 1,
-    },
-    {
-      id: "7",
-      name: "Crimson Knights",
-      subscriptionStatus: "Active",
-      expiryDate: "25/04/24",
-      botAccount: "CrimsonBot#1357",
-      divisions: 7,
-    },
-    {
-      id: "8",
-      name: "Frost Wolves",
-      subscriptionStatus: "Partnered",
-      expiryDate: "08/04/24",
-      botAccount: "FrostBot#9876",
-      divisions: 4,
-    },
-    {
-      id: "9",
-      name: "Thunder Squad",
-      subscriptionStatus: "Inactive",
-      expiryDate: "15/02/24",
-      botAccount: "ThunderBot#3579",
-      divisions: 2,
-    },
-    {
-      id: "10",
-      name: "Solar Empire",
-      subscriptionStatus: "Active",
-      expiryDate: "30/04/24",
-      botAccount: "SolarBot#2580",
-      divisions: 8,
-    },
-    {
-      id: "11",
-      name: "Lunar Dynasty",
-      subscriptionStatus: "Partnered",
-      expiryDate: "05/04/24",
-      botAccount: "LunarBot#1470",
-      divisions: 5,
-    },
-    {
-      id: "12",
-      name: "Ocean Guardians",
-      subscriptionStatus: "Inactive",
-      expiryDate: "10/02/24",
-      botAccount: "OceanBot#3690",
-      divisions: 3,
-    },
-    {
-      id: "13",
-      name: "Terra Force",
-      subscriptionStatus: "Active",
-      expiryDate: "22/04/24",
-      botAccount: "TerraBot#8520",
-      divisions: 6,
-    },
-    {
-      id: "14",
-      name: "Nebula Nomads",
-      subscriptionStatus: "Partnered",
-      expiryDate: "17/04/24",
-      botAccount: "NebulaBot#7410",
-      divisions: 4,
-    },
-    {
-      id: "15",
-      name: "Void Walkers",
-      subscriptionStatus: "Inactive",
-      expiryDate: "05/02/24",
-      botAccount: "VoidBot#9630",
-      divisions: 2,
-    },
-    {
-      id: "16",
-      name: "Astral Seekers",
-      subscriptionStatus: "Active",
-      expiryDate: "28/04/24",
-      botAccount: "AstralBot#1590",
-      divisions: 7,
-    },
-    {
-      id: "17",
-      name: "Quantum Legion",
-      subscriptionStatus: "Partnered",
-      expiryDate: "14/04/24",
-      botAccount: "QuantumBot#7530",
-      divisions: 5,
-    },
-    {
-      id: "18",
-      name: "Cyber Sentinels",
-      subscriptionStatus: "Inactive",
-      expiryDate: "20/02/24",
-      botAccount: "CyberBot#8520",
-      divisions: 1,
-    },
-    {
-      id: "19",
-      name: "Galactic Pioneers",
-      subscriptionStatus: "Active",
-      expiryDate: "26/04/24",
-      botAccount: "GalacticBot#4680",
-      divisions: 9,
-    },
-    {
-      id: "20",
-      name: "Infinity Squad",
-      subscriptionStatus: "Partnered",
-      expiryDate: "10/04/24",
-      botAccount: "InfinityBot#2570",
-      divisions: 6,
-    }
-  ];
+  // Use mock data from centralized database
+  const data: ClanRecord[] = clans as ClanRecord[];
 
   useEffect(() => {
     const handleSearch = (event: CustomEvent) => {

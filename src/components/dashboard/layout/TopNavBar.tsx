@@ -169,7 +169,9 @@ function TopNavBar({
                 }}
                 aria-label="Go back"
               >
-                <i className="fas fa-arrow-left" />
+                <i className={`fas fa-arrow-left ${
+                  theme === "dark" ? "text-slate-200" : "text-gray-700"
+                }`} />
               </button>
             )}
 
@@ -313,63 +315,75 @@ function TopNavBar({
               }}
               aria-label="Toggle theme"
             >
-              {/* Dark mode icon (show in light mode) */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`w-4 h-4 transition-all duration-300 ${
-                  theme === "dark" ? "hidden" : "block"
-                }`}
-                viewBox="0 0 512 512"
-                style={{
-                  backgroundImage: "linear-gradient(135deg, #1E40AF, #7C3AED)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                <path
-                  d="M160 136c0-30.62 4.51-61.61 16-88C99.57 81.27 48 159.32 48 248c0 119.29 96.71 216 216 216 88.68 0 166.73-51.57 200-128-26.39 11.49-57.38 16-88 16-119.29 0-216-96.71-216-216z"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="32"
-                />
-              </svg>
+                             {/* Dark mode icon (show in light mode) */}
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 className={`w-4 h-4 transition-all duration-300 ${
+                   theme === "dark" ? "hidden" : "block"
+                 }`}
+                 viewBox="0 0 512 512"
+                 style={{
+                   backgroundImage: "linear-gradient(135deg, #1E40AF, #7C3AED)",
+                   WebkitBackgroundClip: "text",
+                   WebkitTextFillColor: "transparent",
+                   backgroundClip: "text",
+                 }}
+               >
+                 <path
+                   d="M160 136c0-30.62 4.51-61.61 16-88C99.57 81.27 48 159.32 48 248c0 119.29 96.71 216 216 216 88.68 0 166.73-51.57 200-128-26.39 11.49-57.38 16-88 16-119.29 0-216-96.71-216-216z"
+                   fill="none"
+                   stroke="url(#darkModeGradient)"
+                   strokeLinecap="round"
+                   strokeLinejoin="round"
+                   strokeWidth="32"
+                 />
+                 <defs>
+                   <linearGradient id="darkModeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                     <stop offset="0%" stopColor="#1E40AF" />
+                     <stop offset="100%" stopColor="#7C3AED" />
+                   </linearGradient>
+                 </defs>
+               </svg>
 
-              {/* Light mode icon (show in dark mode) */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`w-4 h-4 transition-all duration-300 ${
-                  theme === "dark" ? "block" : "hidden"
-                }`}
-                viewBox="0 0 512 512"
-                style={{
-                  backgroundImage: "linear-gradient(135deg, #F59E0B, #FBBF24)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
-                <path
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeMiterlimit="10"
-                  strokeWidth="32"
-                  d="M256 48v48M256 416v48M403.08 108.92l-33.94 33.94M142.86 369.14l-33.94 33.94M464 256h-48M96 256H48M403.08 403.08l-33.94-33.94M142.86 142.86l-33.94-33.94"
-                />
-                <circle
-                  cx="256"
-                  cy="256"
-                  r="80"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeMiterlimit="10"
-                  strokeWidth="32"
-                />
-              </svg>
+               {/* Light mode icon (show in dark mode) */}
+               <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                 className={`w-4 h-4 transition-all duration-300 ${
+                   theme === "dark" ? "block" : "hidden"
+                 }`}
+                 viewBox="0 0 512 512"
+                 style={{
+                   backgroundImage: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
+                   WebkitBackgroundClip: "text",
+                   WebkitTextFillColor: "transparent",
+                   backgroundClip: "text",
+                 }}
+               >
+                 <path
+                   fill="none"
+                   stroke="url(#lightModeGradient)"
+                   strokeLinecap="round"
+                   strokeMiterlimit="10"
+                   strokeWidth="32"
+                   d="M256 48v48M256 416v48M403.08 108.92l-33.94 33.94M142.86 369.14l-33.94 33.94M464 256h-48M96 256H48M403.08 403.08l-33.94-33.94M142.86 142.86l-33.94-33.94"
+                 />
+                 <circle
+                   cx="256"
+                   cy="256"
+                   r="80"
+                   fill="none"
+                   stroke="url(#lightModeGradient)"
+                   strokeLinecap="round"
+                   strokeMiterlimit="10"
+                   strokeWidth="32"
+                 />
+                 <defs>
+                   <linearGradient id="lightModeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                     <stop offset="0%" stopColor="#3B82F6" />
+                     <stop offset="100%" stopColor="#8B5CF6" />
+                   </linearGradient>
+                 </defs>
+               </svg>
             </button>
           </div>
         </div>

@@ -8,9 +8,10 @@ interface TableRowProps<T = any> {
   columns: Column<T>[];
   actions?: Action<T>[];
   isEven: boolean;
+  actionButtonClassName?: string;
 }
 
-function TableRow<T>({ row, columns, actions, isEven }: TableRowProps<T>) {
+function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName }: TableRowProps<T>) {
   const theme = useTheme();
 
   return (
@@ -70,7 +71,9 @@ function TableRow<T>({ row, columns, actions, isEven }: TableRowProps<T>) {
                 key={action.label}
                 onClick={() => action.onClick(row)}
                 disabled={action.disabled?.(row)}
-                className={`group/btn relative overflow-hidden h-9 px-6 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl text-sm flex items-center min-w-[90px] justify-center ${
+                className={`group/btn relative overflow-hidden rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center ${
+                  actionButtonClassName || "h-9 px-6 text-sm min-w-[90px]"
+                } ${
                   action.disabled?.(row) ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 style={{

@@ -1,34 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Image from "next/image";
+import useTheme from "@/hooks/useTheme";
+import { groupManagement, type GroupManagementData } from "@/data/mock";
 
 export default function GroupManageHomePage() {
+  const params = useParams();
+  const theme = useTheme();
+  const groupId = params.groupId as string;
   const [serialKey, setSerialKey] = useState("");
-  const [showFullExpiry, setShowFullExpiry] = useState(true);
+  
+  // Get the management data for this specific group
+  const groupData: GroupManagementData | undefined = groupManagement[groupId];
+  
+  // Function to format expiry time
+  const formatExpiryTime = (days: number, hours: number, minutes: number) => {
+    return `${days} days, ${hours} hours, and ${minutes} minutes`;
+  };
+  
+  // If group data doesn't exist, show a fallback or error
+  if (!groupData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className={`text-2xl font-bold mb-4 ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Group Not Found</h1>
+          <p className={theme === "dark" ? "text-gray-400" : "text-gray-600"}>The requested group management data could not be found.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6 min-h-screen bg-gradient-to-br from-[#10132A] to-[#1C1E35]">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group mb-8 p-5 ${
+        theme === "dark" 
+          ? "bg-[#1D203A]/40 border-white/5 shadow-purple-500/10" 
+          : "bg-white/80 border-gray-200/50 shadow-blue-500/10"
+      }`}>
+        <div className={`absolute inset-0 bg-gradient-to-b opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+          theme === "dark" ? "from-[#A84CFB]/5 to-transparent" : "from-blue-500/5 to-transparent"
+        }`}></div>
         <div className="flex items-center space-x-5">
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
-            <div className="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br from-[#1D203A] to-[#2B2D44] flex items-center justify-center shadow-lg shadow-purple-500/10 relative">
+          <div className="relative group/icon">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20 group-hover/icon:opacity-30 transition duration-500"></div>
+            <div className={`w-[72px] h-[72px] rounded-2xl flex items-center justify-center shadow-lg relative ${
+              theme === "dark" 
+                ? "bg-gradient-to-br from-[#1D203A] to-[#2B2D44] shadow-purple-500/10" 
+                : "bg-gradient-to-br from-white to-gray-50 shadow-blue-500/10"
+            }`}>
               <Image
-                src="/img/logo/develop-team.png"
-                alt="Develop Team"
+                src={groupData.logo}
+                alt={groupData.name}
                 width={40}
                 height={40}
-                className="object-contain group-hover:scale-105 transition-transform duration-300"
+                className="object-contain group-hover/icon:scale-105 transition-transform duration-300"
               />
             </div>
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">Development Team</h1>
-            <div className="flex items-center space-x-2 text-[#E0E0E0]/80">
-              <i className="fas fa-gear text-sm animate-spin-slow" />
-              <span className="text-sm">Group Management Dashboard</span>
+            <h1 className={`text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${
+              theme === "dark" 
+                ? "from-white to-white/80" 
+                : "from-gray-900 to-gray-700"
+            }`}>{groupData.name}</h1>
+            <div className={`flex items-center space-x-2 text-sm ${
+              theme === "dark" ? "text-[#E0E0E0]/80" : "text-gray-600"
+            }`}>
+              <i className="fas fa-gear animate-spin-slow" />
+              <span>Group Management Dashboard</span>
             </div>
           </div>
         </div>
@@ -36,11 +78,21 @@ export default function GroupManageHomePage() {
 
       <div className="grid grid-cols-2 gap-8">
         {/* Group Information */}
-        <div className="rounded-2xl bg-[#1D203A] overflow-hidden shadow-xl shadow-purple-500/10 relative group">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#A84CFB]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group ${
+          theme === "dark" 
+            ? "bg-[#1D203A]/40 border-white/5 shadow-purple-500/10" 
+            : "bg-white/80 border-gray-200/50 shadow-blue-500/10"
+        }`}>
+          <div className={`absolute inset-0 bg-gradient-to-b opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+            theme === "dark" ? "from-[#A84CFB]/5 to-transparent" : "from-blue-500/5 to-transparent"
+          }`}></div>
           
           {/* Header */}
-          <div className="flex items-center justify-between p-5 hover:bg-white/5 transition-all duration-300 cursor-pointer group/header border-b border-white/5">
+          <div className={`flex items-center justify-between p-5 hover:backdrop-blur-2xl transition-all duration-300 cursor-pointer group/header border-b ${
+            theme === "dark" 
+              ? "hover:bg-white/10 border-white/5" 
+              : "hover:bg-gray-50/80 border-gray-200/50"
+          }`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20"></div>
@@ -48,35 +100,48 @@ export default function GroupManageHomePage() {
                   <i className="fas fa-info text-[#A84CFB] text-xl group-hover/header:scale-110 transition-transform duration-300" />
                 </div>
               </div>
-              <span className="text-white font-medium text-lg">Group Information</span>
-            </div>
-            <div className="h-8 w-8 rounded-xl bg-white/5 flex items-center justify-center group-hover/header:bg-white/10 transition-colors duration-300">
-              <i className="fas fa-chevron-right text-[#E0E0E0] text-sm group-hover/header:translate-x-0.5 transition-transform duration-200" />
+              <span className={`font-medium text-lg ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}>Group Information</span>
             </div>
           </div>
 
           {/* Owner Card */}
-          <div className="p-5 hover:bg-white/5 transition-all duration-300 cursor-pointer border-b border-white/5 group/owner">
+          <div className={`p-5 hover:backdrop-blur-2xl transition-all duration-300 cursor-pointer border-b ${
+            theme === "dark" 
+              ? "hover:bg-white/10 border-white/5" 
+              : "hover:bg-gray-50/80 border-gray-200/50"
+          } group/owner`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20"></div>
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A84CFB]/20 to-[#7B5EFF]/20 flex items-center justify-center relative group-hover/owner:bg-gradient-to-br group-hover/owner:from-[#A84CFB]/30 group-hover/owner:to-[#7B5EFF]/30 transition-all duration-300">
                   <i className="fas fa-crown text-[#A84CFB] text-2xl group-hover/owner:scale-110 transition-transform duration-300" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#1D203A] flex items-center justify-center">
+                <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center ${
+                  theme === "dark" ? "bg-[#1D203A]" : "bg-white"
+                }`}>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#00FF9C] animate-pulse" />
                 </div>
               </div>
               <div>
-                <div className="text-sm text-[#E0E0E0]/80 uppercase tracking-wider font-medium">GROUP OWNER</div>
-                <div className="text-lg font-semibold bg-gradient-to-r from-[#A84CFB] to-[#7B5EFF] bg-clip-text text-transparent">Software Ventures</div>
+                <div className={`text-sm uppercase tracking-wider font-medium ${
+                  theme === "dark" ? "text-[#E0E0E0]/80" : "text-gray-600"
+                }`}>GROUP OWNER</div>
+                <div className={`text-lg font-semibold ${
+                  theme === "dark" ? "text-white" : "text-gray-900"
+                }`}>{groupData.owner}</div>
               </div>
             </div>
           </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 gap-4 p-5">
-            <div className="rounded-xl bg-[#2B2D44] p-4 hover:bg-[#2B2D44]/80 transition-all duration-300 cursor-pointer group/stat relative">
+            <div className={`rounded-xl backdrop-blur-md border p-4 hover:border-white/10 transition-all duration-300 cursor-pointer group/stat relative ${
+              theme === "dark" 
+                ? "bg-[#2B2D44]/30 border-white/5 hover:bg-[#2B2D44]/40" 
+                : "bg-gray-50/80 border-gray-200/50 hover:bg-gray-100/80 hover:border-gray-300/50"
+            }`}>
               <div className="absolute inset-0 bg-gradient-to-br from-[#7B5EFF]/10 to-transparent opacity-0 group-hover/stat:opacity-100 transition-opacity duration-300 rounded-xl"></div>
               <div className="flex items-center space-x-2 text-[#7B5EFF] mb-3">
                 <i className="fas fa-users text-sm" />
@@ -85,10 +150,16 @@ export default function GroupManageHomePage() {
                   <i className="fas fa-arrow-up text-[10px] group-hover/stat:scale-110 transition-transform duration-300" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-white group-hover/stat:text-[#7B5EFF] transition-colors duration-300">856</div>
-              <div className="text-xs text-[#7B5EFF] mt-1">+12% this month</div>
+              <div className={`text-3xl font-bold group-hover/stat:text-[#7B5EFF] transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}>{groupData.members}</div>
+              <div className="text-xs text-[#7B5EFF] mt-1">{groupData.memberGrowth}</div>
             </div>
-            <div className="rounded-xl bg-[#2B2D44] p-4 hover:bg-[#2B2D44]/80 transition-all duration-300 cursor-pointer group/stat relative">
+            <div className={`rounded-xl backdrop-blur-md border p-4 hover:border-white/10 transition-all duration-300 cursor-pointer group/stat relative ${
+              theme === "dark" 
+                ? "bg-[#2B2D44]/30 border-white/5 hover:bg-[#2B2D44]/40" 
+                : "bg-gray-50/80 border-gray-200/50 hover:bg-gray-100/80 hover:border-gray-300/50"
+            }`}>
               <div className="absolute inset-0 bg-gradient-to-br from-[#00FF9C]/10 to-transparent opacity-0 group-hover/stat:opacity-100 transition-opacity duration-300 rounded-xl"></div>
               <div className="flex items-center space-x-2 text-[#00FF9C] mb-3">
                 <i className="fas fa-layer-group text-sm" />
@@ -97,18 +168,30 @@ export default function GroupManageHomePage() {
                   <i className="fas fa-circle-info text-[10px] group-hover/stat:scale-110 transition-transform duration-300" />
                 </div>
               </div>
-              <div className="text-3xl font-bold text-white group-hover/stat:text-[#00FF9C] transition-colors duration-300">Admin</div>
-              <div className="text-xs text-[#00FF9C] mt-1">Active permissions</div>
+              <div className={`text-3xl font-bold group-hover/stat:text-[#00FF9C] transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}>{groupData.role}</div>
+              <div className="text-xs text-[#00FF9C] mt-1">{groupData.permissions}</div>
             </div>
           </div>
         </div>
 
         {/* Subscription */}
-        <div className="rounded-2xl bg-[#1D203A] overflow-hidden shadow-xl shadow-purple-500/10 relative group">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#A84CFB]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group ${
+          theme === "dark" 
+            ? "bg-[#1D203A]/40 border-white/5 shadow-purple-500/10" 
+            : "bg-white/80 border-gray-200/50 shadow-blue-500/10"
+        }`}>
+          <div className={`absolute inset-0 bg-gradient-to-b opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+            theme === "dark" ? "from-[#A84CFB]/5 to-transparent" : "from-blue-500/5 to-transparent"
+          }`}></div>
           
           {/* Header */}
-          <div className="flex items-center justify-between p-5 hover:bg-white/5 transition-all duration-300 cursor-pointer group/header border-b border-white/5">
+          <div className={`flex items-center justify-between p-5 hover:backdrop-blur-2xl transition-all duration-300 cursor-pointer group/header border-b ${
+            theme === "dark" 
+              ? "hover:bg-white/10 border-white/5" 
+              : "hover:bg-gray-50/80 border-gray-200/50"
+          }`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20"></div>
@@ -116,32 +199,57 @@ export default function GroupManageHomePage() {
                   <i className="fas fa-credit-card text-[#A84CFB] text-xl group-hover/header:scale-110 transition-transform duration-300" />
                 </div>
               </div>
-              <span className="text-white font-medium text-lg">Subscription</span>
-            </div>
-            <div className="h-8 w-8 rounded-xl bg-white/5 flex items-center justify-center group-hover/header:bg-white/10 transition-colors duration-300">
-              <i className="fas fa-chevron-right text-[#E0E0E0] text-sm group-hover/header:translate-x-0.5 transition-transform duration-200" />
+              <span className={`font-medium text-lg ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}>Subscription</span>
             </div>
           </div>
 
           {/* Status Card */}
-          <div className="p-5 hover:bg-white/5 transition-all duration-300 cursor-pointer border-b border-white/5 group/status">
+          <div className={`p-5 hover:backdrop-blur-2xl transition-all duration-300 cursor-pointer border-b ${
+            theme === "dark" 
+              ? "hover:bg-white/10 border-white/5" 
+              : "hover:bg-gray-50/80 border-gray-200/50"
+          } group/status`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#00FF9C] to-[#00D98B] rounded-2xl blur opacity-20"></div>
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00FF9C]/20 to-[#00D98B]/20 flex items-center justify-center relative group-hover/status:bg-gradient-to-br group-hover/status:from-[#00FF9C]/30 group-hover/status:to-[#00D98B]/30 transition-all duration-300">
                   <i className="fas fa-shield-halved text-[#00FF9C] text-2xl group-hover/status:scale-110 transition-transform duration-300" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#1D203A] flex items-center justify-center">
+                <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center ${
+                  theme === "dark" ? "bg-[#1D203A]" : "bg-white"
+                }`}>
                   <div className="w-2.5 h-2.5 rounded-full bg-[#00FF9C] animate-pulse" />
                 </div>
               </div>
               <div>
-                <div className="text-sm text-[#E0E0E0]/80 uppercase tracking-wider font-medium">SUBSCRIPTION STATUS</div>
+                <div className={`text-sm uppercase tracking-wider font-medium ${
+                  theme === "dark" ? "text-[#E0E0E0]/80" : "text-gray-600"
+                }`}>SUBSCRIPTION STATUS</div>
                 <div className="flex items-center space-x-2">
-                  <div className="h-5 w-5 rounded-lg bg-[#00FF9C]/10 flex items-center justify-center">
-                    <i className="fas fa-check text-[#00FF9C] text-xs" />
+                  <div className={`h-5 w-5 rounded-lg flex items-center justify-center ${
+                    groupData.subscriptionStatus === "ACTIVE" 
+                      ? "bg-[#00FF9C]/10" 
+                      : groupData.subscriptionStatus === "PENDING"
+                      ? "bg-[#F59E0B]/10"
+                      : "bg-[#EF4444]/10"
+                  }`}>
+                    <i className={`text-xs ${
+                      groupData.subscriptionStatus === "ACTIVE" 
+                        ? "fas fa-check text-[#00FF9C]" 
+                        : groupData.subscriptionStatus === "PENDING"
+                        ? "fas fa-clock text-[#F59E0B]"
+                        : "fas fa-times text-[#EF4444]"
+                    }`} />
                   </div>
-                  <span className="text-[#00FF9C] font-medium">ACTIVE</span>
+                  <span className={`font-medium ${
+                    groupData.subscriptionStatus === "ACTIVE" 
+                      ? "text-[#00FF9C]" 
+                      : groupData.subscriptionStatus === "PENDING"
+                      ? "text-[#F59E0B]"
+                      : "text-[#EF4444]"
+                  }`}>{groupData.subscriptionStatus}</span>
                 </div>
               </div>
             </div>
@@ -149,7 +257,11 @@ export default function GroupManageHomePage() {
 
           {/* Expiry Info */}
           <div className="p-5 group/expiry">
-            <div className="rounded-xl bg-[#2B2D44] p-4 relative">
+            <div className={`rounded-xl backdrop-blur-md border p-4 relative ${
+              theme === "dark" 
+                ? "bg-[#2B2D44]/30 border-white/5" 
+                : "bg-gray-50/80 border-gray-200/50"
+            }`}>
               <div className="absolute inset-0 bg-gradient-to-br from-[#00FF9C]/10 to-transparent opacity-0 group-hover/expiry:opacity-100 transition-opacity duration-300 rounded-xl"></div>
               <div className="flex items-center space-x-2 text-[#00FF9C] mb-3">
                 <i className="fas fa-clock text-sm" />
@@ -158,71 +270,105 @@ export default function GroupManageHomePage() {
                   <i className="fas fa-arrow-left text-[10px]" />
                 </div>
               </div>
-              <div className="text-2xl font-bold text-white group-hover/expiry:text-[#00FF9C] transition-colors duration-300">
-                {showFullExpiry ? (
-                  <span>142 days, 19 hours, and 58 minutes</span>
-                ) : (
-                  <span>142 days</span>
-                )}
+              <div className={`text-lg font-semibold group-hover/expiry:text-[#00FF9C] transition-colors duration-300 ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}>
+                <span>
+                  {formatExpiryTime(groupData.expiryDays, groupData.expiryHours, groupData.expiryMinutes)}
+                </span>
               </div>
-              <button 
-                onClick={() => setShowFullExpiry(!showFullExpiry)}
-                className="text-xs text-[#00FF9C] mt-2 hover:text-[#00D98B] transition-colors duration-200 flex items-center space-x-2"
-              >
-                <span>Click to {showFullExpiry ? 'simplify' : 'show full time'}</span>
-              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Redeem Key Section */}
-      <div className="rounded-2xl bg-[#1D203A] p-6 mt-8 shadow-xl shadow-purple-500/10 relative group">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#3B6EFF]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+      <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group mt-8 ${
+        theme === "dark" 
+          ? "bg-[#1D203A]/40 border-white/5 shadow-purple-500/10" 
+          : "bg-white/80 border-gray-200/50 shadow-blue-500/10"
+      }`}>
+        <div className={`absolute inset-0 bg-gradient-to-b opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
+          theme === "dark" ? "from-[#3B6EFF]/5 to-transparent" : "from-blue-500/5 to-transparent"
+        }`}></div>
         
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-br from-[#3B6EFF] to-[#7A83FF] rounded-2xl blur opacity-20"></div>
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#3B6EFF]/20 to-[#7A83FF]/20 flex items-center justify-center relative">
-              <i className="fas fa-key text-[#3B6EFF] text-xl" />
+        {/* Header */}
+        <div className={`flex items-center justify-between p-5 hover:backdrop-blur-2xl transition-all duration-300 cursor-pointer group/header border-b ${
+          theme === "dark" 
+            ? "hover:bg-white/10 border-white/5" 
+            : "hover:bg-gray-50/80 border-gray-200/50"
+        }`}>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-br from-[#3B6EFF] to-[#7A83FF] rounded-2xl blur opacity-20"></div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#3B6EFF]/20 to-[#7A83FF]/20 flex items-center justify-center relative">
+                <i className="fas fa-key text-[#3B6EFF] text-xl group-hover/header:scale-110 transition-transform duration-300" />
+              </div>
             </div>
+            <span className={`font-medium text-lg ${
+              theme === "dark" ? "text-white" : "text-gray-900"
+            }`}>Redeem Key</span>
           </div>
-          <span className="text-white font-medium text-lg">Redeem Key</span>
+          <div className={`h-8 w-8 rounded-xl flex items-center justify-center transition-colors duration-300 ${
+            theme === "dark" 
+              ? "bg-white/5 group-hover/header:bg-white/10" 
+              : "bg-gray-100/50 group-hover/header:bg-gray-200/50"
+          }`}>
+            <i className={`fas fa-chevron-right text-sm group-hover/header:translate-x-0.5 transition-transform duration-200 ${
+              theme === "dark" ? "text-[#E0E0E0]" : "text-gray-600"
+            }`} />
+          </div>
         </div>
 
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="flex-1">
-            <div className="text-sm text-[#E0E0E0]/80 uppercase tracking-wider font-medium mb-2">Serial Key</div>
-            <div className="relative group/input">
-              <div className="absolute -inset-0.5 bg-gradient-to-br from-[#3B6EFF]/50 to-[#7A83FF]/50 rounded-xl blur opacity-0 group-focus-within/input:opacity-20 transition duration-300"></div>
-              <input
-                type="text"
-                value={serialKey}
-                onChange={(e) => setSerialKey(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-[#2B2D44] border border-white/5 text-white placeholder-[#E0E0E0]/50 focus:outline-none focus:border-[#3B6EFF]/50 transition-all duration-300 relative"
-                placeholder="Enter your serial key..."
-              />
+        <div className="p-5">
+          <div className="flex items-end space-x-4 mb-4">
+            <div className="flex-1">
+              <div className={`text-sm uppercase tracking-wider font-medium mb-2 ${
+                theme === "dark" ? "text-[#E0E0E0]/80" : "text-gray-600"
+              }`}>Serial Key</div>
+              <div className="relative group/input">
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#3B6EFF]/50 to-[#7A83FF]/50 rounded-xl blur opacity-0 group-focus-within/input:opacity-20 transition duration-300"></div>
+                <input
+                  type="text"
+                  value={serialKey}
+                  onChange={(e) => setSerialKey(e.target.value)}
+                  className={`w-full h-[46px] px-4 rounded-xl backdrop-blur-md border focus:outline-none focus:border-[#3B6EFF]/50 transition-all duration-300 relative ${
+                    theme === "dark" 
+                      ? "bg-[#2B2D44]/30 border-white/5 text-white placeholder-[#E0E0E0]/50" 
+                      : "bg-gray-50/80 border-gray-200/50 text-gray-900 placeholder-gray-500"
+                  }`}
+                  placeholder="Enter your serial key..."
+                />
+              </div>
             </div>
-          </div>
-          <button className="h-[46px] px-6 rounded-xl bg-gradient-to-r from-[#3B6EFF] to-[#7A83FF] hover:from-[#3B6EFF]/90 hover:to-[#7A83FF]/90 text-white font-medium transition-all duration-300 flex items-center space-x-2 shadow-lg shadow-[#3B6EFF]/20 relative group/button">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#3B6EFF] to-[#7A83FF] rounded-xl blur opacity-50 group-hover/button:opacity-100 transition duration-300"></div>
-            <div className="relative flex items-center space-x-2">
+            <button 
+              disabled={!serialKey.trim()}
+              className={`h-[46px] px-6 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+                serialKey.trim() 
+                  ? 'bg-[#3B6EFF] hover:bg-[#3B6EFF]/90 text-white shadow-lg shadow-[#3B6EFF]/20 cursor-pointer' 
+                  : theme === "dark"
+                    ? 'bg-[#2B2D44]/50 text-[#E0E0E0]/40 cursor-not-allowed'
+                    : 'bg-gray-200/50 text-gray-400 cursor-not-allowed'
+              }`}
+            >
               <i className="fas fa-lock text-sm" />
-              <span>Redeem Key</span>
-            </div>
-          </button>
-        </div>
+              <span>Redeem</span>
+            </button>
+          </div>
 
-        <div className="text-center">
-          <div className="text-sm text-[#E0E0E0]/80 mb-3">Need a new subscription?</div>
-          <button className="h-[46px] px-6 rounded-xl bg-gradient-to-r from-[#00D98B] to-[#00FF9C] hover:from-[#00D98B]/90 hover:to-[#00FF9C]/90 text-white font-medium transition-all duration-300 flex items-center space-x-2 mx-auto shadow-lg shadow-[#00D98B]/20 relative group/store">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#00D98B] to-[#00FF9C] rounded-xl blur opacity-50 group-hover/store:opacity-100 transition duration-300"></div>
-            <div className="relative flex items-center space-x-2">
-              <i className="fas fa-shopping-cart text-sm" />
+          <div className={`flex items-center justify-between text-xs ${
+            theme === "dark" ? "text-[#E0E0E0]/60" : "text-gray-500"
+          }`}>
+            <span>Need a new subscription?</span>
+            <button className={`px-3 py-1.5 rounded-lg hover:bg-[#00FF9C]/20 text-[#00FF9C] hover:text-[#00D98B] transition-all duration-200 flex items-center space-x-1 border hover:border-[#00FF9C]/40 ${
+              theme === "dark" 
+                ? "bg-[#00FF9C]/10 border-[#00FF9C]/20" 
+                : "bg-[#00FF9C]/5 border-[#00FF9C]/30"
+            }`}>
               <span>Visit Store</span>
-              <i className="fas fa-external-link text-xs ml-2 group-hover/store:translate-x-0.5 transition-transform duration-200" />
-            </div>
-          </button>
+              <i className="fas fa-external-link text-xs" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

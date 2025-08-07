@@ -1,0 +1,160 @@
+{
+  "groups": [
+    {
+      "id": "1",
+      "name": "Software Ventures",
+      "abbreviation": "SV",
+      "logo": "/img/groups/software-ventures.png",
+      "role": "Member",
+      "isActive": true
+    },
+    {
+      "id": "2",
+      "name": "Development Team",
+      "abbreviation": "DT",
+      "role": "Admin",
+      "isActive": false
+    },
+    {
+      "id": "3",
+      "name": "Beta Testers",
+      "abbreviation": "BT",
+      "role": "Member",
+      "isActive": false
+    }
+  ],
+  "userProfile": {
+    "id": "user-123",
+    "username": "shin",
+    "profilePicture": "/img/profiles/shin.png",
+    "bio": "Elite Roblox clan strategist with 5+ years experience in competitive gaming. Specializes in tactical operations, team coordination, and base building. Leading multiple successful raids and consistently ranked in top 10% of players.",
+    "role": {
+      "name": "Senior Developer",
+      "color": "#3B82F6",
+      "permissions": ["read", "write", "moderate"]
+    },
+    "xpLevel": 1250,
+    "xpUnit": "XP",
+    "joinedDate": "2024-03-15T00:00:00.000Z"
+  },
+  "groupInfo": {
+    "id": "1",
+    "name": "Software Ventures",
+    "abbreviation": "SV",
+    "logo": "/img/groups/software-ventures.png",
+    "creator": {
+      "id": "creator-456",
+      "name": "Wondering_Dev"
+    },
+    "memberCount": 247,
+    "description": "A collaborative community focused on building innovative software solutions and fostering developer growth through shared knowledge and cutting-edge projects.",
+    "createdDate": "2023-08-15T00:00:00.000Z"
+  },
+  "medals": [
+    {
+      "id": "medal-1",
+      "name": "First Contribution",
+      "description": "Made your first contribution to the group project",
+      "icon": "fas fa-code",
+      "color": "#3B82F6",
+      "rarity": "common",
+      "earnedDate": "2024-03-20T00:00:00.000Z"
+    },
+    {
+      "id": "medal-2",
+      "name": "Team Player",
+      "description": "Collaborated effectively with 10+ team members",
+      "icon": "fas fa-users",
+      "color": "#A855F7",
+      "rarity": "epic",
+      "earnedDate": "2024-04-15T00:00:00.000Z",
+      "progress": {
+        "current": 8,
+        "total": 10
+      }
+    },
+    {
+      "id": "medal-3",
+      "name": "Bug Hunter",
+      "description": "Found and reported 50+ critical bugs",
+      "icon": "fas fa-bug",
+      "color": "#F59E0B",
+      "rarity": "legendary",
+      "earnedDate": "2024-05-10T00:00:00.000Z"
+    }
+  ],
+  "qualifications": [
+    {
+      "id": "qual-1",
+      "title": "Elite Combat Specialist",
+      "issuer": "Roblox Military Academy",
+      "description": "Demonstrates mastery in tactical combat operations and leadership in military simulation games",
+      "status": "active",
+      "issuedDate": "2024-01-15T00:00:00.000Z",
+      "expiryDate": "2027-01-15T00:00:00.000Z",
+      "credentialUrl": "https://roblox.com/military-academy/verify"
+    },
+    {
+      "id": "qual-2",
+      "title": "Advanced Builder Certification",
+      "issuer": "Roblox Builders Guild",
+      "description": "Expert level building skills with advanced scripting and design principles",
+      "status": "active",
+      "issuedDate": "2023-11-20T00:00:00.000Z",
+      "expiryDate": "2026-11-20T00:00:00.000Z",
+      "credentialUrl": "https://roblox.com/builders-guild/verify"
+    },
+    {
+      "id": "qual-3",
+      "title": "Community Leadership",
+      "issuer": "Roblox Community Standards",
+      "description": "Demonstrated leadership in maintaining positive community standards",
+      "status": "expired",
+      "issuedDate": "2022-06-10T00:00:00.000Z",
+      "expiryDate": "2024-06-10T00:00:00.000Z",
+      "credentialUrl": "https://roblox.com/community-standards/verify"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log-1",
+      "action": "Role Updated",
+      "description": "Promoted from Member to Senior Developer",
+      "timestamp": "2024-05-15T14:30:00.000Z",
+      "performedBy": "Wondering_Dev",
+      "category": "role_change"
+    },
+    {
+      "id": "log-2",
+      "action": "Project Access Granted",
+      "description": "Access granted to Core Development Repository",
+      "timestamp": "2024-05-10T09:15:00.000Z",
+      "performedBy": "System",
+      "category": "access_control"
+    },
+    {
+      "id": "log-3",
+      "action": "Meeting Attendance",
+      "description": "Attended Weekly Development Sync",
+      "timestamp": "2024-05-08T16:00:00.000Z",
+      "performedBy": "System",
+      "category": "attendance"
+    },
+    {
+      "id": "log-4",
+      "action": "Code Review",
+      "description": "Completed review of Feature Branch #123",
+      "timestamp": "2024-05-05T11:45:00.000Z",
+      "performedBy": "shin",
+      "category": "development"
+    },
+    {
+      "id": "log-5",
+      "action": "Bug Report",
+      "description": "Reported critical bug in authentication system",
+      "timestamp": "2024-05-01T13:20:00.000Z",
+      "performedBy": "shin",
+      "category": "bug_report"
+    }
+  ]
+} 

@@ -7,6 +7,7 @@ import useTheme from "@/hooks/useTheme";
 import CreateBanModal from "./CreateBanModal";
 import UpdateBanModal from "./UpdateBanModal";
 import TypeFilterHeader from "./TypeFilterHeader";
+import { bans } from "@/data/mock";
 
 interface BanRecord {
   id: string;
@@ -37,149 +38,8 @@ function BansList() {
       setIsSearching(value);
     }, value ? 0 : 300); // Show loading immediately, hide with delay
   };
-  // Example data - in real app this would come from an API
-  const data: BanRecord[] = [
-    {
-      id: "1",
-      name: "JohnDoe123",
-      type: "User",
-      date: "15/03/24",
-      description: "Multiple instances of harassment and inappropriate behavior",
-    },
-    {
-      id: "2",
-      name: "Elite Warriors Group",
-      type: "Group",
-      date: "14/03/24",
-      description: "Mass spamming and recruitment violations",
-    },
-    {
-      id: "3",
-      name: "GameMaster456",
-      type: "User",
-      date: "13/03/24",
-      description: "Exploiting game mechanics and disrupting gameplay",
-    },
-    {
-      id: "4",
-      name: "ProGamer2024",
-      type: "User",
-      date: "12/03/24",
-      description: "Using automated scripts for unfair advantages",
-    },
-    {
-      id: "5",
-      name: "Roblox Legends Club",
-      type: "Group",
-      date: "11/03/24",
-      description: "Unauthorized trading and currency exchange activities",
-    },
-    {
-      id: "6",
-      name: "CoolKid789",
-      type: "User",
-      date: "10/03/24",
-      description: "Repeated violations of community guidelines",
-    },
-    {
-      id: "7",
-      name: "Epic Raiders",
-      type: "Group",
-      date: "09/03/24",
-      description: "Organizing raids against other groups",
-    },
-    {
-      id: "8",
-      name: "BuildMaster99",
-      type: "User",
-      date: "08/03/24",
-      description: "Copying and distributing copyrighted content",
-    },
-    {
-      id: "9",
-      name: "Gaming Elite Force",
-      type: "Group",
-      date: "07/03/24",
-      description: "Harassment campaigns against other communities",
-    },
-    {
-      id: "10",
-      name: "SpeedRunner42",
-      type: "User",
-      date: "06/03/24",
-      description: "Using exploits to gain unfair advantages",
-    },
-    {
-      id: "11",
-      name: "TradeMaster2024",
-      type: "User",
-      date: "05/03/24",
-      description: "Scamming users in trading activities",
-    },
-    {
-      id: "12",
-      name: "Ultimate Gaming Squad",
-      type: "Group",
-      date: "04/03/24",
-      description: "Organizing and promoting scam activities",
-    },
-    {
-      id: "13",
-      name: "PvPKing123",
-      type: "User",
-      date: "03/03/24",
-      description: "Using unauthorized third-party tools",
-    },
-    {
-      id: "14",
-      name: "Roblox Warriors United",
-      type: "Group",
-      date: "02/03/24",
-      description: "Spreading malicious content and links",
-    },
-    {
-      id: "15",
-      name: "ScriptMaster55",
-      type: "User",
-      date: "01/03/24",
-      description: "Developing and distributing exploit scripts",
-    },
-    {
-      id: "16",
-      name: "Elite Builders Guild",
-      type: "Group",
-      date: "29/02/24",
-      description: "Unauthorized asset redistribution",
-    },
-    {
-      id: "17",
-      name: "SpeedHacker99",
-      type: "User",
-      date: "28/02/24",
-      description: "Using speed hacks in multiple games",
-    },
-    {
-      id: "18",
-      name: "Combat Masters Club",
-      type: "Group",
-      date: "27/02/24",
-      description: "Exploiting game mechanics for unfair advantages",
-    },
-    {
-      id: "19",
-      name: "AimbotUser123",
-      type: "User",
-      date: "26/02/24",
-      description: "Using automated aiming software",
-    },
-    {
-      id: "20",
-      name: "Trading Empire Group",
-      type: "Group",
-      date: "25/02/24",
-      description: "Operating unauthorized marketplace activities",
-    }
-  ];
+  // Use mock data from centralized database
+  const data: BanRecord[] = bans;
 
   // Example columns configuration
   const columns: Column<BanRecord>[] = [

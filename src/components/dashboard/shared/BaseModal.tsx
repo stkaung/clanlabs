@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import useTheme from "@/hooks/useTheme";
 
 interface BaseModalProps {
@@ -22,6 +22,7 @@ function BaseModal({
   showCloseButton = true,
 }: BaseModalProps) {
   const theme = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
 
   const maxWidthClasses = {
     sm: "max-w-sm",
@@ -31,7 +32,7 @@ function BaseModal({
     "2xl": "max-w-2xl",
   };
 
-  // Handle escape key
+  // Handle escape key and mounting state
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape" && isOpen) {
@@ -42,6 +43,15 @@ function BaseModal({
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
       document.body.style.overflow = "hidden";
+      // Set mounted after a small delay to trigger animation
+      setTimeout(() => setIsMounted(true), 10);
+    } else {
+      // Start close animation
+      setIsMounted(false);
+             // Wait for animation to finish before hiding modal
+       setTimeout(() => {
+         // Modal will be hidden by parent opacity
+       }, 300);
     }
 
     return () => {
@@ -52,34 +62,37 @@ function BaseModal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-300 ${
-        isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+      className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-300 ${
+        isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
       }`}
     >
-      {/* Full-screen backdrop overlay */}
-      <div
-        className={`absolute inset-0 transition-all duration-300 ${
-          isOpen ? "backdrop-blur-sm" : "backdrop-blur-none"
-        } ${theme === "dark" ? "bg-black/40" : "bg-black/20"}`}
-      />
+             {/* Full-screen backdrop overlay */}
+       <div
+         className={`absolute inset-0 transition-all duration-300 ${
+           isOpen ? "backdrop-blur-md" : "backdrop-blur-none"
+         } ${theme === "dark" ? "bg-black/15" : "bg-black/8"}`}
+         style={{
+           backdropFilter: isOpen ? "blur(12px)" : "blur(0px)",
+         }}
+       />
 
       {/* Modal container */}
-      <div className="relative z-10 w-full flex items-center justify-center p-4">
+      <div className="relative z-10 w-full h-full flex items-center justify-center p-4 pt-12">
         {/* Modal */}
-        <div
-          className={`relative w-full ${
-            maxWidthClasses[maxWidth]
-          } rounded-2xl border shadow-2xl backdrop-blur-md max-h-[90vh] flex flex-col transition-all duration-300 transform ${
-            isOpen
-              ? "scale-100 translate-y-0 opacity-100"
-              : "scale-95 translate-y-4 opacity-0"
-          } ${
-            theme === "dark"
-              ? "bg-gray-800/95 border-gray-600/50"
-              : "bg-white/95 border-gray-200/50"
-          }`}
-          style={{ backdropFilter: "blur(12px)" }}
-        >
+                 <div
+           className={`relative w-full max-h-[85vh] ${
+             maxWidthClasses[maxWidth]
+           } rounded-2xl border shadow-2xl backdrop-blur-md flex flex-col transition-all duration-300 ease-out transform ${
+             isMounted
+               ? "scale-100 translate-y-0 opacity-100"
+               : "scale-90 translate-y-6 opacity-0"
+           } ${
+             theme === "dark"
+               ? "bg-gray-800/95 border-gray-600/50"
+               : "bg-white/95 border-gray-200/50"
+           }`}
+           style={{ backdropFilter: "blur(12px)" }}
+         >
           {/* Header */}
           {(title || showCloseButton) && (
             <div
