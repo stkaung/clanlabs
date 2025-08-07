@@ -38,7 +38,7 @@ function CreateBanModal({ isOpen, onClose }: CreateBanModalProps) {
       isOpen={isOpen}
       onClose={onClose}
       title="Create Ban"
-      size="md"
+      maxWidth="md"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Ban Type Selection */}

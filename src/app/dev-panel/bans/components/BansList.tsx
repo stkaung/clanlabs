@@ -39,7 +39,7 @@ function BansList() {
     }, value ? 0 : 300); // Show loading immediately, hide with delay
   };
   // Use mock data from centralized database
-  const data: BanRecord[] = bans;
+  const data: BanRecord[] = bans as BanRecord[];
 
   // Example columns configuration
   const columns: Column<BanRecord>[] = [
