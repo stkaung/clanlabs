@@ -29,7 +29,7 @@ function BansList() {
   const [typeFilter, setTypeFilter] = useState<"all" | "User" | "Group">("all");
   
   // Debounce search state updates
-  const searchTimeout = useRef<NodeJS.Timeout>();
+  const searchTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const debouncedSetSearching = (value: boolean) => {
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);

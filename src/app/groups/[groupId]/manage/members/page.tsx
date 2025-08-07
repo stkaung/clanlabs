@@ -18,7 +18,7 @@ export default function GroupMembersPage() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   
   // Debounce search state updates
-  const searchTimeout = useRef<NodeJS.Timeout>();
+  const searchTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
   const debouncedSetSearching = (value: boolean) => {
     if (searchTimeout.current) {
       clearTimeout(searchTimeout.current);
