@@ -41,7 +41,6 @@ export default function UpdateBanModal({
       isOpen={isOpen}
       onClose={onClose}
       title={`Update Ban - ${banName}`}
-      titleClass="text-xl font-bold"
     >
       <div className="space-y-4">
         <div>

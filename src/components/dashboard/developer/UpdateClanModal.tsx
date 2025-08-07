@@ -47,7 +47,6 @@ export default function UpdateClanModal({
       isOpen={isOpen}
       onClose={onClose}
       title={`Update Bot Account - ${clanName}`}
-      titleClass="text-xl font-bold"
     >
       <div className="space-y-4">
         <div>
