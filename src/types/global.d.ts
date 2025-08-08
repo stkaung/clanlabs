@@ -41,3 +41,8 @@ declare module "*.webp" {
   const content: string;
   export default content;
 }
+
+// Fallback for react-dom types if @types/react-dom is not present
+declare module "react-dom" {
+  export const createPortal: (node: any, container: any) => any;
+}

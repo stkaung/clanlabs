@@ -269,8 +269,9 @@ function DashboardLayout({
               </div>
 
               {/* Content Container - positioned above background layers */}
-              <div className="relative z-10 max-w-7xl mx-auto px-6">
+              <div id="main-content-container" className="relative z-10 max-w-7xl mx-auto px-6">
                 <div
+                  id="main-content-blur"
                   className={`transition-all duration-500 ease-out ${
                     isRouteLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                   }`}

@@ -146,7 +146,8 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
       onClose={onClose}
       title={`${userProfile.username}`}
       subtitle="Member Profile"
-      maxWidth="md"
+      maxWidth="7xl"
+      withinContainer={true}
     >
       <div className="space-y-8">
         {/* Glassmorphic Profile Header */}
