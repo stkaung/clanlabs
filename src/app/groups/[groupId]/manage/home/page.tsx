@@ -43,7 +43,7 @@ export default function GroupManageHomePage() {
         <div className={`absolute inset-0 bg-gradient-to-b opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
           theme === "dark" ? "from-[#A84CFB]/5 to-transparent" : "from-blue-500/5 to-transparent"
         }`}></div>
-        <div className="flex items-center space-x-5">
+        <div className="flex items-center flex-wrap gap-4 sm:gap-5">
           <div className="relative group/icon">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20 group-hover/icon:opacity-30 transition duration-500"></div>
             <div className={`w-[72px] h-[72px] rounded-2xl flex items-center justify-center shadow-lg relative ${
@@ -60,8 +60,8 @@ export default function GroupManageHomePage() {
               />
             </div>
           </div>
-          <div>
-            <h1 className={`text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent ${
+          <div className="min-w-0">
+            <h1 className={`text-2xl font-bold bg-gradient-to-r bg-clip-text text-transparent truncate ${
               theme === "dark" 
                 ? "from-white to-white/80" 
                 : "from-gray-900 to-gray-700"
@@ -76,7 +76,7 @@ export default function GroupManageHomePage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Group Information */}
         <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group ${
           theme === "dark" 
@@ -136,7 +136,7 @@ export default function GroupManageHomePage() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-4 p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5">
             <div className={`rounded-xl backdrop-blur-md border p-4 hover:border-white/10 transition-all duration-300 cursor-pointer group/stat relative ${
               theme === "dark" 
                 ? "bg-[#2B2D44]/30 border-white/5 hover:bg-[#2B2D44]/40" 
@@ -283,7 +283,7 @@ export default function GroupManageHomePage() {
       </div>
 
       {/* Redeem Key Section */}
-      <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group mt-8 ${
+        <div className={`rounded-2xl backdrop-blur-xl overflow-hidden border shadow-xl relative group mt-8 ${
         theme === "dark" 
           ? "bg-[#1D203A]/40 border-white/5 shadow-purple-500/10" 
           : "bg-white/80 border-gray-200/50 shadow-blue-500/10"
@@ -321,7 +321,7 @@ export default function GroupManageHomePage() {
         </div>
 
         <div className="p-5">
-          <div className="flex items-end space-x-4 mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-4">
             <div className="flex-1">
               <div className={`text-sm uppercase tracking-wider font-medium mb-2 ${
                 theme === "dark" ? "text-[#E0E0E0]/80" : "text-gray-600"
@@ -343,7 +343,7 @@ export default function GroupManageHomePage() {
             </div>
             <button 
               disabled={!serialKey.trim()}
-              className={`h-[46px] px-6 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
+              className={`h-[46px] px-6 rounded-xl font-medium transition-all duration-300 flex items-center justify-center space-x-2 w-full sm:w-auto ${
                 serialKey.trim() 
                   ? 'bg-[#3B6EFF] hover:bg-[#3B6EFF]/90 text-white shadow-lg shadow-[#3B6EFF]/20 cursor-pointer' 
                   : theme === "dark"
@@ -356,7 +356,7 @@ export default function GroupManageHomePage() {
             </button>
           </div>
 
-          <div className={`flex items-center justify-between text-xs ${
+          <div className={`flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between text-xs ${
             theme === "dark" ? "text-[#E0E0E0]/60" : "text-gray-500"
           }`}>
             <span>Need a new subscription?</span>
