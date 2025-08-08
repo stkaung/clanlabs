@@ -6,6 +6,7 @@ import {
   createContext,
   useContext,
 } from "react";
+import { usePathname } from "next/navigation";
 import useTheme from "@/hooks/useTheme";
 import type { GroupListItem } from "@/types/group-profile";
 import DashboardSidebar from "@/components/dashboard/sidebar/DashboardSidebar";
@@ -65,6 +66,8 @@ function DashboardLayout({
   const [isSetupModalOpen, setIsSetupModalOpen] = useState<boolean>(false);
   const [isRenewalModalOpen, setIsRenewalModalOpen] = useState<boolean>(false);
   const [renewalGroupName, setRenewalGroupName] = useState<string>("");
+  const pathname = usePathname();
+  const [isRouteLoaded, setIsRouteLoaded] = useState<boolean>(false);
 
   // Handle responsive behavior
   useEffect(() => {
@@ -88,6 +91,13 @@ function DashboardLayout({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, [isMobile, sidebarCollapsed]);
+
+  // Smooth transition on route change
+  useEffect(() => {
+    setIsRouteLoaded(false);
+    const timer = setTimeout(() => setIsRouteLoaded(true), 80);
+    return () => clearTimeout(timer);
+  }, [pathname]);
 
   function openSetupModal(): void {
     setIsSetupModalOpen(true);
@@ -132,9 +142,7 @@ function DashboardLayout({
                 ? `fixed top-0 left-0 h-full z-50 transform transition-transform duration-300 ease-in-out ${
                     sidebarCollapsed ? "-translate-x-full" : "translate-x-0"
                   }`
-                : `fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 ease-in-out ${
-                    sidebarCollapsed ? "-translate-x-full" : "translate-x-0"
-                  }`
+                : `fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 ease-in-out translate-x-0`
             }`}
           >
             {customSidebar || (
@@ -167,6 +175,11 @@ function DashboardLayout({
             className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300 pt-12 ${
               isMobile ? "ml-0" : sidebarCollapsed ? "ml-20" : "ml-64"
             }`}
+            style={{
+              // Keep layout margin left consistent even if the physical sidebar is translated off-screen on desktop
+              marginLeft: isMobile ? 0 : sidebarCollapsed ? 80 : 256,
+              transition: "margin-left 300ms ease",
+            }}
           >
             {/* Top Navigation Bar - Fixed */}
             <div
@@ -257,7 +270,13 @@ function DashboardLayout({
 
               {/* Content Container - positioned above background layers */}
               <div className="relative z-10 max-w-7xl mx-auto px-6">
-                {children}
+                <div
+                  className={`transition-all duration-500 ease-out ${
+                    isRouteLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+                  }`}
+                >
+                  {children}
+                </div>
               </div>
             </div>
           </main>

@@ -77,7 +77,7 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName }: T
                   action.disabled?.(row) ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 style={{
-                  background:
+                  backgroundImage:
                     action.variant === "danger"
                       ? "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"
                       : action.variant === "secondary"
@@ -85,6 +85,9 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName }: T
                         ? "linear-gradient(135deg, #4B5563 0%, #374151 100%)"
                         : "linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)"
                       : "linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%)",
+                  backgroundSize: "200% 100%",
+                  backgroundPosition: "0% 50%",
+                  transition: "background-position 400ms ease, transform 300ms ease, box-shadow 300ms ease",
                   fontFamily: "'Poppins', sans-serif",
                   boxShadow:
                     action.variant === "danger"
@@ -96,26 +99,12 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName }: T
                 }}
                 onMouseEnter={(e) => {
                   if (!action.disabled?.(row)) {
-                    (e.currentTarget as HTMLButtonElement).style.background =
-                      action.variant === "danger"
-                        ? "linear-gradient(135deg, #DC2626 0%, #EF4444 100%)"
-                        : action.variant === "secondary"
-                        ? theme === "dark"
-                          ? "linear-gradient(135deg, #374151 0%, #4B5563 100%)"
-                          : "linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)"
-                        : "linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%)";
+                    (e.currentTarget as HTMLButtonElement).style.backgroundPosition = "100% 50%";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!action.disabled?.(row)) {
-                    (e.currentTarget as HTMLButtonElement).style.background =
-                      action.variant === "danger"
-                        ? "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"
-                        : action.variant === "secondary"
-                        ? theme === "dark"
-                          ? "linear-gradient(135deg, #4B5563 0%, #374151 100%)"
-                          : "linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%)"
-                        : "linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%)";
+                    (e.currentTarget as HTMLButtonElement).style.backgroundPosition = "0% 50%";
                   }
                 }}
               >

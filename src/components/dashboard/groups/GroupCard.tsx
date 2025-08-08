@@ -157,7 +157,10 @@ function GroupCard({ group, onViewProfile, onSettings }: GroupCardProps) {
             onClick={() => openRenewalModal(group.name)}
             className="w-full flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg"
             style={{
-              background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+              backgroundImage: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+              backgroundSize: "200% 100%",
+              backgroundPosition: "0% 50%",
+              transition: "background-position 400ms ease, transform 300ms ease, box-shadow 300ms ease",
               fontFamily: "'Poppins', sans-serif",
               boxShadow:
                 theme === "dark"
@@ -165,12 +168,10 @@ function GroupCard({ group, onViewProfile, onSettings }: GroupCardProps) {
                   : "0 8px 25px rgba(245, 158, 11, 0.2)",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "linear-gradient(135deg, #D97706 0%, #F59E0B 100%)";
+              (e.currentTarget as HTMLButtonElement).style.backgroundPosition = "100% 50%";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)";
+              (e.currentTarget as HTMLButtonElement).style.backgroundPosition = "0% 50%";
             }}
           >
             <i className="fas fa-refresh text-sm" />
@@ -183,7 +184,10 @@ function GroupCard({ group, onViewProfile, onSettings }: GroupCardProps) {
               onClick={() => onViewProfile(group.id)}
               className="flex-1 flex items-center justify-center space-x-2 py-3 px-6 rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg"
               style={{
-                background: "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)",
+                backgroundImage: "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)",
+                backgroundSize: "200% 100%",
+                backgroundPosition: "0% 50%",
+                transition: "background-position 400ms ease, transform 300ms ease, box-shadow 300ms ease",
                 fontFamily: "'Poppins', sans-serif",
                 boxShadow:
                   theme === "dark"
@@ -191,12 +195,10 @@ function GroupCard({ group, onViewProfile, onSettings }: GroupCardProps) {
                     : "0 8px 25px rgba(30, 111, 217, 0.2)",
               }}
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background =
-                  "linear-gradient(135deg, #0A2D5A 0%, #1E6FD9 100%)";
+                (e.currentTarget as HTMLButtonElement).style.backgroundPosition = "100% 50%";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background =
-                  "linear-gradient(135deg, #1E6FD9 0%, #0A2D5A 100%)";
+                (e.currentTarget as HTMLButtonElement).style.backgroundPosition = "0% 50%";
               }}
             >
               <i className="fas fa-user text-sm" />

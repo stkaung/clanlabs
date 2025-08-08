@@ -62,7 +62,17 @@ export default function GroupManageLayout({
       customSidebar={<GroupManageSidebar groupId={groupId} />}
       breadcrumb={breadcrumb}
       showBackButton={true}
-      showSearch={false}
+      showSearch={true}
+      onSearch={(query: string) => {
+        try {
+          const eventBase = currentPageName.toLowerCase().replace(/\s+/g, '').replace(/-/g, '');
+          const eventName = `${eventBase}Search`;
+          window.dispatchEvent(new CustomEvent(eventName, { detail: query } as CustomEventInit<string>));
+        } catch (_) {
+          // no-op
+        }
+      }}
+      searchPlaceholder={currentPageName === 'Members' ? 'Search members...' : 'Search...'}
     >
       <div className="p-2">{children}</div>
     </DashboardLayout>

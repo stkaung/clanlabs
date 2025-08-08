@@ -31,6 +31,20 @@ export default function GroupMembersPage() {
   // Get members data for this specific group
   const data: GroupMember[] = groupMembers[groupId] || [];
 
+  function buildDefaultUserProfile(member: GroupMember): UserProfile {
+    return {
+      id: member.id,
+      username: member.username,
+      profilePicture: "/img/misc/default-avatar.svg",
+      rank: member.rank,
+      experience: member.experience,
+      quotaPoints: member.quotaPoints,
+      medals: [],
+      qualifications: [],
+      auditLogs: [],
+    };
+  }
+
   // Columns configuration
   const columns: Column<GroupMember>[] = [
     {
@@ -117,13 +131,10 @@ export default function GroupMembersPage() {
       label: "View Profile",
       icon: "fas fa-eye",
       onClick: (row) => {
-        const userProfile = userProfiles[row.username];
-        if (userProfile) {
-          setSelectedUserProfile(userProfile);
-          setIsProfileModalOpen(true);
-        } else {
-          console.log("User profile not found for:", row.username);
-        }
+        const existing = userProfiles[row.username];
+        const profileToShow = existing ?? buildDefaultUserProfile(row);
+        setSelectedUserProfile(profileToShow);
+        setIsProfileModalOpen(true);
       },
       variant: "primary",
     },
@@ -189,7 +200,7 @@ export default function GroupMembersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <h2 className={`text-2xl font-bold ${
           theme === "dark" ? "text-white" : "text-gray-900"
         }`}>
@@ -202,9 +213,10 @@ export default function GroupMembersPage() {
         columns={columns}
         actions={actions}
         isLoading={isSearching}
+        searchQuery={searchQuery}
         rowKeyField="id"
         emptyMessage="No members found"
-        pageSize={10}
+        pageSize={5}
         actionButtonClassName="h-7 px-6 text-[10px] min-w-[70px]"
       />
 

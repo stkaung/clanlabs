@@ -10,47 +10,52 @@ interface ThemeChangeEvent extends CustomEvent {
 }
 
 function useTheme(): Theme {
-  // Initialize theme synchronously to prevent flash
-  const getInitialTheme = (): Theme => {
-    if (typeof window === "undefined") return "dark"; // SSR fallback
-
-    // First check localStorage
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme as Theme;
-    }
-
-    // Then check HTML class
-    const html = document.querySelector("html");
-    const isDark = html?.classList?.contains("dark");
-    return isDark ? "dark" : "light";
-  };
-
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  // Always start with 'dark' to match SSR markup and avoid hydration mismatches
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    // Ensure HTML class matches the theme
-    const html = document.querySelector("html");
-    if (html) {
-      html.classList.remove("dark", "light");
-      html.classList.add(theme);
-    }
+    // Resolve actual theme on client after mount
+    const resolveTheme = (): Theme => {
+      try {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          return savedTheme as Theme;
+        }
+        const html = document.documentElement;
+        return html.classList.contains("dark") ? "dark" : "light";
+      } catch {
+        return "dark";
+      }
+    };
 
-    // Save theme to localStorage
-    localStorage.setItem("theme", theme);
+    const actual = resolveTheme();
+    setTheme(actual);
 
-    // Listen for theme changes from the theme controller
+    // Ensure HTML class matches the resolved theme
+    const html = document.documentElement;
+    html.classList.remove("dark", "light");
+    html.classList.add(actual);
+
+    // Persist
+    try {
+      localStorage.setItem("theme", actual);
+    } catch {}
+
+    // Listen for external theme changes
     const handleThemeChange = (event: Event): void => {
       const themeEvent = event as ThemeChangeEvent;
-      setTheme(themeEvent.detail.theme);
+      const nextTheme = themeEvent.detail.theme;
+      setTheme(nextTheme);
+      html.classList.remove("dark", "light");
+      html.classList.add(nextTheme);
+      try {
+        localStorage.setItem("theme", nextTheme);
+      } catch {}
     };
 
     document.addEventListener("themeChanged", handleThemeChange);
-
-    return (): void => {
-      document.removeEventListener("themeChanged", handleThemeChange);
-    };
-  }, [theme]);
+    return () => document.removeEventListener("themeChanged", handleThemeChange);
+  }, []);
 
   return theme;
 }

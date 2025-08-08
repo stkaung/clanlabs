@@ -95,9 +95,9 @@ export default function GroupManageHomePage() {
           }`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20"></div>
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#A84CFB]/20 to-[#7B5EFF]/20 flex items-center justify-center relative">
-                  <i className="fas fa-info text-[#A84CFB] text-xl group-hover/header:scale-110 transition-transform duration-300" />
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#3B82F6] to-[#6366F1] rounded-2xl blur opacity-20"></div>
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#3B82F6]/20 to-[#6366F1]/20 flex items-center justify-center relative">
+                  <i className="fas fa-info text-[#3B82F6] text-xl group-hover/header:scale-110 transition-transform duration-300" />
                 </div>
               </div>
               <span className={`font-medium text-lg ${
@@ -114,9 +114,9 @@ export default function GroupManageHomePage() {
           } group/owner`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20"></div>
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A84CFB]/20 to-[#7B5EFF]/20 flex items-center justify-center relative group-hover/owner:bg-gradient-to-br group-hover/owner:from-[#A84CFB]/30 group-hover/owner:to-[#7B5EFF]/30 transition-all duration-300">
-                  <i className="fas fa-crown text-[#A84CFB] text-2xl group-hover/owner:scale-110 transition-transform duration-300" />
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#F59E0B] to-[#FBBF24] rounded-2xl blur opacity-20"></div>
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#F59E0B]/20 to-[#FBBF24]/20 flex items-center justify-center relative group-hover/owner:bg-gradient-to-br group-hover/owner:from-[#F59E0B]/30 group-hover/owner:to-[#FBBF24]/30 transition-all duration-300">
+                  <i className="fas fa-crown text-[#F59E0B] text-2xl group-hover/owner:scale-110 transition-transform duration-300" />
                 </div>
                 <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center ${
                   theme === "dark" ? "bg-[#1D203A]" : "bg-white"
@@ -161,17 +161,21 @@ export default function GroupManageHomePage() {
                 : "bg-gray-50/80 border-gray-200/50 hover:bg-gray-100/80 hover:border-gray-300/50"
             }`}>
               <div className="absolute inset-0 bg-gradient-to-br from-[#00FF9C]/10 to-transparent opacity-0 group-hover/stat:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-              <div className="flex items-center space-x-2 text-[#00FF9C] mb-3">
+              <div className={`flex items-center space-x-2 ${
+                theme === "dark" ? "text-[#00FF9C]" : "text-emerald-700"
+              } mb-3`}>
                 <i className="fas fa-layer-group text-sm" />
                 <span className="text-xs font-medium uppercase tracking-wider">ROLE</span>
                 <div className="ml-auto h-6 w-6 rounded-lg bg-[#00FF9C]/10 flex items-center justify-center group-hover/stat:bg-[#00FF9C]/20 transition-colors duration-300">
                   <i className="fas fa-circle-info text-[10px] group-hover/stat:scale-110 transition-transform duration-300" />
                 </div>
               </div>
-              <div className={`text-3xl font-bold group-hover/stat:text-[#00FF9C] transition-colors duration-300 ${
+              <div className={`text-3xl font-bold ${
+                theme === "dark" ? "group-hover/stat:text-[#00FF9C]" : "group-hover/stat:text-emerald-700"
+              } transition-colors duration-300 ${
                 theme === "dark" ? "text-white" : "text-gray-900"
               }`}>{groupData.role}</div>
-              <div className="text-xs text-[#00FF9C] mt-1">{groupData.permissions}</div>
+              <div className={`text-xs ${theme === "dark" ? "text-[#00FF9C]" : "text-emerald-700"} mt-1`}>{groupData.permissions}</div>
             </div>
           </div>
         </div>
@@ -194,9 +198,9 @@ export default function GroupManageHomePage() {
           }`}>
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#A84CFB] to-[#7B5EFF] rounded-2xl blur opacity-20"></div>
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#A84CFB]/20 to-[#7B5EFF]/20 flex items-center justify-center relative">
-                  <i className="fas fa-credit-card text-[#A84CFB] text-xl group-hover/header:scale-110 transition-transform duration-300" />
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-[#06B6D4] to-[#0EA5E9] rounded-2xl blur opacity-20"></div>
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#06B6D4]/20 to-[#0EA5E9]/20 flex items-center justify-center relative">
+                  <i className="fas fa-credit-card text-[#06B6D4] text-xl group-hover/header:scale-110 transition-transform duration-300" />
                 </div>
               </div>
               <span className={`font-medium text-lg ${
@@ -215,7 +219,9 @@ export default function GroupManageHomePage() {
               <div className="relative">
                 <div className="absolute -inset-0.5 bg-gradient-to-br from-[#00FF9C] to-[#00D98B] rounded-2xl blur opacity-20"></div>
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00FF9C]/20 to-[#00D98B]/20 flex items-center justify-center relative group-hover/status:bg-gradient-to-br group-hover/status:from-[#00FF9C]/30 group-hover/status:to-[#00D98B]/30 transition-all duration-300">
-                  <i className="fas fa-shield-halved text-[#00FF9C] text-2xl group-hover/status:scale-110 transition-transform duration-300" />
+                  <i className={`fas fa-shield-halved text-2xl group-hover/status:scale-110 transition-transform duration-300 ${
+                    theme === "dark" ? "text-[#00FF9C]" : "text-emerald-700"
+                  }`} />
                 </div>
                 <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center ${
                   theme === "dark" ? "bg-[#1D203A]" : "bg-white"
@@ -237,7 +243,7 @@ export default function GroupManageHomePage() {
                   }`}>
                     <i className={`text-xs ${
                       groupData.subscriptionStatus === "ACTIVE" 
-                        ? "fas fa-check text-[#00FF9C]" 
+                        ? (theme === "dark" ? "fas fa-check text-[#00FF9C]" : "fas fa-check text-emerald-700") 
                         : groupData.subscriptionStatus === "PENDING"
                         ? "fas fa-clock text-[#F59E0B]"
                         : "fas fa-times text-[#EF4444]"
@@ -245,7 +251,7 @@ export default function GroupManageHomePage() {
                   </div>
                   <span className={`font-medium ${
                     groupData.subscriptionStatus === "ACTIVE" 
-                      ? "text-[#00FF9C]" 
+                      ? (theme === "dark" ? "text-[#00FF9C]" : "text-emerald-700") 
                       : groupData.subscriptionStatus === "PENDING"
                       ? "text-[#F59E0B]"
                       : "text-[#EF4444]"
@@ -263,14 +269,22 @@ export default function GroupManageHomePage() {
                 : "bg-gray-50/80 border-gray-200/50"
             }`}>
               <div className="absolute inset-0 bg-gradient-to-br from-[#00FF9C]/10 to-transparent opacity-0 group-hover/expiry:opacity-100 transition-opacity duration-300 rounded-xl"></div>
-              <div className="flex items-center space-x-2 text-[#00FF9C] mb-3">
+              <div className={`flex items-center space-x-2 ${
+                theme === "dark" ? "text-[#00FF9C]" : "text-emerald-700"
+              } mb-3`}>
                 <i className="fas fa-clock text-sm" />
                 <span className="text-xs font-medium uppercase tracking-wider">EXPIRES IN</span>
-                <div className="ml-auto h-6 w-6 rounded-lg bg-[#00FF9C]/10 flex items-center justify-center">
-                  <i className="fas fa-arrow-left text-[10px]" />
+                <div className={`ml-auto h-6 w-6 rounded-lg flex items-center justify-center ${
+                  theme === "dark" ? "bg-[#00FF9C]/10" : "bg-emerald-100"
+                }`}>
+                  <i className={`fas fa-arrow-left text-[10px] ${
+                    theme === "dark" ? "text-[#00FF9C]" : "text-emerald-700"
+                  }`} />
                 </div>
               </div>
-              <div className={`text-lg font-semibold group-hover/expiry:text-[#00FF9C] transition-colors duration-300 ${
+              <div className={`text-lg font-semibold ${
+                theme === "dark" ? "group-hover/expiry:text-[#00FF9C]" : "group-hover/expiry:text-emerald-700"
+              } transition-colors duration-300 ${
                 theme === "dark" ? "text-white" : "text-gray-900"
               }`}>
                 <span>
@@ -360,10 +374,10 @@ export default function GroupManageHomePage() {
             theme === "dark" ? "text-[#E0E0E0]/60" : "text-gray-500"
           }`}>
             <span>Need a new subscription?</span>
-            <button className={`px-3 py-1.5 rounded-lg hover:bg-[#00FF9C]/20 text-[#00FF9C] hover:text-[#00D98B] transition-all duration-200 flex items-center space-x-1 border hover:border-[#00FF9C]/40 ${
+            <button className={`px-3 py-1.5 rounded-lg transition-all duration-200 flex items-center space-x-1 border ${
               theme === "dark" 
-                ? "bg-[#00FF9C]/10 border-[#00FF9C]/20" 
-                : "bg-[#00FF9C]/5 border-[#00FF9C]/30"
+                ? "hover:bg-[#00FF9C]/20 text-[#00FF9C] hover:text-[#00D98B] bg-[#00FF9C]/10 border-[#00FF9C]/20 hover:border-[#00FF9C]/40" 
+                : "hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 bg-emerald-50 border-emerald-200 hover:border-emerald-300"
             }`}>
               <span>Visit Store</span>
               <i className="fas fa-external-link text-xs" />

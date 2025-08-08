@@ -89,6 +89,30 @@ a {
   display: inline-block;
   transition: all 0.3s;
 }
+
+/* Global smooth hover for buttons */
+button,
+input[type="button"],
+input[type="submit"],
+.btn,
+button[class*="btn"],
+a.btn,
+button[role="button"],
+button:where(:not([class*="no-smooth"])) {
+  transition: background-position 400ms ease, color 200ms ease, transform 300ms ease, box-shadow 300ms ease, background-color 200ms ease;
+}
+
+/* Provide a sensible default gradient motion when a gradient background is present */
+button,
+.btn {
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+}
+
+button:hover,
+.btn:hover {
+  background-position: 100% 50%;
+}
 img {
   max-width: 100%;
   height: auto;

@@ -18,7 +18,7 @@ function DashboardSidebar({
       name: "Developer Panel",
       icon: "fas fa-code",
       active: false,
-      href: "/dev-panel/bot-accounts",
+      href: "/dev-panel/bans",
     },
     { name: "Settings", icon: "fas fa-cog", active: false, href: "#" },
   ];
