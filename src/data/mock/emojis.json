@@ -1,0 +1,12 @@
+{
+  "emojis": [
+    { "id": "e1", "symbol": "🛡️", "name": "Shield" },
+    { "id": "e2", "symbol": "🎖️", "name": "Medal" },
+    { "id": "e3", "symbol": "🏅", "name": "Sports Medal" },
+    { "id": "e4", "symbol": "📘", "name": "Blue Book" },
+    { "id": "e5", "symbol": "✨", "name": "Sparkles" },
+    { "id": "e6", "symbol": "⚔️", "name": "Crossed Swords" },
+    { "id": "e7", "symbol": "🔥", "name": "Fire" },
+    { "id": "e8", "symbol": "🌟", "name": "Glowing Star" }
+  ]
+}

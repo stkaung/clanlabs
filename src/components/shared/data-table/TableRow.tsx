@@ -9,10 +9,13 @@ interface TableRowProps<T = any> {
   actions?: Action<T>[];
   isEven: boolean;
   actionButtonClassName?: string;
+  actionsAlign?: 'left' | 'center' | 'right';
+  actionContainerWidth?: string;
 }
 
-function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName }: TableRowProps<T>) {
+function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName, actionsAlign = 'right', actionContainerWidth = '180px' }: TableRowProps<T>) {
   const theme = useTheme();
+  const justifyClass = actionsAlign === 'center' ? 'justify-center' : actionsAlign === 'left' ? 'justify-start' : 'justify-end';
 
   return (
     <div
@@ -63,8 +66,8 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName }: T
 
         {actions && actions.length > 0 && (
           <div
-            className="flex items-center justify-end space-x-3"
-            style={{ width: "180px" }}
+            className={`flex items-center ${justifyClass} space-x-3`}
+            style={{ width: actionContainerWidth }}
           >
             {actions.map((action) => (
               <button

@@ -29,7 +29,15 @@ function SetupGroupModal({
     setIsMounted(true);
   }, []);
 
-  // Don't render anything until mounted and opened
+  // Drive enter/exit transitions locally
+  useEffect(() => {
+    if (!isMounted) return;
+    // BaseModal now handles enter/exit transitions globally; no per-modal show state
+    setAnimating(isOpen);
+  }, [isOpen, isMounted]);
+
+  const [animating, setAnimating] = useState<boolean>(false);
+
   if (!isMounted || !isOpen) return null;
 
   // Mock data - replace with actual API calls
@@ -98,8 +106,8 @@ function SetupGroupModal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
-        isOpen ? "opacity-100 visible" : "opacity-0 invisible"
+      className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-200 ${
+        isOpen ? "opacity-100" : "opacity-0"
       }`}
     >
       {/* Full-screen backdrop overlay */}
@@ -113,16 +121,13 @@ function SetupGroupModal({
       <div className="relative z-10 w-full max-w-2xl">
         {/* Modal */}
         <div
-          className={`relative w-full rounded-2xl border shadow-2xl backdrop-blur-md max-h-[90vh] flex flex-col transition-all duration-300 transform ${
-            isOpen
-              ? "scale-100 translate-y-0 opacity-100"
-              : "scale-95 translate-y-4 opacity-0"
+          className={`relative w-full rounded-2xl border shadow-2xl max-h-[90vh] flex flex-col transition-transform duration-200 ease-out transform ${
+            isOpen ? "scale-100" : "scale-95"
           } ${
             theme === "dark"
               ? "bg-gray-800/95 border-gray-600/50"
               : "bg-white/95 border-gray-200/50"
           }`}
-          style={{ backdropFilter: "blur(12px)" }}
         >
           {/* Header */}
           <div

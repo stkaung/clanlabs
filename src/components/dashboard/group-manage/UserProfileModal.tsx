@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import BaseModal from "@/components/dashboard/shared/BaseModal";
 import useTheme from "@/hooks/useTheme";
@@ -15,8 +15,21 @@ interface UserProfileModalProps {
 function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProps) {
   const theme = useTheme();
   const [activeTab, setActiveTab] = useState<"overview" | "medals" | "qualifications" | "audit">("overview");
+  const [displayProfile, setDisplayProfile] = useState<UserProfile | null>(null);
 
-  if (!userProfile) return null;
+  // Keep content mounted briefly during close so BaseModal can animate exit
+  useEffect(() => {
+    if (userProfile) {
+      setDisplayProfile(userProfile);
+      return;
+    }
+    if (!isOpen) {
+      const t = window.setTimeout(() => setDisplayProfile(null), 240);
+      return () => window.clearTimeout(t);
+    }
+  }, [userProfile, isOpen]);
+
+  if (!displayProfile) return null;
 
   const getRankIcon = (rank: string) => {
     switch (rank) {
@@ -144,7 +157,7 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      title={`${userProfile.username}`}
+      title={`${displayProfile.username}`}
       subtitle="Member Profile"
       maxWidth="7xl"
       withinContainer={true}
@@ -158,8 +171,8 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
         }`}>
           <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-4 border-gray-200/50 dark:border-white/10 shadow-lg">
             <Image
-              src={userProfile.profilePicture}
-              alt={userProfile.username}
+              src={displayProfile.profilePicture}
+              alt={displayProfile.username}
               width={96}
               height={96}
               className="object-cover w-full h-full"
@@ -168,11 +181,11 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
           <h3 className={`text-2xl font-bold mb-2 ${
             theme === "dark" ? "text-white" : "text-gray-900"
           }`}>
-            {userProfile.username}
+            {displayProfile.username}
           </h3>
-          <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${getRankColor(userProfile.rank)} shadow-lg`}>
-            <i className={`${getRankIcon(userProfile.rank)} mr-2`} />
-            {userProfile.rank}
+          <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${getRankColor(displayProfile.rank)} shadow-lg`}>
+            <i className={`${getRankIcon(displayProfile.rank)} mr-2`} />
+            {displayProfile.rank}
           </div>
         </div>
 
@@ -186,7 +199,7 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
             <div className={`text-3xl font-bold mb-2 ${
               theme === "dark" ? "text-blue-300" : "text-blue-600"
             }`}>
-              {userProfile.experience.toLocaleString()}
+              {displayProfile.experience.toLocaleString()}
             </div>
             <div className={`text-sm ${
               theme === "dark" ? "text-blue-200" : "text-blue-700"
@@ -203,7 +216,7 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
             <div className={`text-3xl font-bold mb-2 ${
               theme === "dark" ? "text-purple-300" : "text-purple-600"
             }`}>
-              {userProfile.quotaPoints.toLocaleString()}
+              {displayProfile.quotaPoints.toLocaleString()}
             </div>
             <div className={`text-sm ${
               theme === "dark" ? "text-purple-200" : "text-purple-700"
@@ -223,15 +236,15 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
             theme === "dark" ? "text-white" : "text-gray-900"
           }`}>
             <i className="fas fa-medal mr-2 text-yellow-500"></i>
-            Medals ({userProfile.medals.length})
+            Medals ({displayProfile.medals.length})
           </h4>
-          {userProfile.medals.length === 0 ? (
+          {displayProfile.medals.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               No medals earned yet
             </div>
           ) : (
             <div className="space-y-3">
-              {userProfile.medals.map((medal) => (
+              {displayProfile.medals.map((medal) => (
                 <div key={medal.id} className={`flex items-center p-4 rounded-xl backdrop-blur-sm border ${
                   theme === "dark" 
                     ? "bg-white/5 border-white/5" 
@@ -271,15 +284,15 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
             theme === "dark" ? "text-white" : "text-gray-900"
           }`}>
             <i className="fas fa-certificate mr-2 text-blue-500"></i>
-            Qualifications ({userProfile.qualifications.length})
+            Qualifications ({displayProfile.qualifications.length})
           </h4>
-          {userProfile.qualifications.length === 0 ? (
+          {displayProfile.qualifications.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
               No qualifications added yet
             </div>
           ) : (
             <div className="space-y-3">
-              {userProfile.qualifications.map((qualification) => (
+              {displayProfile.qualifications.map((qualification) => (
                 <div key={qualification.id} className={`p-4 rounded-xl backdrop-blur-sm border ${
                   theme === "dark" 
                     ? "bg-white/5 border-white/5" 
@@ -316,13 +329,13 @@ function UserProfileModal({ isOpen, onClose, userProfile }: UserProfileModalProp
             theme === "dark" ? "text-white" : "text-gray-900"
           }`}>
             <i className="fas fa-history mr-2 text-gray-500"></i>
-            Audit Logs ({userProfile.auditLogs.length})
+            Audit Logs ({displayProfile.auditLogs.length})
           </h4>
           <div className="text-center py-8">
             <div className={`text-gray-500 mb-4 ${
               theme === "dark" ? "text-gray-400" : "text-gray-600"
             }`}>
-              {userProfile.auditLogs.length} audit entries available
+              {displayProfile.auditLogs.length} audit entries available
             </div>
             <button className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               theme === "dark"

@@ -7,6 +7,8 @@ import profileData from './profile.json';
 import groupManagementData from './groupManagement.json';
 import groupMembersData from './groupMembers.json';
 import userProfilesData from './userProfiles.json';
+import discordRolesData from './discordRoles.json';
+import emojisData from './emojis.json';
 
 // Export the data
 export const bans = bansData.bans;
@@ -17,6 +19,8 @@ export const profile = profileData;
 export const groupManagement: Record<string, GroupManagementData> = groupManagementData.groupManagement as Record<string, GroupManagementData>;
 export const groupMembers: Record<string, GroupMember[]> = groupMembersData.groupMembers as Record<string, GroupMember[]>;
 export const userProfiles: Record<string, UserProfile> = userProfilesData.userProfiles as Record<string, UserProfile>;
+export const discordRoles: DiscordRole[] = (discordRolesData as any).discordRoles as DiscordRole[];
+export const emojis: Emoji[] = (emojisData as any).emojis as Emoji[];
 
 // Export types for TypeScript
 export interface BanRecord {
@@ -126,6 +130,18 @@ export interface UserProfile {
   auditLogs: AuditLog[];
 }
 
+export interface DiscordRole {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export interface Emoji {
+  id: string;
+  symbol: string;
+  name: string;
+}
+
 // Re-export all data as default
 export default {
   bans,
@@ -133,5 +149,7 @@ export default {
   groups,
   serialKeys,
   profile,
-  groupManagement
+  groupManagement,
+  discordRoles,
+  emojis
 }; 

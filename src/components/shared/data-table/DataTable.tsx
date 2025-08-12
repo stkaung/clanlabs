@@ -22,6 +22,8 @@ function DataTable<T>({
   onSearch,
   className = "",
   actionButtonClassName = "",
+  actionsAlign = "right",
+  actionContainerWidth = "180px",
 }: DataTableProps<T>) {
   const theme = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
@@ -148,7 +150,7 @@ function DataTable<T>({
       )}
 
       {/* Table Header */}
-      <TableHeader columns={columns} hasActions={!!actions?.length} />
+      <TableHeader columns={columns} hasActions={!!actions?.length} actionContainerWidth={actionContainerWidth} />
 
       {/* Table Body */}
       {isLoading ? (
@@ -185,6 +187,8 @@ function DataTable<T>({
               actions={actions}
               isEven={index % 2 === 0}
               actionButtonClassName={actionButtonClassName}
+              actionsAlign={actionsAlign}
+              actionContainerWidth={actionContainerWidth}
             />
           ))}
         </div>

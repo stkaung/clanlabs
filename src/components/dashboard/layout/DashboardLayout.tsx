@@ -202,6 +202,7 @@ function DashboardLayout({
 
             {/* Page content with max-width container */}
             <div
+              id="page-blur-root"
               className={`flex-1 relative pt-12 pb-12`}
               style={{
                 background:

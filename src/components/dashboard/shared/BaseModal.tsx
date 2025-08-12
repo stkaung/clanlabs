@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useState, useLayoutEffect } from "react";
+import { ReactNode, useEffect, useState, useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import useTheme from "@/hooks/useTheme";
 
@@ -26,6 +26,7 @@ function BaseModal({
 }: BaseModalProps) {
   const theme = useTheme();
   const [isMounted, setIsMounted] = useState(false);
+  const [show, setShow] = useState(false);
 
   const maxWidthClasses: Record<NonNullable<BaseModalProps["maxWidth"]>, string> = {
     sm: "max-w-sm",
@@ -41,6 +42,8 @@ function BaseModal({
   };
 
   // Handle escape key and mounting state
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape" && isOpen) {
@@ -49,36 +52,76 @@ function BaseModal({
     }
 
     if (isOpen) {
+      setShow(true);
       document.addEventListener("keydown", handleEscape);
+      // Lock background scroll (both html and body)
       document.body.style.overflow = "hidden";
-      // Apply blur to main content container when requested
-      // Only blur the background content element, not this modal
+      document.documentElement.style.overflow = "hidden";
+      // Overlay-based blur using backdrop-filter to avoid blurring the modal
       if (withinContainer) {
-        const content = document.getElementById("main-content-blur");
-        if (content) {
-          content.style.transition = "filter 200ms ease";
-          content.style.filter = "blur(6px)";
+        const ensureOverlay = () => {
+          if (!overlayRef.current) {
+            const div = document.createElement("div");
+            div.style.position = "fixed";
+            div.style.inset = "0px";
+            div.style.zIndex = "9998"; // below modal (9999)
+            // Capture input to prevent background scrolling/clicks
+            div.style.pointerEvents = "auto";
+            div.style.backdropFilter = "blur(6px)";
+            // tiny alpha to trigger backdrop blur rendering without visible dim
+            div.style.backgroundColor = "rgba(0,0,0,0.001)";
+            document.body.appendChild(div);
+            overlayRef.current = div;
+            // Prevent wheel/touch scrolling on background
+            const prevent = (e: Event) => {
+              e.preventDefault();
+            };
+            overlayRef.current.addEventListener("wheel", prevent, { passive: false });
+            overlayRef.current.addEventListener("touchmove", prevent, { passive: false });
+          }
+        };
+        ensureOverlay();
+        // Position overlay to only cover the page content area
+        const content = document.getElementById("main-content-container");
+        const pageRoot = document.getElementById("page-blur-root");
+        const targetEl = content || pageRoot;
+        if (overlayRef.current && targetEl) {
+          const rect = targetEl.getBoundingClientRect();
+          overlayRef.current.style.top = `${rect.top}px`;
+          overlayRef.current.style.left = `${rect.left}px`;
+          overlayRef.current.style.width = `${rect.width}px`;
+          overlayRef.current.style.height = `${rect.height}px`;
         }
       }
-      // Set mounted after a small delay to trigger animation
-      setTimeout(() => setIsMounted(true), 10);
+      // Mount first in reduced scale, then animate to full
+      setIsMounted(false);
+      requestAnimationFrame(() => setIsMounted(true));
     } else {
       // Start close animation
       setIsMounted(false);
-             // Wait for animation to finish before hiding modal
-       setTimeout(() => {
-         // Modal will be hidden by parent opacity
-       }, 300);
+      // Wait for animation to finish before removing from DOM and overlay
+      const timeout = window.setTimeout(() => {
+        setShow(false);
+        if (withinContainer) {
+          if (overlayRef.current) {
+            // Remove listeners before removing element
+            overlayRef.current.replaceWith();
+            overlayRef.current.remove();
+            overlayRef.current = null;
+          }
+        }
+      }, 220);
+      return () => window.clearTimeout(timeout);
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "unset";
-      if (withinContainer) {
-        const content = document.getElementById("main-content-blur");
-        if (content) {
-          content.style.filter = "";
-        }
+      document.documentElement.style.overflow = "unset";
+      // Ensure overlay is removed on unmount/cleanup regardless of state
+      if (overlayRef.current) {
+        overlayRef.current.remove();
+        overlayRef.current = null;
       }
     };
   }, [isOpen, onClose, withinContainer]);
@@ -86,6 +129,7 @@ function BaseModal({
   // Compute positioning when withinContainer is true (center within main content container)
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
   const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     if (!withinContainer || !isOpen) return;
@@ -107,6 +151,12 @@ function BaseModal({
       const rect = container.getBoundingClientRect();
       setPosition({ top: rect.top + rect.height / 2, left: rect.left + rect.width / 2 });
       setContainerSize({ width: rect.width, height: rect.height });
+      if (overlayRef.current) {
+        overlayRef.current.style.top = `${rect.top}px`;
+        overlayRef.current.style.left = `${rect.left}px`;
+        overlayRef.current.style.width = `${rect.width}px`;
+        overlayRef.current.style.height = `${rect.height}px`;
+      }
     }
     window.addEventListener("resize", computePosition);
     window.addEventListener("scroll", computePosition, true);
@@ -116,10 +166,30 @@ function BaseModal({
     };
   }, [withinContainer, isOpen]);
 
+  // Prevent background scroll: block wheel/touch outside the modal panel
+  useEffect(() => {
+    if (!isOpen) return;
+    const blockIfOutside = (e: Event) => {
+      const target = e.target as Node | null;
+      if (panelRef.current && target && panelRef.current.contains(target)) {
+        return; // allow scrolling inside the modal panel
+      }
+      e.preventDefault();
+    };
+    document.addEventListener("wheel", blockIfOutside, { passive: false });
+    document.addEventListener("touchmove", blockIfOutside, { passive: false });
+    return () => {
+      document.removeEventListener("wheel", blockIfOutside);
+      document.removeEventListener("touchmove", blockIfOutside);
+    };
+  }, [isOpen]);
+
+  if (!show) return null;
+
   const modalNode = (
     <div
       className={`z-[9999] transition-opacity duration-200 ${
-        isOpen && (!withinContainer || position) ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
+        (!withinContainer || position) && (isOpen || isMounted) ? "opacity-100 visible" : "opacity-0 visible"
       }`}
       style={
         withinContainer && position

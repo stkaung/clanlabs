@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import BaseModal from "@/components/dashboard/shared/BaseModal";
 import useTheme from "@/hooks/useTheme";
 
 interface MobileSearchModalProps {
@@ -51,8 +52,8 @@ function MobileSearchModal({
     };
   }, [isOpen, onClose, isMounted]);
 
-  // Don't render anything until mounted and opened
-  if (!isMounted || !isOpen) return null;
+  // Don't render anything until mounted
+  if (!isMounted) return null;
 
   function handleSearch(): void {
     onSearch(searchQuery);
@@ -72,61 +73,14 @@ function MobileSearchModal({
   }
 
   return (
-    <div
-      className={`fixed inset-0 z-40 transition-all duration-300 ${
-        isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-      }`}
-    >
-      {/* Backdrop */}
+    <BaseModal isOpen={isOpen} onClose={onClose} title="Search" showCloseButton={true} maxWidth="md">
       <div
-        className={`absolute inset-0 transition-all duration-300 ${
-          isOpen ? "backdrop-blur-sm" : "backdrop-blur-none"
-        } ${theme === "dark" ? "bg-black/40" : "bg-black/20"}`}
-        onClick={onClose}
-      />
-
-      {/* Search Modal */}
-      <div
-        className={`relative z-10 w-full transition-all duration-300 transform ${
-          isOpen ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
+        className={`mx-0 rounded-xl ${
+          theme === "dark" ? "" : ""
         }`}
-        style={{
-          top: "64px", // Position below the top nav bar
-        }}
       >
-        <div
-          className={`mx-4 mt-4 rounded-xl border shadow-2xl backdrop-blur-md ${
-            theme === "dark"
-              ? "bg-gray-800/95 border-gray-600/50"
-              : "bg-white/95 border-gray-200/50"
-          }`}
-          style={{ backdropFilter: "blur(12px)" }}
-        >
           {/* Header */}
-          <div
-            className={`px-4 py-3 border-b flex items-center justify-between ${
-              theme === "dark" ? "border-gray-600/50" : "border-gray-200/50"
-            }`}
-          >
-            <h3
-              className={`text-lg font-semibold ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              Search
-            </h3>
-            <button
-              onClick={onClose}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 ${
-                theme === "dark"
-                  ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
-                  : "bg-gray-100 hover:bg-gray-200 text-gray-600"
-              }`}
-            >
-              <i className="fas fa-times text-sm" />
-            </button>
-          </div>
+        <div className={`px-0`}></div>
 
           {/* Search Input */}
           <div className="p-4">
@@ -175,9 +129,8 @@ function MobileSearchModal({
               </button>
             </div>
           </div>
-        </div>
       </div>
-    </div>
+    </BaseModal>
   );
 }
 

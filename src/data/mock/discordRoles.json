@@ -1,0 +1,11 @@
+{
+  "discordRoles": [
+    { "id": "111", "name": "Owner", "color": "#F59E0B" },
+    { "id": "112", "name": "Admin", "color": "#EF4444" },
+    { "id": "113", "name": "Moderator", "color": "#3B82F6" },
+    { "id": "114", "name": "Senior Member", "color": "#10B981" },
+    { "id": "115", "name": "Member", "color": "#6B7280" },
+    { "id": "116", "name": "Junior Member", "color": "#8B5CF6" },
+    { "id": "117", "name": "Recruit", "color": "#22C55E" }
+  ]
+}

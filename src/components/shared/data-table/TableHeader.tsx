@@ -6,9 +6,10 @@ import useTheme from "@/hooks/useTheme";
 interface TableHeaderProps<T = any> {
   columns: Column<T>[];
   hasActions?: boolean;
+  actionContainerWidth?: string;
 }
 
-function TableHeader<T>({ columns, hasActions }: TableHeaderProps<T>) {
+function TableHeader<T>({ columns, hasActions, actionContainerWidth = "180px" }: TableHeaderProps<T>) {
   const theme = useTheme();
 
   return (
@@ -49,7 +50,7 @@ function TableHeader<T>({ columns, hasActions }: TableHeaderProps<T>) {
         {hasActions && (
           <div
             className="flex items-center justify-center"
-            style={{ width: "180px" }}
+            style={{ width: actionContainerWidth }}
           >
             <span
               className={`text-sm font-semibold uppercase tracking-wider ${
