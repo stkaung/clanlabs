@@ -270,7 +270,7 @@ function DashboardLayout({
               </div>
 
               {/* Content Container - positioned above background layers */}
-              <div id="main-content-container" className="relative z-10 max-w-7xl mx-auto px-6">
+              <div id="main-content-container" className={`relative z-10 mx-auto ${pathname.includes('/analytics') ? 'max-w-none px-2' : 'max-w-7xl px-6'}`}>
                 <div
                   id="main-content-blur"
                   className={`transition-all duration-500 ease-out ${

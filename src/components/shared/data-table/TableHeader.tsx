@@ -21,11 +21,11 @@ function TableHeader<T>({ columns, hasActions, actionContainerWidth = "180px" }:
       }`}
       style={{ backdropFilter: "blur(8px)" }}
     >
-      <div className="flex items-center">
+      <div className="flex items-center w-full">
         {columns.map((column) => (
           <div
             key={column.key}
-            className="flex items-center"
+            className={`flex items-center ${column.align === 'right' ? 'justify-end' : column.align === 'center' ? 'justify-center' : ''}`}
             style={{
               width: column.width,
               minWidth: column.minWidth,

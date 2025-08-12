@@ -46,7 +46,7 @@ export default function GroupManageLayout({
       'qualifications': 'Qualifications',
       'blacklists': 'Blacklists',
       'permissions': 'Permissions',
-      'audit-log': 'Audit Log',
+      'audits': 'Audit Logs',
       'analytics': 'Analytics',
       'settings': 'Settings'
     };
@@ -56,6 +56,7 @@ export default function GroupManageLayout({
 
   const currentPageName = getPageName(pathname);
   const breadcrumb = [groupName, "Manage", currentPageName];
+  const isAnalytics = pathname.includes('/analytics');
 
   return (
     <DashboardLayout 
@@ -72,9 +73,17 @@ export default function GroupManageLayout({
           // no-op
         }
       }}
-      searchPlaceholder={currentPageName === 'Members' ? 'Search members...' : 'Search...'}
+      searchPlaceholder={
+        (
+          {
+            Members: 'Search members...',
+            Permissions: 'Search permissions...',
+            'Audit Logs': 'Search audit logs...'
+          } as Record<string, string>
+        )[currentPageName] || 'Search...'
+      }
     >
-      <div className="p-2">{children}</div>
+      <div className={isAnalytics ? "p-0" : "p-2"}>{children}</div>
     </DashboardLayout>
   );
 }

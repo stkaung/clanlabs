@@ -26,7 +26,7 @@ export default function GroupManageSidebar({
     { name: "Qualifications", icon: "fas fa-certificate", active: pathname === `${baseUrl}/qualifications`, href: `${baseUrl}/qualifications` },
     { name: "Blacklists", icon: "fas fa-ban", active: pathname === `${baseUrl}/blacklists`, href: `${baseUrl}/blacklists` },
     { name: "Permissions", icon: "fas fa-shield-halved", active: pathname === `${baseUrl}/permissions`, href: `${baseUrl}/permissions` },
-    { name: "Audit Log", icon: "fas fa-list-check", active: pathname === `${baseUrl}/audit-log`, href: `${baseUrl}/audit-log` },
+    { name: "Audits", icon: "fas fa-list-check", active: pathname === `${baseUrl}/audits`, href: `${baseUrl}/audits` },
     { 
       name: "Analytics", 
       icon: "fas fa-chart-line", 

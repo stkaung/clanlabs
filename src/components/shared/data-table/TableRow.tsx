@@ -44,7 +44,7 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName, act
         {columns.map((column) => (
           <div
             key={column.key}
-            className="flex items-center"
+            className={`flex items-center ${column.align === 'right' ? 'justify-end' : column.align === 'center' ? 'justify-center' : ''}`}
             style={{
               width: column.width,
               minWidth: column.minWidth,
