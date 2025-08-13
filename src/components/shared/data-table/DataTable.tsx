@@ -100,7 +100,27 @@ function DataTable<T>({
   };
 
   return (
-    <div className={className}>
+    <div
+      className={`${className} w-full overscroll-contain`}
+      onWheelCapture={(e) => {
+        const el = e.currentTarget as HTMLDivElement;
+        // Only capture if the table area is actually scrollable (guard for parent layouts)
+        const isScrollable = el.scrollHeight > el.clientHeight;
+        if (!isScrollable) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const next = el.scrollTop + e.deltaY;
+        const max = el.scrollHeight - el.clientHeight;
+        el.scrollTop = Math.max(0, Math.min(max, next));
+      }}
+      onTouchMoveCapture={(e) => {
+        const el = e.currentTarget as HTMLDivElement;
+        if (el.scrollHeight > el.clientHeight) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }}
+    >
       {/* Section Header with Search Count */}
       {searchQuery && (
         <div

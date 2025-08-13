@@ -46,7 +46,7 @@ function BansList() {
     {
       key: "name",
       header: "Name",
-      width: "25%",
+      width: "30%",
       renderCell: (row) => (
         <div className="font-medium truncate">{row.name}</div>
       ),
@@ -77,6 +77,7 @@ function BansList() {
       key: "date",
       header: "Date",
       width: "20%",
+      mobileHidden: true,
       renderCell: (row) => (
         <div className="text-gray-600 dark:text-gray-300">{row.date}</div>
       ),
@@ -84,9 +85,9 @@ function BansList() {
     {
       key: "description",
       header: "Description",
-      width: "40%",
+      width: "35%",
       renderCell: (row) => (
-        <div className="text-gray-600 dark:text-gray-300 line-clamp-2">
+        <div className="text-gray-600 dark:text-gray-300 line-clamp-2 sm:line-clamp-1">
           {row.description}
         </div>
       ),
@@ -224,6 +225,7 @@ function BansList() {
         rowKeyField="id"
         emptyMessage="No bans found"
         pageSize={10}
+        className="w-full"
       />
     </div>
   );

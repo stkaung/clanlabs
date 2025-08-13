@@ -4,7 +4,6 @@ export type RankName =
   | "Owner"
   | "Admin"
   | "Moderator"
-  | "Senior Member"
   | "Member"
   | "Junior Member";
 
@@ -12,7 +11,6 @@ export const RANK_ORDER: RankName[] = [
   "Owner",
   "Admin",
   "Moderator",
-  "Senior Member",
   "Member",
   "Junior Member",
 ];
@@ -29,8 +27,6 @@ export function getRankIcon(rank: RankName): string {
       return "fas fa-shield-alt";
     case "Moderator":
       return "fas fa-user-shield";
-    case "Senior Member":
-      return "fas fa-star";
     case "Member":
       return "fas fa-user";
     case "Junior Member":
@@ -48,8 +44,6 @@ export function getRankBadgeClasses(rank: RankName): string {
       return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
     case "Moderator":
       return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
-    case "Senior Member":
-      return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
     case "Member":
       return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
     case "Junior Member":

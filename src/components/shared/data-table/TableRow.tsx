@@ -40,7 +40,8 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName, act
             : "0 4px 20px rgba(59, 130, 246, 0.1), 0 1px 0 rgba(255, 255, 255, 0.8) inset",
       }}
     >
-      <div className="relative flex items-center p-4 md:p-6 space-x-4">
+      {/* Desktop/tablet layout */}
+      <div className="relative hidden md:flex items-center p-4 md:p-6 space-x-4">
         {columns.map((column) => (
           <div
             key={column.key}
@@ -52,33 +53,20 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName, act
               textAlign: column.align || "left",
             }}
           >
-            <div
-              className={`text-sm ${
-                theme === "dark" ? "text-gray-200" : "text-gray-700"
-              }`}
-            >
-              {column.renderCell
-                ? column.renderCell(row)
-                : (row as any)[column.key]}
+            <div className={`text-sm ${theme === "dark" ? "text-gray-200" : "text-gray-700"}`}>
+              {column.renderCell ? column.renderCell(row) : (row as any)[column.key]}
             </div>
           </div>
         ))}
 
         {actions && actions.length > 0 && (
-          <div
-            className={`flex items-center ${justifyClass} space-x-3`}
-            style={{ width: actionContainerWidth }}
-          >
+          <div className={`flex items-center ${justifyClass} space-x-3`} style={{ width: actionContainerWidth }}>
             {actions.map((action) => (
               <button
                 key={action.label}
                 onClick={() => action.onClick(row)}
                 disabled={action.disabled?.(row)}
-                className={`group/btn relative overflow-hidden rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center ${
-                  actionButtonClassName || "h-9 px-6 text-sm min-w-[90px]"
-                } ${
-                  action.disabled?.(row) ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+                className={`group/btn relative overflow-hidden rounded-lg font-semibold text-white transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center ${actionButtonClassName || "h-9 px-6 text-sm min-w-[90px]"} ${action.disabled?.(row) ? "opacity-50 cursor-not-allowed" : ""}`}
                 style={{
                   backgroundImage:
                     action.variant === "danger"
@@ -113,6 +101,30 @@ function TableRow<T>({ row, columns, actions, isEven, actionButtonClassName, act
               >
                 {action.icon && <i className={`${action.icon} mr-1.5`} />}
                 <span className="relative top-px">{action.label}</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Mobile stacked layout (<= md) */}
+      <div className="md:hidden p-4 space-y-3">
+        {columns.filter((c) => !c.mobileHidden).map((column) => (
+          <div key={column.key} className="flex items-start justify-between gap-3 text-sm">
+            <span className={`font-semibold ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+              {('mobileLabel' in column && (column as any).mobileLabel) ? (column as any).mobileLabel : (typeof column.header === 'string' ? column.header : '')}
+            </span>
+            <div className={`${theme === 'dark' ? 'text-gray-100' : 'text-gray-800'} text-right`}>
+              {column.renderMobileCell ? column.renderMobileCell(row) : column.renderCell ? column.renderCell(row) : (row as any)[column.key]}
+            </div>
+          </div>
+        ))}
+
+        {actions && actions.length > 0 && (
+          <div className={`pt-3 grid ${actions.length === 1 ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
+            {actions.map((action) => (
+              <button key={action.label} onClick={() => action.onClick(row)} className={`btn btn-xs w-full ${action.variant === 'danger' ? 'btn-error' : action.variant === 'secondary' ? '' : 'btn-primary'}`}>
+                {action.label}
               </button>
             ))}
           </div>

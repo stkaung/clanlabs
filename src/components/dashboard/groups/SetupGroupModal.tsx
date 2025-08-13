@@ -228,7 +228,7 @@ function SetupGroupModal({
           </div>
 
           {/* Content - Scrollable */}
-          <div className="px-4 sm:px-8 py-6 sm:py-8 flex-1 overflow-y-auto">
+        <div className="px-4 sm:px-8 py-6 sm:py-8 flex-1 overflow-y-auto overscroll-contain">
             {/* Step 1: Serial Key */}
             {currentStep === 1 && (
               <div className="space-y-4 sm:space-y-6">

@@ -69,9 +69,26 @@ body {
   background-color: #ffffff;
 }
 
+.dark html {
+  background-color: #0f0f0f;
+}
+
+html {
+  background-color: #ffffff;
+}
+
 .dark body {
   background-color: #0f0f0f;
 }
+
+/* Prevent rubber-band overscroll revealing the page background */
+html,
+body {
+  min-height: 100%;
+  overscroll-behavior: none;
+}
+
+/* keep previous rule location compatibility */
 /* typography */
 h1,
 h2,

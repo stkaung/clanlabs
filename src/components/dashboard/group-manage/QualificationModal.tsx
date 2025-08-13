@@ -173,7 +173,21 @@ export default function QualificationModal({ isOpen, onClose, qualification, onS
                   className={`w-full h-10 px-3 rounded-lg border text-sm ${theme === 'dark' ? 'bg-gray-900 border-gray-700 text-gray-200 placeholder-gray-500' : 'bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-500'}`}
                 />
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto pr-1">
+          <div
+            className="grid grid-cols-2 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto overscroll-contain pr-1"
+            onWheelCapture={(e) => {
+              const el = e.currentTarget as HTMLDivElement;
+              e.preventDefault();
+              e.stopPropagation();
+              const next = el.scrollTop + e.deltaY;
+              const max = el.scrollHeight - el.clientHeight;
+              el.scrollTop = Math.max(0, Math.min(max, next));
+            }}
+            onTouchMoveCapture={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
                 {filteredEmojis.map((e) => (
                   <button
                     key={e.id}
@@ -226,7 +240,21 @@ export default function QualificationModal({ isOpen, onClose, qualification, onS
               <div className="mb-2">
                 <input value={roleQuery} onChange={(e) => setRoleQuery(e.target.value)} placeholder="Search roles..." className={`w-full h-10 px-3 rounded-lg border text-sm ${theme === 'dark' ? 'bg-gray-900 border-gray-700 text-gray-200 placeholder-gray-500' : 'bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-500'}`} />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto overscroll-contain pr-1"
+            onWheelCapture={(e) => {
+              const el = e.currentTarget as HTMLDivElement;
+              e.preventDefault();
+              e.stopPropagation();
+              const next = el.scrollTop + e.deltaY;
+              const max = el.scrollHeight - el.clientHeight;
+              el.scrollTop = Math.max(0, Math.min(max, next));
+            }}
+            onTouchMoveCapture={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
                 {filteredRoles.map((role) => {
                   const active = effectiveForm.discordRoleIds.includes(role.id);
                   return (

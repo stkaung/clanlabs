@@ -182,7 +182,21 @@ export default function RankModal({ isOpen, onClose, rank, onSave, mode = 'updat
                   className={`w-full h-10 px-3 rounded-lg border text-sm ${theme === 'dark' ? 'bg-gray-900 border-gray-700 text-gray-200 placeholder-gray-500' : 'bg-gray-50 border-gray-300 text-gray-800 placeholder-gray-500'}`}
                 />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto overscroll-contain pr-1"
+          onWheelCapture={(e) => {
+            const el = e.currentTarget as HTMLDivElement;
+            e.preventDefault();
+            e.stopPropagation();
+            const next = el.scrollTop + e.deltaY;
+            const max = el.scrollHeight - el.clientHeight;
+            el.scrollTop = Math.max(0, Math.min(max, next));
+          }}
+          onTouchMoveCapture={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
                 {filteredRoles.map((role) => {
                   const active = effectiveForm.discordRoleIds.includes(role.id);
                   return (
@@ -284,9 +298,12 @@ export default function RankModal({ isOpen, onClose, rank, onSave, mode = 'updat
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-2 sticky bottom-0 pb-1" style={{
-          background: theme === 'dark' ? 'linear-gradient(to top, rgba(17,24,39,0.9), rgba(17,24,39,0.0))' : 'linear-gradient(to top, rgba(255,255,255,0.9), rgba(255,255,255,0.0))'
-        }}>
+        <div
+          className={`sticky bottom-0 z-10 mt-2 border-t px-4 py-3 backdrop-blur-sm ${
+            theme === 'dark' ? 'bg-gray-900/80 border-white/10' : 'bg-white/80 border-gray-200/60'
+          }`}
+        >
+          <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
             className={`px-4 h-11 rounded-lg font-medium transition-all ${theme === "dark" ? "text-gray-300 hover:text-white hover:bg-gray-800" : "text-gray-700 hover:text-gray-900 hover:bg-gray-100"}`}
@@ -306,6 +323,7 @@ export default function RankModal({ isOpen, onClose, rank, onSave, mode = 'updat
               primaryLabel
             )}
           </button>
+          </div>
         </div>
       </div>
     </BaseModal>

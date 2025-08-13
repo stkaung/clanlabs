@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useTheme from "@/hooks/useTheme";
 import MobileSearchModal from "@/components/dashboard/shared/MobileSearchModal";
 
@@ -27,6 +27,38 @@ function TopNavBar({
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState<boolean>(false);
+  const [viewportWidth, setViewportWidth] = useState<number>(typeof window !== "undefined" ? window.innerWidth : 1200);
+
+  useEffect(() => {
+    const onResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  function getDisplayedBreadcrumb(items: string[], width: number): Array<string> {
+    const len = items.length;
+    if (len <= 2) return items;
+    if (width < 480) {
+      // Tiny screens: Root … Current
+      return [items[0], "…", items[len - 1]];
+    }
+    if (width < 768) {
+      // Small screens: Root … Prev Current
+      if (len <= 3) return items;
+      return [items[0], "…", items[len - 2], items[len - 1]];
+    }
+    if (width < 1024) {
+      // Medium screens: Root … Last 3
+      if (len <= 4) return items;
+      return [items[0], "…", ...items.slice(len - 3)];
+    }
+    // Large screens: show all
+    return items;
+  }
+
+  const displayed = getDisplayedBreadcrumb(breadcrumb, viewportWidth);
+  const isMobileHeader = viewportWidth < 768;
+  const currentTitle = breadcrumb[breadcrumb.length - 1] ?? "";
 
   function handleSearch(query?: string): void {
     const searchTerm = query || searchQuery;
@@ -175,44 +207,66 @@ function TopNavBar({
               </button>
             )}
 
-            {/* Breadcrumb */}
-            <nav className="text-sm">
-              <ol className="flex items-center space-x-2">
-                {breadcrumb.map((item, index) => (
-                  <li key={index} className="flex items-center">
-                    {index > 0 && (
-                      <i
-                        className={`fas fa-chevron-right mx-2 text-xs ${
-                          theme === "dark" ? "text-gray-500" : "text-gray-400"
-                        }`}
-                      />
-                    )}
-                    <span
-                      className={`font-medium ${
-                        index === breadcrumb.length - 1
-                          ? theme === "dark"
-                            ? "text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-cyan-200"
-                            : "text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700"
-                          : theme === "dark"
-                          ? "text-slate-300 hover:text-slate-200"
-                          : "text-slate-600 hover:text-slate-800"
-                      }`}
-                      style={{
-                        fontFamily: "'Poppins', sans-serif",
-                        textShadow:
-                          index === breadcrumb.length - 1
-                            ? theme === "dark"
-                              ? "0 1px 2px rgba(59, 130, 246, 0.3)"
-                              : "0 1px 2px rgba(0, 0, 0, 0.1)"
-                            : undefined,
-                      }}
-                    >
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            {/* Mobile title or desktop breadcrumb */}
+            {isMobileHeader ? (
+              <div className="min-w-0">
+                <span
+                  className={`block truncate font-semibold ${
+                    theme === "dark" ? "text-white" : "text-slate-900"
+                  }`}
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                  title={currentTitle}
+                >
+                  {currentTitle}
+                </span>
+              </div>
+            ) : (
+              <nav className="text-sm max-w-full overflow-hidden">
+                <ol className="flex items-center space-x-2">
+                  {displayed.map((item, index) => (
+                    <li key={`${item}-${index}`} className="flex items-center min-w-0">
+                      {index > 0 && (
+                        <i
+                          className={`fas fa-chevron-right mx-2 text-xs ${
+                            theme === "dark" ? "text-gray-500" : "text-gray-400"
+                          }`}
+                        />
+                      )}
+                      {item === "…" ? (
+                        <span className={theme === "dark" ? "text-slate-400" : "text-slate-500"} aria-hidden>
+                          …
+                        </span>
+                      ) : (
+                        <span
+                          className={`font-medium truncate ${
+                            index === displayed.length - 1
+                              ? theme === "dark"
+                                ? "text-white bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-cyan-200"
+                                : "text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700"
+                              : theme === "dark"
+                              ? "text-slate-300 hover:text-slate-200"
+                              : "text-slate-600 hover:text-slate-800"
+                          }`}
+                          style={{
+                            fontFamily: "'Poppins', sans-serif",
+                            maxWidth: index === displayed.length - 1 ? "52vw" : "28vw",
+                            textShadow:
+                              index === displayed.length - 1
+                                ? theme === "dark"
+                                  ? "0 1px 2px rgba(59, 130, 246, 0.3)"
+                                  : "0 1px 2px rgba(0, 0, 0, 0.1)"
+                                : undefined,
+                          }}
+                          title={item}
+                        >
+                          {item}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </nav>
+            )}
           </div>
 
           {/* Right Section - Search & Theme Toggle */}

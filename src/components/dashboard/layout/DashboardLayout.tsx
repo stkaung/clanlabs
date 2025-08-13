@@ -1,10 +1,13 @@
 "use client";
 import {
   ReactNode,
+  ReactElement,
   useState,
   useEffect,
   createContext,
   useContext,
+  isValidElement,
+  cloneElement,
 } from "react";
 import { usePathname } from "next/navigation";
 import useTheme from "@/hooks/useTheme";
@@ -125,7 +128,7 @@ function DashboardLayout({
         }}
       >
         {/* Main content container */}
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen overscroll-none">
           {/* Mobile Overlay - positioned above navbar but below sidebar */}
           {isMobile && !sidebarCollapsed && (
             <div
@@ -145,34 +148,40 @@ function DashboardLayout({
                 : `fixed top-0 left-0 h-full z-40 transform transition-transform duration-300 ease-in-out translate-x-0`
             }`}
           >
-            {customSidebar || (
-              isDeveloperPanel ? (
-                <DeveloperSidebar
-                  collapsed={!isMobile && sidebarCollapsed}
-                  onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  isMobile={isMobile}
-                />
-              ) : isGroupsPage ? (
-                <GroupsSidebar
-                  groups={groups}
-                  currentGroupId={currentGroupId}
-                  collapsed={!isMobile && sidebarCollapsed}
-                  onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  isMobile={isMobile}
-                />
-              ) : (
-                <DashboardSidebar
-                  collapsed={!isMobile && sidebarCollapsed}
-                  onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-                  isMobile={isMobile}
-                />
-              )
-            )}
+            {customSidebar && isValidElement(customSidebar)
+              ? cloneElement(customSidebar as ReactElement, {
+                  collapsed: !isMobile && sidebarCollapsed,
+                  onToggle: () => setSidebarCollapsed(!sidebarCollapsed),
+                  isMobile,
+                })
+              : (
+                isDeveloperPanel ? (
+                  <DeveloperSidebar
+                    collapsed={!isMobile && sidebarCollapsed}
+                    onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                    isMobile={isMobile}
+                  />
+                ) : isGroupsPage ? (
+                  <GroupsSidebar
+                    groups={groups}
+                    currentGroupId={currentGroupId}
+                    collapsed={!isMobile && sidebarCollapsed}
+                    onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                    isMobile={isMobile}
+                  />
+                ) : (
+                  <DashboardSidebar
+                    collapsed={!isMobile && sidebarCollapsed}
+                    onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
+                    isMobile={isMobile}
+                  />
+                )
+              )}
           </div>
 
           {/* Main content area */}
           <main
-            className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300 pt-12 ${
+            className={`flex-1 flex flex-col min-h-screen w-full transition-all duration-300 pt-12 overscroll-none ${
               isMobile ? "ml-0" : sidebarCollapsed ? "ml-20" : "ml-64"
             }`}
             style={{
@@ -203,7 +212,7 @@ function DashboardLayout({
             {/* Page content with max-width container */}
             <div
               id="page-blur-root"
-              className={`flex-1 relative pt-12 pb-12`}
+              className={`flex-1 relative pt-12 pb-12 overscroll-none`}
               style={{
                 background:
                   theme === "dark"

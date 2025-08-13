@@ -7,6 +7,7 @@ import type { Column, Action } from "@/components/shared/data-table";
 import useTheme from "@/hooks/useTheme";
 import { groupMembers, userProfiles, type GroupMember, type UserProfile } from "@/data/mock";
 import UserProfileModal from "@/components/dashboard/group-manage/UserProfileModal";
+import MemberUpdateModal from "@/components/dashboard/group-manage/MemberUpdateModal";
 
 export default function GroupMembersPage() {
   const params = useParams();
@@ -16,6 +17,9 @@ export default function GroupMembersPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [selectedUserProfile, setSelectedUserProfile] = useState<UserProfile | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<GroupMember | null>(null);
+  const [selectedProfile, setSelectedProfile] = useState<UserProfile | null>(null);
   
   // Debounce search state updates
   const searchTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -29,7 +33,7 @@ export default function GroupMembersPage() {
   };
 
   // Get members data for this specific group
-  const data: GroupMember[] = groupMembers[groupId] || [];
+  const [members, setMembers] = useState<GroupMember[]>(groupMembers[groupId] || []);
 
   function buildDefaultUserProfile(member: GroupMember): UserProfile {
     return {
@@ -142,8 +146,9 @@ export default function GroupMembersPage() {
       label: "Update",
       icon: "fas fa-edit",
       onClick: (row) => {
-        console.log("Update member:", row);
-        // Open update modal or navigate to update page
+        setSelectedMember(row);
+        setSelectedProfile(userProfiles[row.username] ?? null);
+        setIsUpdateOpen(true);
       },
       variant: "secondary",
     },
@@ -183,7 +188,7 @@ export default function GroupMembersPage() {
     if (isSearching) {
       debouncedSetSearching(false);
     }
-    return data.filter((member) => {
+    return members.filter((member) => {
       // Apply search filter
       const matchesSearch = !searchQuery || Object.values(member).some((value) =>
         value.toString().toLowerCase().includes(searchQuery.toLowerCase())
@@ -191,12 +196,19 @@ export default function GroupMembersPage() {
 
       return matchesSearch;
     });
-  }, [searchQuery, data]);
+  }, [searchQuery, members]);
 
   const handleCloseProfileModal = () => {
     setIsProfileModalOpen(false);
     setSelectedUserProfile(null);
   };
+
+  function handleSaveMember(updated: GroupMember, profileUpdate?: { username: string }): void {
+    setMembers((prev) => prev.map((m) => (m.id === updated.id ? updated : m)));
+    setIsUpdateOpen(false);
+    setSelectedMember(null);
+    setSelectedProfile(null);
+  }
 
   return (
     <div className="space-y-6">
@@ -224,6 +236,14 @@ export default function GroupMembersPage() {
         isOpen={isProfileModalOpen}
         onClose={handleCloseProfileModal}
         userProfile={selectedUserProfile}
+      />
+
+      <MemberUpdateModal
+        isOpen={isUpdateOpen}
+        onClose={() => setIsUpdateOpen(false)}
+        member={selectedMember}
+        profile={selectedProfile}
+        onSave={handleSaveMember}
       />
     </div>
   );

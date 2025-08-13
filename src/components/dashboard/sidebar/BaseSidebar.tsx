@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import useTheme from "@/hooks/useTheme";
+import { useEffect, useRef } from "react";
 import type { GroupListItem } from "@/types/group-profile";
 
 interface NavigationItem {
@@ -41,6 +42,71 @@ function BaseSidebar({
 }: BaseSidebarProps) {
   const theme = useTheme();
 
+  const navRef = useRef<HTMLDivElement | null>(null);
+  const groupsRef = useRef<HTMLDivElement | null>(null);
+
+  function handleWheelScroll(e: React.WheelEvent<HTMLDivElement>): void {
+    const el = e.currentTarget;
+    e.preventDefault();
+    e.stopPropagation();
+    const next = el.scrollTop + e.deltaY;
+    const max = el.scrollHeight - el.clientHeight;
+    el.scrollTop = Math.max(0, Math.min(max, next));
+  }
+
+  useEffect(() => {
+    const attach = (el: HTMLElement | null) => {
+      if (!el) return () => {};
+      const onWheel = (ev: WheelEvent) => {
+        ev.preventDefault();
+        (ev as any).stopPropagation?.();
+        (ev as any).stopImmediatePropagation?.();
+        const next = el.scrollTop + ev.deltaY;
+        const max = el.scrollHeight - el.clientHeight;
+        el.scrollTop = Math.max(0, Math.min(max, next));
+      };
+      const onTouchMove = (ev: TouchEvent) => {
+        ev.preventDefault();
+        (ev as any).stopPropagation?.();
+      };
+      el.addEventListener("wheel", onWheel, { passive: false, capture: true });
+      el.addEventListener("touchmove", onTouchMove, { passive: false, capture: true });
+      return () => {
+        el.removeEventListener("wheel", onWheel, { capture: true } as any);
+        el.removeEventListener("touchmove", onTouchMove, { capture: true } as any);
+      };
+    };
+    const cleanupNav = attach(navRef.current);
+    const cleanupGroups = attach(groupsRef.current);
+    return () => {
+      cleanupNav();
+      cleanupGroups();
+    };
+  }, []);
+
+  useEffect(() => {
+    const prevent = (ev: Event) => {
+      ev.preventDefault();
+    };
+    const el = navRef.current;
+    if (!el) return;
+    const onEnter = () => {
+      document.addEventListener("wheel", prevent, { passive: false });
+      document.addEventListener("touchmove", prevent, { passive: false });
+    };
+    const onLeave = () => {
+      document.removeEventListener("wheel", prevent as any);
+      document.removeEventListener("touchmove", prevent as any);
+    };
+    el.addEventListener("mouseenter", onEnter, { passive: true });
+    el.addEventListener("mouseleave", onLeave, { passive: true });
+    return () => {
+      el.removeEventListener("mouseenter", onEnter as any);
+      el.removeEventListener("mouseleave", onLeave as any);
+      onLeave();
+    };
+  }, []);
+
   function handleVerification(): void {
     console.log("Verification clicked");
   }
@@ -77,7 +143,7 @@ function BaseSidebar({
       )}
 
       <aside
-        className={`h-full ${
+        className={`h-full overscroll-contain ${
           isMobile ? "w-64" : collapsed ? "w-20" : "w-64"
         } backdrop-blur-xl border-r flex flex-col transition-all duration-300`}
         style={{
@@ -94,6 +160,13 @@ function BaseSidebar({
               ? "4px 0 24px rgba(0, 0, 0, 0.15), inset -1px 0 0 rgba(59, 130, 246, 0.1)"
               : "2px 0 16px rgba(0, 0, 0, 0.06), inset -1px 0 0 rgba(255, 255, 255, 0.2)",
           height: "100vh",
+        }}
+        onWheelCapture={(e) => {
+          // Prevent page from scrolling when interacting with sidebar
+          e.preventDefault();
+        }}
+        onTouchMoveCapture={(e) => {
+          e.preventDefault();
         }}
       >
         {/* Subtle gradient overlay */}
@@ -161,10 +234,10 @@ function BaseSidebar({
 
           {/* Navigation */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            <nav className="flex-1 p-4 overflow-y-auto">
+            <nav ref={navRef} className="flex-1 p-4 overflow-y-auto overscroll-contain" onWheel={handleWheelScroll} onWheelCapture={handleWheelScroll}>
               {mode === "groups" ? (
                 // Groups List
-                <div className="h-full overflow-y-auto space-y-2 pr-2 groups-scrollbar">
+                <div ref={groupsRef} className="h-full overflow-y-auto overscroll-contain space-y-2 pr-2 groups-scrollbar" onWheel={handleWheelScroll} onWheelCapture={handleWheelScroll}>
                   {groups.map((group) => (
                     <Link
                       key={group.id}

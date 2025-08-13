@@ -57,7 +57,7 @@ function BaseModal({
       // Lock background scroll (both html and body)
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
-      // Overlay-based blur using backdrop-filter to avoid blurring the modal
+      // For withinContainer modals, add a positioned blur overlay that covers ONLY the main content area
       if (withinContainer) {
         const ensureOverlay = () => {
           if (!overlayRef.current) {
@@ -65,14 +65,11 @@ function BaseModal({
             div.style.position = "fixed";
             div.style.inset = "0px";
             div.style.zIndex = "9998"; // below modal (9999)
-            // Capture input to prevent background scrolling/clicks
             div.style.pointerEvents = "auto";
             div.style.backdropFilter = "blur(6px)";
-            // tiny alpha to trigger backdrop blur rendering without visible dim
-            div.style.backgroundColor = "rgba(0,0,0,0.001)";
+            div.style.backgroundColor = theme === "dark" ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.25)";
             document.body.appendChild(div);
             overlayRef.current = div;
-            // Prevent wheel/touch scrolling on background
             const prevent = (e: Event) => {
               e.preventDefault();
             };
@@ -81,16 +78,19 @@ function BaseModal({
           }
         };
         ensureOverlay();
-        // Position overlay to only cover the page content area
+        // Position overlay to cover only the page content container (not navbar/sidebar)
         const content = document.getElementById("main-content-container");
         const pageRoot = document.getElementById("page-blur-root");
-        const targetEl = content || pageRoot;
+        const targetEl = pageRoot || content;
         if (overlayRef.current && targetEl) {
           const rect = targetEl.getBoundingClientRect();
-          overlayRef.current.style.top = `${rect.top}px`;
+          const navHeight = 64; // TopNavBar h-16
+          const top = Math.max(navHeight, rect.top);
+          const bottom = rect.top + rect.height;
+          overlayRef.current.style.top = `${top}px`;
           overlayRef.current.style.left = `${rect.left}px`;
           overlayRef.current.style.width = `${rect.width}px`;
-          overlayRef.current.style.height = `${rect.height}px`;
+          overlayRef.current.style.height = `${Math.max(0, bottom - top)}px`;
         }
       }
       // Mount first in reduced scale, then animate to full
@@ -104,8 +104,6 @@ function BaseModal({
         setShow(false);
         if (withinContainer) {
           if (overlayRef.current) {
-            // Remove listeners before removing element
-            overlayRef.current.replaceWith();
             overlayRef.current.remove();
             overlayRef.current = null;
           }
@@ -126,19 +124,32 @@ function BaseModal({
     };
   }, [isOpen, onClose, withinContainer]);
 
-  // Compute positioning when withinContainer is true (center within main content container)
-  const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
+  // Track container size to constrain modal width when withinContainer is true
   const [containerSize, setContainerSize] = useState<{ width: number; height: number } | null>(null);
+  // Track horizontal center (left) for withinContainer; vertical is handled via Tailwind classes
+  const [leftCenter, setLeftCenter] = useState<number | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     if (!withinContainer || !isOpen) return;
     function computePosition() {
-      const container = document.getElementById("main-content-container");
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
-      setPosition({ top: rect.top + rect.height / 2, left: rect.left + rect.width / 2 });
+      const content = document.getElementById("main-content-container");
+      const pageRoot = document.getElementById("page-blur-root");
+      const targetEl = pageRoot || content;
+      if (!targetEl) return;
+      const rect = targetEl.getBoundingClientRect();
       setContainerSize({ width: rect.width, height: rect.height });
+      setLeftCenter(rect.left + rect.width / 2);
+      if (overlayRef.current) {
+        const navHeight = 64;
+        const top = Math.max(navHeight, rect.top);
+        const bottom = rect.top + rect.height;
+        overlayRef.current.style.top = `${top}px`;
+        overlayRef.current.style.left = `${rect.left}px`;
+        overlayRef.current.style.width = `${rect.width}px`;
+        overlayRef.current.style.height = `${Math.max(0, bottom - top)}px`;
+      }
     }
     computePosition();
   }, [withinContainer, isOpen]);
@@ -149,17 +160,13 @@ function BaseModal({
       const container = document.getElementById("main-content-container");
       if (!container) return;
       const rect = container.getBoundingClientRect();
-      setPosition({ top: rect.top + rect.height / 2, left: rect.left + rect.width / 2 });
       setContainerSize({ width: rect.width, height: rect.height });
-      if (overlayRef.current) {
-        overlayRef.current.style.top = `${rect.top}px`;
-        overlayRef.current.style.left = `${rect.left}px`;
-        overlayRef.current.style.width = `${rect.width}px`;
-        overlayRef.current.style.height = `${rect.height}px`;
-      }
+      setLeftCenter(rect.left + rect.width / 2);
     }
     window.addEventListener("resize", computePosition);
     window.addEventListener("scroll", computePosition, true);
+    // Also recompute immediately to capture current viewport size
+    computePosition();
     return () => {
       window.removeEventListener("resize", computePosition);
       window.removeEventListener("scroll", computePosition, true);
@@ -170,9 +177,11 @@ function BaseModal({
   useEffect(() => {
     if (!isOpen) return;
     const blockIfOutside = (e: Event) => {
-      const target = e.target as Node | null;
-      if (panelRef.current && target && panelRef.current.contains(target)) {
-        return; // allow scrolling inside the modal panel
+      const path = (e as any).composedPath?.() as Node[] | undefined;
+      if (panelRef.current) {
+        if (path && path.includes(panelRef.current)) return; // allow scrolling inside
+        const target = e.target as Node | null;
+        if (target && panelRef.current.contains(target)) return;
       }
       e.preventDefault();
     };
@@ -187,37 +196,41 @@ function BaseModal({
   if (!show) return null;
 
   const modalNode = (
-    <div
-      className={`z-[9999] transition-opacity duration-200 ${
-        (!withinContainer || position) && (isOpen || isMounted) ? "opacity-100 visible" : "opacity-0 visible"
-      }`}
-      style={
-        withinContainer && position
-          ? {
-              position: "fixed",
-              top: position.top,
-              left: position.left,
-              transform: "translate(-50%, -50%)",
-              maxWidth: containerSize ? `${containerSize.width}px` : undefined,
-              width: "100%",
-            }
-          : { position: "fixed", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }
-      }
-    >
-      {/* No backdrop; modal only */}
+    <div className={`fixed inset-0 z-[9999] transition-opacity duration-200 ${
+      (!withinContainer || leftCenter !== null) && (isOpen || isMounted) ? "opacity-100 visible" : "opacity-0 visible"
+    }`}>
+      {/* Backdrop overlay: full-viewport for global modals; content-area-only for withinContainer (via body overlay) */}
+      {!withinContainer && (
+        <div
+          className="absolute inset-0 pointer-events-none backdrop-blur-sm"
+          style={{ backgroundColor: theme === "dark" ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0.25)" }}
+        />
+      )}
+
+      {/* Centering wrapper */}
       <div
-        className={`relative w-full max-h-[85vh] ${maxWidthClasses[maxWidth]} rounded-2xl border shadow-2xl flex flex-col transition-transform duration-200 ease-out transform ${
-          isMounted ? "scale-100" : "scale-95"
-        } ${theme === "dark" ? "bg-gray-800/95 border-gray-600/50" : "bg-white/95 border-gray-200/50"}`}
-        style={{
-          width: withinContainer
-            ? containerSize
-              ? `min(96vw, ${Math.min(containerSize.width - 24, 1536)}px)`
-              : "min(96vw, 1280px)"
-            : undefined,
-          margin: withinContainer ? "0 auto" : undefined,
-        }}
+        className={
+          withinContainer
+            ? "absolute top-1/2 transform -translate-x-1/2 translate-y-[calc(-50%+32px)]"
+            : "absolute inset-0 flex items-center justify-center"
+        }
+        style={withinContainer && leftCenter !== null ? { left: leftCenter } : undefined}
       >
+        <div
+          className={`relative w-full max-h-[85vh] ${maxWidthClasses[maxWidth]} rounded-2xl border shadow-2xl flex flex-col transition-transform duration-200 ease-out transform ${
+            isMounted ? "scale-100" : "scale-95"
+          } ${theme === "dark" ? "bg-gray-800/95 border-gray-600/50" : "bg-white/95 border-gray-200/50"}`}
+          ref={panelRef}
+          style={{
+            width: withinContainer
+              ? containerSize
+                ? `min(96vw, ${Math.min(containerSize.width - 24, 1536)}px)`
+                : "min(96vw, 1280px)"
+              : undefined,
+            margin: withinContainer ? "0 auto" : undefined,
+            overscrollBehavior: "contain",
+          }}
+        >
         {(title || showCloseButton) && (
           <div className={`px-6 py-4 border-b flex-shrink-0 ${theme === "dark" ? "border-gray-600/50" : "border-gray-200/50"}`}>
             <div className="flex items-center justify-between">
@@ -246,7 +259,28 @@ function BaseModal({
             </div>
           </div>
         )}
-        <div className="flex-1 overflow-y-auto p-6">{children}</div>
+          <div
+            ref={contentRef}
+            className="flex-1 overflow-y-auto p-6 overscroll-contain"
+            onWheelCapture={(e) => {
+              const el = contentRef.current;
+              if (!el) return;
+              e.preventDefault();
+              e.stopPropagation();
+              const next = el.scrollTop + e.deltaY;
+              const max = el.scrollHeight - el.clientHeight;
+              el.scrollTop = Math.max(0, Math.min(max, next));
+            }}
+            onTouchMoveCapture={(e) => {
+              const el = contentRef.current;
+              if (!el) return;
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   );

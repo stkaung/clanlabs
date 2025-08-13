@@ -7,6 +7,9 @@ export interface Column<T = any> {
   maxWidth?: string;
   align?: 'left' | 'center' | 'right';
   renderCell?: (row: T) => React.ReactNode;
+  mobileHidden?: boolean;
+  renderMobileCell?: (row: T) => React.ReactNode;
+  mobileLabel?: string;
 }
 
 export interface Action<T = any> {
@@ -34,4 +37,5 @@ export interface DataTableProps<T = any> {
   actionButtonClassName?: string;
   actionsAlign?: 'left' | 'center' | 'right';
   actionContainerWidth?: string;
+  renderMobileRow?: (row: T) => React.ReactNode;
 }

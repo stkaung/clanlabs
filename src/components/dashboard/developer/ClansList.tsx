@@ -149,10 +149,13 @@ function ClansList() {
     {
       key: "name",
       header: "Name",
-      width: "25%",
-      align: "center",
+      width: "30%",
+      align: "left",
       renderCell: (row) => (
-        <div className="text-center">{row.name}</div>
+        <div className="pl-2 md:pl-0">{row.name}</div>
+      ),
+      renderMobileCell: (row) => (
+        <div className="font-semibold">{row.name}</div>
       ),
     },
     {
@@ -160,15 +163,24 @@ function ClansList() {
       header: "Subscription",
       headerExtra: () => <StatusFilterHeader />,
       width: "25%",
-      align: "center",
+      align: "left",
       renderCell: (row) => {
         const styles = getStatusStyles(row.subscriptionStatus);
         return (
-          <div className="flex items-center justify-center">
+          <div className="w-full flex items-center justify-center">
             <div className={`inline-flex items-center px-3 py-1 rounded-full border ${styles.bg} ${styles.text} ${styles.border} text-sm font-semibold`}>
               <i className={`${styles.icon} mr-1.5 text-xs`} />
               {row.subscriptionStatus}
             </div>
+          </div>
+        );
+      },
+      renderMobileCell: (row) => {
+        const styles = getStatusStyles(row.subscriptionStatus);
+        return (
+          <div className={`inline-flex items-center px-2 py-0.5 rounded-full border ${styles.bg} ${styles.text} ${styles.border} text-xs font-semibold`}>
+            <i className={`${styles.icon} mr-1 text-[10px]`} />
+            {row.subscriptionStatus}
           </div>
         );
       },
@@ -191,11 +203,15 @@ function ClansList() {
           )}
         </div>
       ),
-      width: "15%",
-      align: "center",
+      width: "20%",
+      align: "left",
       renderCell: (row) => (
-        <div className="text-center">{row.expiryDate}</div>
+        <div className="w-full text-center">{row.expiryDate}</div>
       ),
+      renderMobileCell: (row) => (
+        <div className="text-sm">{row.expiryDate}</div>
+      ),
+      mobileLabel: "Expiry",
     },
     {
       key: "botAccount",
@@ -215,20 +231,28 @@ function ClansList() {
           )}
         </div>
       ),
-      width: "25%",
-      align: "center",
+      width: "20%",
+      align: "left",
       renderCell: (row) => (
-        <div className="text-center">{row.botAccount}</div>
+        <div className="w-full text-center">{row.botAccount}</div>
       ),
+      renderMobileCell: (row) => (
+        <code className="text-xs bg-black/10 dark:bg-white/10 px-1.5 py-0.5 rounded">{row.botAccount}</code>
+      ),
+      mobileLabel: "Bot Account",
     },
     {
       key: "divisions",
       header: "Divisions",
-      width: "10%",
-      align: "center",
+      width: "5%",
+      align: "left",
       renderCell: (row) => (
-        <div className="text-center">{row.divisions}</div>
+        <div className="w-full text-center">{row.divisions}</div>
       ),
+      renderMobileCell: (row) => (
+        <span className="text-sm font-semibold">{row.divisions}</span>
+      ),
+      mobileLabel: "Divisions",
     },
   ];
 
